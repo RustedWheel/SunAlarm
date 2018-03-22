@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">SunAlarm</string>
+    <string name="set_alarm">Set Alarm</string>
+    <string name="input_hint">Set time after sunrise</string>
 </resources>

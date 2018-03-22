@@ -2,6 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.a1.compsci702.sunalarm">
 
+    <uses-permission android:name="android.permission.WAKE_LOCK"></uses-permission>
+    <uses-permission android:name="android.permission.VIBRATE"></uses-permission>
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -14,8 +17,17 @@
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
+
             </intent-filter>
         </activity>
+
+        <receiver android:name=".Alarm" android:exported="true" android:process=":remote">
+            <intent-filter>
+                <action android:name="com.a1.compsci702.sunalarm.START_ALARM" >
+                </action>
+            </intent-filter>
+        </receiver>
+
     </application>
 
 </manifest>
