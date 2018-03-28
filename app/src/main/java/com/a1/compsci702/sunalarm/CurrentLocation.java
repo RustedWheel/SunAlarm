@@ -58,7 +58,7 @@ public class CurrentLocation implements LocationListener {
     }
 
 
-    public Hashtable<String, Double> getCurrentLocation() throws NoConnectionException {
+    public Hashtable<String, Double> getCurrentLocation() throws NoConnectionException, SecurityException {
 
         Hashtable<String, Double> locationTable = new Hashtable<>();
 
@@ -68,8 +68,8 @@ public class CurrentLocation implements LocationListener {
             throw new NoConnectionException();
 
         } else {
-            Log.d(TAG, "Connection on");
 
+            Log.d(TAG, "Connection on");
             // get location
             Location location = getLocation();
             locationTable.put("Latitude", location.getLatitude());
@@ -81,20 +81,15 @@ public class CurrentLocation implements LocationListener {
     }
 
 
-    private void getLastLocation() {
-        try {
+    private void getLastLocation() throws SecurityException{
             Criteria criteria = new Criteria();
             String provider = locationManager.getBestProvider(criteria, false);
             Location location = locationManager.getLastKnownLocation(provider);
             Log.d(TAG, provider);
             Log.d(TAG, location == null ? "NO LastLocation" : location.toString());
-        } catch (SecurityException e) {
-            e.printStackTrace();
-        }
     }
 
-    private Location getLocation() throws NoConnectionException {
-        try {
+    private Location getLocation() throws NoConnectionException, SecurityException {
 
             if (hasGPS) {
                 // from GPS
@@ -125,10 +120,6 @@ public class CurrentLocation implements LocationListener {
             } else {
                 throw new NoConnectionException();
             }
-
-        } catch (SecurityException e) {
-            e.printStackTrace();
-        }
 
         return null;
     }

@@ -81,12 +81,12 @@ public class MainActivity extends AppCompatActivity {
                 int seconds = Integer.parseInt(time);
 
                 if (canGetLocation) {
+
                     CurrentLocation currentLocation = new CurrentLocation(getApplicationContext());
 
-                    Hashtable<String, Double> location = null;
                     try {
 
-                        location = currentLocation.getCurrentLocation();
+                        Hashtable<String, Double> location = currentLocation.getCurrentLocation();
 
                         Double latitude = location.get("Latitude");
                         Double longitude = location.get("Longitude");
@@ -95,10 +95,12 @@ public class MainActivity extends AppCompatActivity {
 
                     } catch (NoConnectionException e) {
                         showGPSSettingsAlert();
+                    } catch (SecurityException e){
+                        showPermissionDenied();
                     }
 
                 } else {
-                    Toast.makeText(getApplicationContext(), "No Permission to get location!", Toast.LENGTH_LONG).show();
+                    showPermissionDenied();
                 }
 
             }
@@ -196,5 +198,9 @@ public class MainActivity extends AppCompatActivity {
         });
 
         alertDialog.show();
+    }
+
+    public void showPermissionDenied(){
+        Toast.makeText(getApplicationContext(), "No Permission to get location!", Toast.LENGTH_LONG).show();
     }
 }
