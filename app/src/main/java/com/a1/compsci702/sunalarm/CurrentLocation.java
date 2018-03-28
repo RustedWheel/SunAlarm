@@ -1,48 +1,39 @@
 package com.a1.compsci702.sunalarm;
 
-import android.Manifest;
-import android.annotation.TargetApi;
 import android.app.Service;
 import android.content.Context;
-import android.content.pm.PackageManager;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
-import android.os.Build;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
-import java.util.ArrayList;
+import com.a1.compsci702.sunalarm.Exceptions.NoConnectionException;
+
 import java.util.Hashtable;
 
 /**
  * Created by st970 on 28/03/2018.
  */
 
-public class CurrentLocation implements LocationListener{
+public class CurrentLocation implements LocationListener {
 
     private static final long MIN_DISTANCE_CHANGE_FOR_UPDATES = 10;
     private static final long MIN_TIME_BW_UPDATES = 1000 * 60 * 1;
-    LocationManager locationManager;
-    Location loc;
-    ArrayList<String> permissions = new ArrayList<>();
-    ArrayList<String> permissionsToRequest;
-    ArrayList<String> permissionsRejected = new ArrayList<>();
-    boolean isGPS = false;
-    boolean isNetwork = false;
-    boolean canGetLocation = true;
-    String TAG = "Location";
+    private LocationManager locationManager;
+    private Location loc;
+    boolean hasGPS = false;
+    boolean hasNetwork = false;
+    private String TAG = "Location";
 
-    public CurrentLocation(Context context){
+    public CurrentLocation(Context context) {
 
         locationManager = (LocationManager) context.getSystemService(Service.LOCATION_SERVICE);
-        isGPS = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
-        isNetwork = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+        hasGPS = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+        hasNetwork = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
 
     }
-
 
     @Override
     public void onLocationChanged(Location location) {
@@ -66,25 +57,18 @@ public class CurrentLocation implements LocationListener{
         }
     }
 
-    public Hashtable<String, Double> getCurrentLocation(){
 
-        Hashtable<String,Double> locationTable = new Hashtable<>();
+    public Hashtable<String, Double> getCurrentLocation() throws NoConnectionException {
 
-        if (!isGPS && !isNetwork) {
+        Hashtable<String, Double> locationTable = new Hashtable<>();
+
+        if (!hasGPS && !hasNetwork) {
             Log.d(TAG, "Connection off");
             getLastLocation();
+            throw new NoConnectionException();
 
         } else {
             Log.d(TAG, "Connection on");
-            // check permissions
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                /*if (permissionsToRequest.size() > 0) {
-                    requestPermissions(permissionsToRequest.toArray(new String[permissionsToRequest.size()]),
-                            ALL_PERMISSIONS_RESULT);
-                    Log.d(TAG, "Permission requests");
-                    canGetLocation = false;
-                }*/
-            }
 
             // get location
             Location location = getLocation();
@@ -95,6 +79,7 @@ public class CurrentLocation implements LocationListener{
 
         return locationTable;
     }
+
 
     private void getLastLocation() {
         try {
@@ -108,48 +93,43 @@ public class CurrentLocation implements LocationListener{
         }
     }
 
-    private Location getLocation() {
+    private Location getLocation() throws NoConnectionException {
         try {
-            if (canGetLocation) {
-                Log.d(TAG, "Can get location");
-                if (isGPS) {
-                    // from GPS
-                    Log.d(TAG, "GPS on");
-                    locationManager.requestLocationUpdates(
-                            LocationManager.GPS_PROVIDER,
-                            MIN_TIME_BW_UPDATES,
-                            MIN_DISTANCE_CHANGE_FOR_UPDATES, this);
 
-                    if (locationManager != null) {
-                        loc = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-                        if (loc != null)
-                            return loc;
-                    }
-                } else if (isNetwork) {
-                    // from Network Provider
-                    Log.d(TAG, "NETWORK_PROVIDER on");
-                    locationManager.requestLocationUpdates(
-                            LocationManager.NETWORK_PROVIDER,
-                            MIN_TIME_BW_UPDATES,
-                            MIN_DISTANCE_CHANGE_FOR_UPDATES, this);
+            if (hasGPS) {
+                // from GPS
+                Log.d(TAG, "GPS on");
+                locationManager.requestLocationUpdates(
+                        LocationManager.GPS_PROVIDER,
+                        MIN_TIME_BW_UPDATES,
+                        MIN_DISTANCE_CHANGE_FOR_UPDATES, this);
 
-                    if (locationManager != null) {
-                        loc = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-                        if (loc != null)
-                            return loc;
-                    }
-                } else {
-                    loc.setLatitude(0);
-                    loc.setLongitude(0);
-                    return loc;
+                if (locationManager != null) {
+                    loc = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+                    if (loc != null)
+                        return loc;
+                }
+            } else if (hasNetwork) {
+                // from Network Provider
+                Log.d(TAG, "NETWORK_PROVIDER on");
+                locationManager.requestLocationUpdates(
+                        LocationManager.NETWORK_PROVIDER,
+                        MIN_TIME_BW_UPDATES,
+                        MIN_DISTANCE_CHANGE_FOR_UPDATES, this);
+
+                if (locationManager != null) {
+                    loc = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+                    if (loc != null)
+                        return loc;
                 }
             } else {
-                Log.d(TAG, "Can't get location");
+                throw new NoConnectionException();
             }
+
         } catch (SecurityException e) {
             e.printStackTrace();
         }
-        Log.d(TAG, "No permission!");
+
         return null;
     }
 

@@ -21,6 +21,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
+import com.a1.compsci702.sunalarm.Exceptions.NoConnectionException;
+
 import java.util.ArrayList;
 import java.util.Hashtable;
 
@@ -30,7 +32,7 @@ public class MainActivity extends AppCompatActivity {
     private AppCompatButton btnSet;
     private final static int ALL_PERMISSIONS_RESULT = 101;
     private final String TAG = "MainActivity";
-    boolean canGetLocation = false;
+    boolean canGetLocation = true;
     ArrayList<String> permissions = new ArrayList<>();
     ArrayList<String> permissionsToRequest;
     ArrayList<String> permissionsRejected = new ArrayList<>();
@@ -41,38 +43,30 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        askForPermission();
+        setUpUIComponents();
+
+    }
+
+    private void askForPermission(){
         permissions.add(Manifest.permission.ACCESS_FINE_LOCATION);
         permissions.add(Manifest.permission.ACCESS_COARSE_LOCATION);
         permissionsToRequest = findUnAskedPermissions(permissions);
 
-  /*      // Here, thisActivity is the current activity
-        if (ContextCompat.checkSelfPermission(thisActivity,
-                Manifest.permission.READ_CONTACTS)
-                != PackageManager.PERMISSION_GRANTED) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
 
-            // Permission is not granted
-            // Should we show an explanation?
-            if (ActivityCompat.shouldShowRequestPermissionRationale(thisActivity,
-                    Manifest.permission.READ_CONTACTS)) {
+            if (permissionsToRequest.size() > 0) {
 
-                // Show an explanation to the user *asynchronously* -- don't block
-                // this thread waiting for the user's response! After the user
-                // sees the explanation, try again to request the permission.
-
-            } else {
-
-                // No explanation needed; request the permission
-                ActivityCompat.requestPermissions(thisActivity,
-                        new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-                        MY_PERMISSIONS_REQUEST_READ_CONTACTS);
-
-                // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
-                // app-defined int constant. The callback method gets the
-                // result of the request.
+                ActivityCompat.requestPermissions(MainActivity.this,permissionsToRequest.toArray(new String[permissionsToRequest.size()]),
+                        ALL_PERMISSIONS_RESULT);
+                Log.d(TAG, "Permission requests");
+                canGetLocation = false;
             }
-        } else {
-            // Permission has already been granted
-        }*/
+
+        }
+    }
+
+    private void setUpUIComponents(){
 
         btnSet = (AppCompatButton) findViewById(R.id.setAlarm);
         etTime = (TextInputLayout) findViewById(R.id.time_input_layout);
@@ -86,33 +80,25 @@ public class MainActivity extends AppCompatActivity {
                 // Placeholder, currently in seconds
                 int seconds = Integer.parseInt(time);
 
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-
-                if (permissionsToRequest.size() > 0) {
-
-/*                    ActivityCompat.requestPermissions(MainActivity.this,
-                            new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-                            ALL_PERMISSIONS_RESULT);*/
-
-                    requestPermissions(permissionsToRequest.toArray(new String[permissionsToRequest.size()]),
-                            ALL_PERMISSIONS_RESULT);
-                    Log.d(TAG, "Permission requests");
-                    canGetLocation = false;
-                }
-
-                }
-
-                if(canGetLocation){
+                if (canGetLocation) {
                     CurrentLocation currentLocation = new CurrentLocation(getApplicationContext());
 
-                    Hashtable<String, Double> location = currentLocation.getCurrentLocation();
+                    Hashtable<String, Double> location = null;
+                    try {
 
-                    Double latitude = location.get("Latitude");
-                    Double longitude = location.get("Longitude");
+                        location = currentLocation.getCurrentLocation();
 
-                    Toast.makeText(getApplicationContext(), "Sunrise ! Latitude: " + latitude + " Longitude: " + longitude, Toast.LENGTH_LONG).show();
+                        Double latitude = location.get("Latitude");
+                        Double longitude = location.get("Longitude");
+
+                        Toast.makeText(getApplicationContext(), "Sunrise !  Location - Latitude: " + latitude + " Longitude: " + longitude, Toast.LENGTH_LONG).show();
+
+                    } catch (NoConnectionException e) {
+                        showGPSSettingsAlert();
+                    }
+
                 } else {
-                    Toast.makeText(getApplicationContext(), "Cannot get location!", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), "No Permission to get location!", Toast.LENGTH_LONG).show();
                 }
 
             }
@@ -133,10 +119,11 @@ public class MainActivity extends AppCompatActivity {
         return result;
     }
 
+
     private boolean hasPermission(String permission) {
         if (canAskPermission()) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                return (checkSelfPermission(permission) == PackageManager.PERMISSION_GRANTED);
+                return (ContextCompat.checkSelfPermission(MainActivity.this,permission) == PackageManager.PERMISSION_GRANTED);
             }
         }
         return true;
@@ -160,13 +147,13 @@ public class MainActivity extends AppCompatActivity {
 
                 if (permissionsRejected.size() > 0) {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                        if (shouldShowRequestPermissionRationale(permissionsRejected.get(0))) {
+                        if (ActivityCompat.shouldShowRequestPermissionRationale(MainActivity.this,permissionsRejected.get(0))) {
                             showMessageOKCancel("These permissions are mandatory for the application. Please allow access.",
                                     new DialogInterface.OnClickListener() {
                                         @Override
                                         public void onClick(DialogInterface dialog, int which) {
                                             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                                                requestPermissions(permissionsRejected.toArray(
+                                                ActivityCompat.requestPermissions(MainActivity.this,permissionsRejected.toArray(
                                                         new String[permissionsRejected.size()]), ALL_PERMISSIONS_RESULT);
                                             }
                                         }
@@ -182,7 +169,16 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void showSettingsAlert() {
+    private void showMessageOKCancel(String message, DialogInterface.OnClickListener okListener) {
+        new AlertDialog.Builder(MainActivity.this)
+                .setMessage(message)
+                .setPositiveButton("OK", okListener)
+                .setNegativeButton("Cancel", null)
+                .create()
+                .show();
+    }
+
+    public void showGPSSettingsAlert() {
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
         alertDialog.setTitle("GPS is not Enabled!");
         alertDialog.setMessage("Do you want to turn on GPS?");
@@ -200,14 +196,5 @@ public class MainActivity extends AppCompatActivity {
         });
 
         alertDialog.show();
-    }
-
-    private void showMessageOKCancel(String message, DialogInterface.OnClickListener okListener) {
-        new AlertDialog.Builder(MainActivity.this)
-                .setMessage(message)
-                .setPositiveButton("OK", okListener)
-                .setNegativeButton("Cancel", null)
-                .create()
-                .show();
     }
 }

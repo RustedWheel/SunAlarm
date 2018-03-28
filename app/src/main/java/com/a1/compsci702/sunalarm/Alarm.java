@@ -33,7 +33,6 @@ public class Alarm extends BroadcastReceiver
         }
 
         // Better to play a video animation i guess?
-
         Toast.makeText(context, "Sunrise !", Toast.LENGTH_LONG).show();
 
         wl.release();
