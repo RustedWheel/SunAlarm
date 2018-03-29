@@ -32,10 +32,11 @@ public class MainActivity extends AppCompatActivity {
     private AppCompatButton btnSet;
     private final static int ALL_PERMISSIONS_RESULT = 101;
     private final String TAG = "MainActivity";
-    boolean canGetLocation = true;
-    ArrayList<String> permissions = new ArrayList<>();
-    ArrayList<String> permissionsToRequest;
-    ArrayList<String> permissionsRejected = new ArrayList<>();
+    private boolean canGetLocation = true;
+    private ArrayList<String> permissions = new ArrayList<>();
+    private ArrayList<String> permissionsToRequest;
+    private ArrayList<String> permissionsRejected = new ArrayList<>();
+    private Alarm alarm;
 
 
     @Override
@@ -92,6 +93,9 @@ public class MainActivity extends AppCompatActivity {
                         Double longitude = location.get("Longitude");
 
                         Toast.makeText(getApplicationContext(), "Sunrise !  Location - Latitude: " + latitude + " Longitude: " + longitude, Toast.LENGTH_LONG).show();
+
+                        alarm = new Alarm();
+                        alarm.setAlarm(MainActivity.this, seconds);
 
                     } catch (NoConnectionException e) {
                         showGPSSettingsAlert();

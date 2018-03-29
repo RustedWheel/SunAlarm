@@ -19,6 +19,7 @@ import static android.content.Context.VIBRATOR_SERVICE;
 
 public class Alarm extends BroadcastReceiver
 {
+
     @Override
     public void onReceive(Context context, Intent intent)
     {
@@ -26,24 +27,29 @@ public class Alarm extends BroadcastReceiver
         PowerManager.WakeLock wl = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "");
         wl.acquire();
 
+        // Better to play a video animation i guess?
+        Toast.makeText(context, "Sunrise !", Toast.LENGTH_LONG).show();
+
         if (Build.VERSION.SDK_INT >= 26) {
             ((Vibrator) context.getSystemService(VIBRATOR_SERVICE)).vibrate(VibrationEffect.createOneShot(10000,-1));
         } else {
             ((Vibrator) context.getSystemService(VIBRATOR_SERVICE)).vibrate(10000);
         }
 
-        // Better to play a video animation i guess?
-        Toast.makeText(context, "Sunrise !", Toast.LENGTH_LONG).show();
-
         wl.release();
     }
 
-/*    public void setAlarm(Context context)
+    public void setAlarm(Context context, int seconds)
     {
-        AlarmManager am =( AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
-        Intent i = new Intent(context, Alarm.class);
-        PendingIntent pi = PendingIntent.getBroadcast(context, 0, i, 0);
-        am.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), 1000 * 60 * 10, pi); // Millisec * Second * Minute
+        /*AlarmManager am =( AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
+        Intent intent = new Intent(context, Alarm.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, intent, 0);*/
+        //am.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), 1000 * 60 * 10, pendingIntent); // Millisec * Second * Minute
+        //am.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis()* seconds * 1000, pendingIntent);
+        Intent intent = new Intent(context, Alarm.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context,0, intent,0);
+        AlarmManager am = (AlarmManager)context.getSystemService(context.ALARM_SERVICE);
+        am.set(AlarmManager.RTC_WAKEUP,System.currentTimeMillis() + seconds * 1000, pendingIntent );
     }
 
     public void cancelAlarm(Context context)
@@ -52,5 +58,5 @@ public class Alarm extends BroadcastReceiver
         PendingIntent sender = PendingIntent.getBroadcast(context, 0, intent, 0);
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         alarmManager.cancel(sender);
-    }*/
+    }
 }

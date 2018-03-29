@@ -72,8 +72,13 @@ public class CurrentLocation implements LocationListener {
             Log.d(TAG, "Connection on");
             // get location
             Location location = getLocation();
-            locationTable.put("Latitude", location.getLatitude());
-            locationTable.put("Longitude", location.getLongitude());
+
+            if(location != null){
+                locationTable.put("Latitude", location.getLatitude());
+                locationTable.put("Longitude", location.getLongitude());
+            } else {
+                throw new NoConnectionException();
+            }
 
         }
 
