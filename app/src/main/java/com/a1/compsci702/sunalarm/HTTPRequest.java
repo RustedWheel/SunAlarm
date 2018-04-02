@@ -19,14 +19,14 @@ public class HTTPRequest {
         _url = url;
     }
 
-    public String makeGetRequest() throws MalformedURLException, IOException {
+    public String makeGetRequest() throws IOException {
 
         URL url = new URL(_url);
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
         connection.setRequestMethod("GET");
 
         // connection.setRequestProperty("User-Agent", USER_AGENT);
-        connection.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
+        connection.setRequestProperty("Content-Type", "application/json");
         connection.setUseCaches(false);
         connection.setConnectTimeout(_connectionTimeout_ms);
         connection.setReadTimeout(_readTimeout_ms);

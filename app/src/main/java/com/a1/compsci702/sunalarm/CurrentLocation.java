@@ -58,9 +58,9 @@ public class CurrentLocation implements LocationListener {
     }
 
 
-    public Hashtable<String, Double> getCurrentLocation() throws NoConnectionException, SecurityException {
+    public Location getCurrentLocation() throws NoConnectionException, SecurityException {
 
-        Hashtable<String, Double> locationTable = new Hashtable<>();
+        Location location;
 
         if (!hasGPS && !hasNetwork) {
             Log.d(TAG, "Connection off");
@@ -71,18 +71,15 @@ public class CurrentLocation implements LocationListener {
 
             Log.d(TAG, "Connection on");
             // get location
-            Location location = getLocation();
+            location = getLocation();
 
-            if(location != null){
-                locationTable.put("Latitude", location.getLatitude());
-                locationTable.put("Longitude", location.getLongitude());
-            } else {
+            if(location == null){
                 throw new NoConnectionException();
             }
 
         }
 
-        return locationTable;
+        return location;
     }
 
 

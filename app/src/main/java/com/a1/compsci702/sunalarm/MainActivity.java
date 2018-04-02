@@ -7,6 +7,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.location.Location;
 import android.location.LocationListener;
 import android.os.Build;
 import android.provider.Settings;
@@ -23,7 +24,10 @@ import android.widget.Toast;
 
 import com.a1.compsci702.sunalarm.Exceptions.NoConnectionException;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.Hashtable;
 
 public class MainActivity extends AppCompatActivity {
@@ -87,12 +91,19 @@ public class MainActivity extends AppCompatActivity {
 
                     try {
 
-                        Hashtable<String, Double> location = currentLocation.getCurrentLocation();
+                        Location location = currentLocation.getCurrentLocation();
 
-                        Double latitude = location.get("Latitude");
-                        Double longitude = location.get("Longitude");
+                        Double latitude = location.getLatitude();
+                        Double longitude = location.getLongitude();
 
                         Toast.makeText(getApplicationContext(), "Sunrise !  Location - Latitude: " + latitude + " Longitude: " + longitude, Toast.LENGTH_LONG).show();
+
+                        SunriseTime sunriseTime = new SunriseTime();
+
+                        Calendar cal = Calendar.getInstance();
+                        cal.set(2018, Calendar.APRIL, 9); //Year, month, day of month, hours, minutes and seconds
+                        Date date = cal.getTime();
+                        sunriseTime.getSunriseTime(location, date);
 
                         alarm = new Alarm();
                         alarm.setAlarm(MainActivity.this, seconds);
@@ -101,6 +112,8 @@ public class MainActivity extends AppCompatActivity {
                         showGPSSettingsAlert();
                     } catch (SecurityException e){
                         showPermissionDenied();
+                    } catch (IOException e) {
+                        Log.e(TAG, "Failed to fetch sunrise time!");
                     }
 
                 } else {
