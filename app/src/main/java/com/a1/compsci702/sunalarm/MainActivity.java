@@ -2,24 +2,19 @@ package com.a1.compsci702.sunalarm;
 
 import android.Manifest;
 import android.annotation.TargetApi;
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
-import android.location.LocationListener;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.provider.Settings;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.TextInputEditText;
-import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.AppCompatButton;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
@@ -30,7 +25,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.Hashtable;
 
 public class MainActivity extends AppCompatActivity {
     private final static int ALL_PERMISSIONS_RESULT = 101;
@@ -218,7 +212,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    private class FetchSunriseData extends AsyncTask<Void, Void, String> {
+    private class FetchSunriseData extends AsyncTask<Void, Void, Date> {
 
         private Location _location;
         private Date _alarmDate;
@@ -229,14 +223,14 @@ public class MainActivity extends AppCompatActivity {
         }
 
         @Override
-        protected String doInBackground(Void... params) {
+        protected Date doInBackground(Void... params) {
 
             SunriseTime sunriseTime = new SunriseTime();
 
             try {
-                String time = sunriseTime.getSunriseTime(_location, _alarmDate);
+                Date date = sunriseTime.getSunriseTime(_location, _alarmDate);
 
-                return time;
+                return date;
             } catch (IOException e) {
 
                 Log.e(TAG, "Failed to fetch sunrise time!");
@@ -245,9 +239,9 @@ public class MainActivity extends AppCompatActivity {
         }
 
         @Override
-        protected void onPostExecute(String result) {
+        protected void onPostExecute(Date result) {
             super.onPostExecute(result);
-            Log.d(TAG, "JSON: " + result);
+            Log.d(TAG, "JSON: " + result.toString());
         }
     }
 }
