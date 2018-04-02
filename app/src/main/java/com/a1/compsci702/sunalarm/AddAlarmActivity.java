@@ -1,12 +1,10 @@
 package com.a1.compsci702.sunalarm;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.View;
 
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
-import com.wdullaer.materialdatetimepicker.time.RadialPickerLayout;
 import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
 
 import java.util.Calendar;
@@ -22,15 +20,11 @@ public class AddAlarmActivity extends AppCompatActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_alarm);
-        Log.d(TAG, "public class AddAlarmActivity");
-
 
         this.setTime();
     }
 
     private void setTime(){
-        Log.d(TAG, "private void setTime(View v)");
-
         Calendar now = Calendar.getInstance();
         TimePickerDialog tpd = TimePickerDialog.newInstance(
                 AddAlarmActivity.this,
@@ -38,6 +32,7 @@ public class AddAlarmActivity extends AppCompatActivity implements
                 now.get(Calendar.MINUTE),
                 false
         );
+
         tpd.setThemeDark(false);
         tpd.show(getFragmentManager(), "Timepickerdialog");
     }
@@ -49,7 +44,9 @@ public class AddAlarmActivity extends AppCompatActivity implements
     @Override
     public void onTimeSet(TimePickerDialog view, int hourOfDay, int minute, int second) {
         String time = "You picked the following time: "+hourOfDay+"h"+minute+"m";
+
         Log.d(TAG, time);
 
+        finish();
     }
 }
