@@ -34,7 +34,7 @@ dependencies {
     implementation 'com.android.support:recyclerview-v7:26.1.0'
 
     implementation 'com.getbase:floatingactionbutton:1.9.0'
-    implementation 'com.wdullaer:materialdatetimepicker:1.2.1'
+    implementation 'com.wdullaer:materialdatetimepicker:3.5.1'
     implementation 'com.bignerdranch.android:recyclerview-multiselect:+'
     implementation 'com.wrapp.floatlabelededittext:library:0.0.6'
 
