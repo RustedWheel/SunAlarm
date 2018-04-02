@@ -95,7 +95,7 @@ public class SunriseTime {
 
         Date convertedDate = null;
         try {
-            convertedDate = utcTime.parse(s);
+            convertedDate = currentTime.parse(s);
         } catch (ParseException e) {
             e.printStackTrace();
         }

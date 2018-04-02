@@ -11,8 +11,6 @@ import android.util.Log;
 
 import com.a1.compsci702.sunalarm.Exceptions.NoConnectionException;
 
-import java.util.Hashtable;
-
 /**
  * Created by st970 on 28/03/2018.
  */
@@ -107,8 +105,8 @@ public class CurrentLocation implements LocationListener {
                         return loc;
                     else {
                         Location mock = new Location("mock");
-                        mock.setLongitude(-36.848461);
-                        mock.setLatitude(174.763336);
+                        mock.setLongitude(174.763336);
+                        mock.setLatitude(-36.848461);
                         return mock;
                     }
                 }
