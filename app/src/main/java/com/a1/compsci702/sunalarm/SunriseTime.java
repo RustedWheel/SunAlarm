@@ -7,8 +7,12 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.TimeZone;
 
 /**
  * Created by David on 2018/3/22.
@@ -38,7 +42,7 @@ public class SunriseTime {
         return date;
     }
 
-    public String getSunriseTime(Location location, Date date) throws IOException {
+    public Date getSunriseTime(Location location, Date date) throws IOException {
         StringBuilder sb = new StringBuilder(s1);
         sb.append(location.getLatitude());
         sb.append(s2);
@@ -71,7 +75,26 @@ public class SunriseTime {
             e.printStackTrace();
         }
 
-        return result;
+        result = result.substring(0,19);
+
+        DateFormat utcTime = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+        utcTime.setTimeZone(TimeZone.getTimeZone("UTC"));
+
+        Date utcDate = null;
+        try {
+            utcDate = utcTime.parse(result);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        DateFormat currentTime = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+        currentTime.setTimeZone(TimeZone.getDefault());
+
+        String s = currentTime.format(utcDate);
+
+        Log.e(TAG, s);
+
+        return new Date();
     }
 
 }
