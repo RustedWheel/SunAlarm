@@ -48,9 +48,9 @@ public class SunriseTime {
         sb.append(s2);
         sb.append(location.getLongitude());
         sb.append(s3);
-        sb.append(date.getYear());
+        sb.append(date.getYear()+1900);
         sb.append(s4);
-        sb.append(date.getMonth());
+        sb.append(date.getMonth()+1);
         sb.append(s4);
         sb.append(date.getDate());
         sb.append(s5);
@@ -91,10 +91,18 @@ public class SunriseTime {
         currentTime.setTimeZone(TimeZone.getDefault());
 
         String s = currentTime.format(utcDate);
+        Log.d(TAG, s);
 
-        Log.e(TAG, s);
+        Date convertedDate = null;
+        try {
+            convertedDate = utcTime.parse(s);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
 
-        return new Date();
+        Log.d(TAG, convertedDate.toString());
+        return convertedDate;
+
     }
 
 }
