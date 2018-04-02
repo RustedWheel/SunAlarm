@@ -11,6 +11,7 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.os.Build;
 import android.provider.Settings;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.ActivityCompat;
@@ -42,11 +43,22 @@ public class MainActivity extends AppCompatActivity {
     private ArrayList<String> permissionsRejected = new ArrayList<>();
     private Alarm alarm;
 
+    private FloatingActionButton mAddAlarm;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        mAddAlarm = (FloatingActionButton) findViewById(R.id.add_alarm);
+
+        mAddAlarm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getApplicationContext(), "Button pressed.", Toast.LENGTH_LONG).show();
+            }
+        });
 
         askForPermission();
         setUpUIComponents();
@@ -72,10 +84,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setUpUIComponents(){
-
-        btnSet = (AppCompatButton) findViewById(R.id.setAlarm);
-        etTime = (TextInputLayout) findViewById(R.id.time_input_layout);
-
         btnSet.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
