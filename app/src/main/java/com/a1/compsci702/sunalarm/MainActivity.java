@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.provider.Settings;
 import android.support.design.widget.FloatingActionButton;
@@ -65,7 +66,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void askForPermission(){
+    private void askForPermission() {
         permissions.add(Manifest.permission.ACCESS_FINE_LOCATION);
         permissions.add(Manifest.permission.ACCESS_COARSE_LOCATION);
         permissionsToRequest = findUnAskedPermissions(permissions);
@@ -74,7 +75,7 @@ public class MainActivity extends AppCompatActivity {
 
             if (permissionsToRequest.size() > 0) {
 
-                ActivityCompat.requestPermissions(MainActivity.this,permissionsToRequest.toArray(new String[permissionsToRequest.size()]),
+                ActivityCompat.requestPermissions(MainActivity.this, permissionsToRequest.toArray(new String[permissionsToRequest.size()]),
                         ALL_PERMISSIONS_RESULT);
                 Log.d(TAG, "Permission requests");
                 canGetLocation = false;
@@ -83,7 +84,15 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+<<<<<<< HEAD
     private void setUpUIComponents(){
+=======
+    private void setUpUIComponents() {
+
+        btnSet = (AppCompatButton) findViewById(R.id.setAlarm);
+        etTime = (TextInputLayout) findViewById(R.id.time_input_layout);
+
+>>>>>>> 19b0cf8062aae48dc21d79e0ea459d8c66d127b2
         btnSet.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -106,22 +115,20 @@ public class MainActivity extends AppCompatActivity {
 
                         Toast.makeText(getApplicationContext(), "Sunrise !  Location - Latitude: " + latitude + " Longitude: " + longitude, Toast.LENGTH_LONG).show();
 
-                        SunriseTime sunriseTime = new SunriseTime();
-
                         Calendar cal = Calendar.getInstance();
                         cal.set(2018, Calendar.APRIL, 9); //Year, month, day of month, hours, minutes and seconds
                         Date date = cal.getTime();
-                        sunriseTime.getSunriseTime(location, date);
+
+                        FetchSunriseData sunriseTask = new FetchSunriseData(location, date);
+                        sunriseTask.execute();
 
                         alarm = new Alarm();
                         alarm.setAlarm(MainActivity.this, seconds);
 
                     } catch (NoConnectionException e) {
                         showGPSSettingsAlert();
-                    } catch (SecurityException e){
+                    } catch (SecurityException e) {
                         showPermissionDenied();
-                    } catch (IOException e) {
-                        Log.e(TAG, "Failed to fetch sunrise time!");
                     }
 
                 } else {
@@ -150,7 +157,7 @@ public class MainActivity extends AppCompatActivity {
     private boolean hasPermission(String permission) {
         if (canAskPermission()) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                return (ContextCompat.checkSelfPermission(MainActivity.this,permission) == PackageManager.PERMISSION_GRANTED);
+                return (ContextCompat.checkSelfPermission(MainActivity.this, permission) == PackageManager.PERMISSION_GRANTED);
             }
         }
         return true;
@@ -174,13 +181,13 @@ public class MainActivity extends AppCompatActivity {
 
                 if (permissionsRejected.size() > 0) {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                        if (ActivityCompat.shouldShowRequestPermissionRationale(MainActivity.this,permissionsRejected.get(0))) {
+                        if (ActivityCompat.shouldShowRequestPermissionRationale(MainActivity.this, permissionsRejected.get(0))) {
                             showMessageOKCancel("These permissions are mandatory for the application. Please allow access.",
                                     new DialogInterface.OnClickListener() {
                                         @Override
                                         public void onClick(DialogInterface dialog, int which) {
                                             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                                                ActivityCompat.requestPermissions(MainActivity.this,permissionsRejected.toArray(
+                                                ActivityCompat.requestPermissions(MainActivity.this, permissionsRejected.toArray(
                                                         new String[permissionsRejected.size()]), ALL_PERMISSIONS_RESULT);
                                             }
                                         }
@@ -225,7 +232,40 @@ public class MainActivity extends AppCompatActivity {
         alertDialog.show();
     }
 
-    public void showPermissionDenied(){
+    public void showPermissionDenied() {
         Toast.makeText(getApplicationContext(), "No Permission to get location!", Toast.LENGTH_LONG).show();
+    }
+
+    private class FetchSunriseData extends AsyncTask<Void, Void, String> {
+
+        private Location _location;
+        private Date _alarmDate;
+
+        public FetchSunriseData(Location location, Date alarmDate){
+            _location = location;
+            _alarmDate = alarmDate;
+        }
+
+        @Override
+        protected String doInBackground(Void... params) {
+
+            SunriseTime sunriseTime = new SunriseTime();
+
+            try {
+                String time = sunriseTime.getSunriseTime(_location, _alarmDate);
+
+                return time;
+            } catch (IOException e) {
+
+                Log.e(TAG, "Failed to fetch sunrise time!");
+                return null;
+            }
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            super.onPostExecute(result);
+            Log.d(TAG, "JSON: " + result);
+        }
     }
 }
