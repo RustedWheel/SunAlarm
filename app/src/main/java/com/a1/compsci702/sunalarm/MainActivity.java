@@ -35,6 +35,8 @@ public class MainActivity extends AppCompatActivity {
     private FloatingActionButton mAddAlarm;
     private boolean canGetLocation = true;
 
+    private final static int PICK_ALARM_TIME = 0;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -75,12 +77,24 @@ public class MainActivity extends AppCompatActivity {
                 getSunriseTime();
 
                 Intent newAlarmIntent = new Intent(v.getContext(), AddAlarmActivity.class);
-                startActivity(newAlarmIntent);
+                startActivityForResult(newAlarmIntent, PICK_ALARM_TIME);
             }
         });
-
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        Log.d(TAG, "onActivityResult()");
+
+        // Check which request we're responding to
+        if (requestCode == PICK_ALARM_TIME) {
+            // Make sure the request was successful
+            if (resultCode == RESULT_OK) {
+                // todo
+                Log.d(TAG, "protected void onActivityResult() " + data.getDataString());
+            }
+        }
+    }
 
     private ArrayList findUnAskedPermissions(ArrayList<String> wanted) {
         ArrayList result = new ArrayList();
