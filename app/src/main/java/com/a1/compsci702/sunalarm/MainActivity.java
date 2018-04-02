@@ -84,15 +84,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-<<<<<<< HEAD
-    private void setUpUIComponents(){
-=======
     private void setUpUIComponents() {
-
-        btnSet = (AppCompatButton) findViewById(R.id.setAlarm);
-        etTime = (TextInputLayout) findViewById(R.id.time_input_layout);
-
->>>>>>> 19b0cf8062aae48dc21d79e0ea459d8c66d127b2
         btnSet.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -241,7 +233,7 @@ public class MainActivity extends AppCompatActivity {
         private Location _location;
         private Date _alarmDate;
 
-        public FetchSunriseData(Location location, Date alarmDate){
+        public FetchSunriseData(Location location, Date alarmDate) {
             _location = location;
             _alarmDate = alarmDate;
         }
