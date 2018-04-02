@@ -1,13 +1,11 @@
 package com.a1.compsci702.sunalarm;
 
-import java.io.IOException;
-import java.net.MalformedURLException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-
 import android.location.Location;
-import android.os.AsyncTask;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -54,7 +52,18 @@ public class SunriseTime {
         HTTPRequest request = new HTTPRequest(sb.toString());
         String rawJSON = request.makeGetRequest();
 
-        return rawJSON;
+        ProcessJSON processJSON = new ProcessJSON();
+
+        JSONObject response = processJSON.stringToJSON(rawJSON);
+
+        String result = "";
+
+        try {
+            result = response.getString("sunrise");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return result;
     }
 
 }
