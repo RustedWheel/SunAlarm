@@ -33,16 +33,11 @@ import java.util.Date;
 import java.util.Hashtable;
 
 public class MainActivity extends AppCompatActivity {
-
-    private TextInputLayout etTime;
-    private AppCompatButton btnSet;
     private final static int ALL_PERMISSIONS_RESULT = 101;
     private final String TAG = "MainActivity";
-    private boolean canGetLocation = true;
     private ArrayList<String> permissions = new ArrayList<>();
     private ArrayList<String> permissionsToRequest;
     private ArrayList<String> permissionsRejected = new ArrayList<>();
-    private Alarm alarm;
 
     private FloatingActionButton mAddAlarm;
 
@@ -52,14 +47,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mAddAlarm = (FloatingActionButton) findViewById(R.id.add_alarm);
-
-        mAddAlarm.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(getApplicationContext(), "Button pressed.", Toast.LENGTH_LONG).show();
-            }
-        });
 
         askForPermission();
         setUpUIComponents();
@@ -78,55 +65,21 @@ public class MainActivity extends AppCompatActivity {
                 ActivityCompat.requestPermissions(MainActivity.this, permissionsToRequest.toArray(new String[permissionsToRequest.size()]),
                         ALL_PERMISSIONS_RESULT);
                 Log.d(TAG, "Permission requests");
-                canGetLocation = false;
             }
 
         }
     }
 
     private void setUpUIComponents() {
-        btnSet.setOnClickListener(new View.OnClickListener() {
+
+        mAddAlarm = findViewById(R.id.add_alarm);
+
+        mAddAlarm.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-
-                String time = etTime.getEditText().getText().toString();
-
-                // Placeholder, currently in seconds
-                int seconds = Integer.parseInt(time);
-
-                if (canGetLocation) {
-
-                    CurrentLocation currentLocation = new CurrentLocation(getApplicationContext());
-
-                    try {
-
-                        Location location = currentLocation.getCurrentLocation();
-
-                        Double latitude = location.getLatitude();
-                        Double longitude = location.getLongitude();
-
-                        Toast.makeText(getApplicationContext(), "Sunrise !  Location - Latitude: " + latitude + " Longitude: " + longitude, Toast.LENGTH_LONG).show();
-
-                        Calendar cal = Calendar.getInstance();
-                        cal.set(2018, Calendar.APRIL, 9); //Year, month, day of month, hours, minutes and seconds
-                        Date date = cal.getTime();
-
-                        FetchSunriseData sunriseTask = new FetchSunriseData(location, date);
-                        sunriseTask.execute();
-
-                        alarm = new Alarm();
-                        alarm.setAlarm(MainActivity.this, seconds);
-
-                    } catch (NoConnectionException e) {
-                        showGPSSettingsAlert();
-                    } catch (SecurityException e) {
-                        showPermissionDenied();
-                    }
-
-                } else {
-                    showPermissionDenied();
-                }
-
+            public void onClick(View v) {
+                Log.d(TAG, "Button Pressed.");
+                Intent newAlarmIntent = new Intent(v.getContext(), AddAlarmActivity.class);
+                startActivity(newAlarmIntent);
             }
         });
 
@@ -187,9 +140,6 @@ public class MainActivity extends AppCompatActivity {
                             return;
                         }
                     }
-                } else {
-                    Log.d(TAG, "No rejected permissions.");
-                    canGetLocation = true;
                 }
                 break;
         }
