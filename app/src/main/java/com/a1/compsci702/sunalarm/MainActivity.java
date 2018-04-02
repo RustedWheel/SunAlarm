@@ -2,6 +2,7 @@ package com.a1.compsci702.sunalarm;
 
 import android.Manifest;
 import android.annotation.TargetApi;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -90,8 +91,13 @@ public class MainActivity extends AppCompatActivity {
         if (requestCode == PICK_ALARM_TIME) {
             // Make sure the request was successful
             if (resultCode == RESULT_OK) {
-                // todo
-                Log.d(TAG, "protected void onActivityResult() " + data.getDataString());
+                String result = data.getStringExtra("result");
+
+                Log.d(TAG, "protected void onActivityResult() " + result);
+            }
+            if (resultCode == Activity.RESULT_CANCELED) {
+                //Write your code if there's no result
+                Log.e(TAG, "resultCode == " + Activity.RESULT_CANCELED);
             }
         }
     }
