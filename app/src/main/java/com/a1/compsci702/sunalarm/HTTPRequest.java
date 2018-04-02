@@ -47,6 +47,8 @@ public class HTTPRequest {
             }
             in.close();
 
+        } else {
+            throw new IOException();
         }
 
         return response.toString();

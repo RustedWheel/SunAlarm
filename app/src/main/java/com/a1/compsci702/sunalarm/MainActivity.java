@@ -38,9 +38,8 @@ public class MainActivity extends AppCompatActivity {
     private ArrayList<String> permissions = new ArrayList<>();
     private ArrayList<String> permissionsToRequest;
     private ArrayList<String> permissionsRejected = new ArrayList<>();
-
     private FloatingActionButton mAddAlarm;
-
+    private boolean canGetLocation = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,6 +64,7 @@ public class MainActivity extends AppCompatActivity {
                 ActivityCompat.requestPermissions(MainActivity.this, permissionsToRequest.toArray(new String[permissionsToRequest.size()]),
                         ALL_PERMISSIONS_RESULT);
                 Log.d(TAG, "Permission requests");
+                canGetLocation = false;
             }
 
         }
@@ -78,6 +78,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Log.d(TAG, "Button Pressed.");
+                getSunriseTime();
+
                 Intent newAlarmIntent = new Intent(v.getContext(), AddAlarmActivity.class);
                 startActivity(newAlarmIntent);
             }
@@ -177,6 +179,44 @@ public class MainActivity extends AppCompatActivity {
     public void showPermissionDenied() {
         Toast.makeText(getApplicationContext(), "No Permission to get location!", Toast.LENGTH_LONG).show();
     }
+
+
+    private void getSunriseTime() {
+
+        if (canGetLocation) {
+
+            CurrentLocation currentLocation = new CurrentLocation(getApplicationContext());
+
+            try {
+
+                Location location = currentLocation.getCurrentLocation();
+
+                Double latitude = location.getLatitude();
+                Double longitude = location.getLongitude();
+
+                Toast.makeText(getApplicationContext(), "Sunrise !  Location - Latitude: " + latitude + " Longitude: " + longitude, Toast.LENGTH_LONG).show();
+
+                SunriseTime sunriseTime = new SunriseTime();
+
+                Calendar cal = Calendar.getInstance();
+                cal.set(2018, Calendar.APRIL, 9); //Year, month, day of month, hours, minutes and seconds
+                Date date = cal.getTime();
+
+                FetchSunriseData sunriseTask = new FetchSunriseData(location, date);
+                sunriseTask.execute();
+
+                /*alarm = new Alarm();
+                alarm.setAlarm(MainActivity.this, seconds);*/
+
+            } catch (NoConnectionException e) {
+                showGPSSettingsAlert();
+            } catch (SecurityException e) {
+                showPermissionDenied();
+            }
+
+        }
+    }
+
 
     private class FetchSunriseData extends AsyncTask<Void, Void, String> {
 

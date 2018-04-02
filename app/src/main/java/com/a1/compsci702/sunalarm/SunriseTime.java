@@ -1,6 +1,7 @@
 package com.a1.compsci702.sunalarm;
 
 import android.location.Location;
+import android.util.Log;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -22,6 +23,7 @@ public class SunriseTime {
     private final String s3 = "&date=";
     private final String s4 = "-";
     private final String s5 = "&formatted=0";
+    private final String TAG = "SunriseTime";
 
     public SunriseTime() {
 
@@ -52,6 +54,8 @@ public class SunriseTime {
         HTTPRequest request = new HTTPRequest(sb.toString());
         String rawJSON = request.makeGetRequest();
 
+        Log.d(TAG, "JSON: " + rawJSON);
+
         ProcessJSON processJSON = new ProcessJSON();
 
         JSONObject response = processJSON.stringToJSON(rawJSON);
@@ -59,10 +63,14 @@ public class SunriseTime {
         String result = "";
 
         try {
-            result = response.getString("sunrise");
+
+            JSONObject results = response.getJSONObject("results");
+            result = results.getString("sunrise");
+
         } catch (JSONException e) {
             e.printStackTrace();
         }
+
         return result;
     }
 
