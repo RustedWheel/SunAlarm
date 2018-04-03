@@ -46,9 +46,11 @@ public class MainActivity extends AppCompatActivity {
     private ArrayList<Integer> alarmIds;
     private Hashtable<String, Long> sunriseTimes = new Hashtable<String, Long>(); //remove when cache is done
 
+/*
     private String offsetSign;
     private int hour;
     private int minute;
+*/
 
 
     private final static int PICK_ALARM_TIME = 0;
@@ -62,7 +64,6 @@ public class MainActivity extends AppCompatActivity {
         askForPermission();
         setUpUIComponents();
         loadAlarms();
-        //cacheDates(); NEED TO REMOVE OFFSET ETC BEFORE THIS WORKS
     }
 
     private void askForPermission() {
@@ -110,14 +111,34 @@ public class MainActivity extends AppCompatActivity {
 
                 String[] splitResult = result.split(":");
 
-                offsetSign = splitResult[0];
-                hour = Integer.parseInt(splitResult[1]);
-                minute = Integer.parseInt(splitResult[2]);
+                String offsetSign = splitResult[0];
+                int hour = Integer.parseInt(splitResult[1]);
+                int minute = Integer.parseInt(splitResult[2]);
 
-                Calendar c = Calendar.getInstance();
-                c.add(Calendar.DATE, 1);
-                Log.d(TAG, c.getTime().toString());
-                getSunriseTime(c.getTime());
+                //get sunrise time for tomorrow
+                //calculate offset time
+                //set alarm
+                Calendar today = Calendar.getInstance();
+                today.add(Calendar.DATE, 1);
+                String dateTomorrow = dateToString(today.getTime());
+                Log.d(TAG, "Date tomorrow is : " + dateTomorrow);
+
+                Date nextSunrise = new Date(sunriseTimes.get(dateTomorrow));
+
+                Log.d(TAG, "Sunrise tomorrow is : " + nextSunrise);
+
+                Calendar c = convertDateToCalendar(nextSunrise);
+
+                if (offsetSign.equals("-")) {
+                    hour = -hour;
+                    minute = -minute;
+                }
+
+                    c.add(Calendar.HOUR, hour);
+                    c.add(Calendar.MINUTE, minute);
+
+                    Log.d(TAG,c.toString());
+                    setAlarm(c.getTime(), 1);
 
                 Log.d(TAG, "protected void onActivityResult() " + result);
             }
@@ -262,7 +283,8 @@ public class MainActivity extends AppCompatActivity {
                 Double latitude = location.getLatitude();
                 Double longitude = location.getLongitude();
 
-                Toast.makeText(getApplicationContext(), "Sunrise !  Location - Latitude: " + latitude + " Longitude: " + longitude, Toast.LENGTH_LONG).show();
+                //Toast.makeText(getApplicationContext(), "Sunrise !  Location - Latitude: " + latitude + " Longitude: " + longitude, Toast.LENGTH_LONG).show();
+                Log.d(TAG, "Sunrise !  Location - Latitude: " + latitude + " Longitude: " + longitude);
 
                 FetchSunriseData sunriseTask = new FetchSunriseData(location, date);
                 sunriseTask.execute();
@@ -320,18 +342,7 @@ public class MainActivity extends AppCompatActivity {
                 Log.d(TAG, "JSON: " + result.toString());
                 sunriseTimes.put(dateToString(result), result.getTime());
 
-                Calendar c = convertDateToCalendar(result);
 
-                if (offsetSign.equals("-")) {
-                    hour = -hour;
-                    minute = -minute;
-                }
-
-                    c.add(Calendar.HOUR, hour);
-                    c.add(Calendar.MINUTE, minute);
-
-                    Log.d(TAG,c.toString());
-                    setAlarm(c.getTime(), 1);
             } else {
                 Toast.makeText(getApplicationContext(), "Unable to connect to server", Toast.LENGTH_LONG).show();
             }
