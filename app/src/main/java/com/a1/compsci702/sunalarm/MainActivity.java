@@ -31,7 +31,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.Hashtable;
 import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
@@ -44,7 +43,6 @@ public class MainActivity extends AppCompatActivity {
     private FloatingActionButton mAddAlarm;
     private boolean canGetLocation = true;
     private ArrayList<Integer> alarmIds;
-    private Hashtable<String, Long> sunriseTimes = new Hashtable<String, Long>(); //remove when cache is done
 
 /*
     private String offsetSign;
@@ -124,7 +122,9 @@ public class MainActivity extends AppCompatActivity {
                 String dateTomorrow = dateToString(today.getTime());
                 Log.d(TAG, "Date tomorrow is : " + dateTomorrow);
 
-                Date nextSunrise = new Date(sunriseTimes.get(dateTomorrow));
+                //change later on to set date of alarm
+                SharedPreferences sunriseStorage = getSharedPreferences(Values.SUNRISE_TIME_CACHE, Context.MODE_PRIVATE);
+                Date nextSunrise = new Date(sunriseStorage.getLong(dateTomorrow, 0L));
 
                 Log.d(TAG, "Sunrise tomorrow is : " + nextSunrise);
 
@@ -299,10 +299,20 @@ public class MainActivity extends AppCompatActivity {
 
     private void cacheDates() {
 
+        Log.d(TAG, "Cache dates");
+
+        SharedPreferences sunriseStorage = getSharedPreferences(Values.SUNRISE_TIME_CACHE, Context.MODE_PRIVATE);
+
         for(int i = 1; i <= 7; i++) {
             Calendar c = Calendar.getInstance();
             c.add(Calendar.DATE, i);
-            getSunriseTime(c.getTime());
+            //check if already in cache
+            if (sunriseStorage.contains(dateToString(c.getTime()))) {
+                Log.d(TAG, "Already cached : " + c.getTime());
+            } else {
+                Log.d(TAG, "Accessing date : " + c.getTime());
+                getSunriseTime(c.getTime());
+            }
         }
     }
 
@@ -341,8 +351,7 @@ public class MainActivity extends AppCompatActivity {
             if (result != null) {
                 super.onPostExecute(result);
                 Log.d(TAG, "JSON: " + result.toString());
-                sunriseTimes.put(dateToString(result), result.getTime());
-
+                saveSunriseTime(result);
 
             } else {
                 Toast.makeText(getApplicationContext(), "Unable to connect to server", Toast.LENGTH_LONG).show();
@@ -397,5 +406,12 @@ public class MainActivity extends AppCompatActivity {
         editor.putInt(String.valueOf(alarmID), alarmID);
         editor.apply();
 
+    }
+
+    private void saveSunriseTime(Date time) {
+        SharedPreferences sunriseStorage = getSharedPreferences(Values.SUNRISE_TIME_CACHE, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sunriseStorage.edit();
+        editor.putLong(dateToString(time), time.getTime());
+        editor.apply();
     }
 }
