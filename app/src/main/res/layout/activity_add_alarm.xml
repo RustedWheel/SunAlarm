@@ -47,6 +47,7 @@
         android:layout_alignTop="@+id/alarmTimePicker"
         android:layout_marginTop="12dp"
         android:layout_toEndOf="@+id/alarmTimePicker"
-        android:layout_toRightOf="@+id/alarmTimePicker" />
+        android:layout_toRightOf="@+id/alarmTimePicker"
+        android:descendantFocusability="blocksDescendants" />
 
 </RelativeLayout>
