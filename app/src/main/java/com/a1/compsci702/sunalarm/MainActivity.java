@@ -365,11 +365,6 @@ public class MainActivity extends AppCompatActivity {
      * @param date Time for alarm
      */
     public void setAlarm(Date date) {
-        /*AlarmManager am =( AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
-        Intent intent = new Intent(context, AlarmBroadcastReceiver.class);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, intent, 0);*/
-        //am.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), 1000 * 60 * 10, pendingIntent); // Millisec * Second * Minute
-        //am.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis()* seconds * 1000, pendingIntent);
 
         Calendar c = convertDateToCalendar(date);
         int alarmID = getNextAlarmID();
@@ -381,7 +376,7 @@ public class MainActivity extends AppCompatActivity {
         am.set(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(), pendingIntent );
         Log.d(TAG, "alarm set " + date.toString() + " ALARM ID: " + alarmID);
         Toast.makeText(getApplicationContext(), date.toString(), Toast.LENGTH_LONG).show();
-        saveToStorage(alarmID);
+        saveAlarm(alarmID);
     }
 
 
@@ -390,6 +385,7 @@ public class MainActivity extends AppCompatActivity {
         PendingIntent sender = PendingIntent.getBroadcast(this, alarmID, intent, 0);
         AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
         alarmManager.cancel(sender);
+        deleteAlarm(alarmID);
     }
 
 
@@ -399,7 +395,7 @@ public class MainActivity extends AppCompatActivity {
         return c;
     }
 
-    private void saveToStorage(int alarmID){
+    private void saveAlarm(int alarmID){
 
         SharedPreferences alarmsStorage = getSharedPreferences(Values.STORED_ALARMS, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = alarmsStorage.edit();
@@ -407,6 +403,17 @@ public class MainActivity extends AppCompatActivity {
         editor.apply();
 
     }
+
+
+    private void deleteAlarm(int alarmID){
+
+        SharedPreferences alarmsStorage = getSharedPreferences(Values.STORED_ALARMS, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = alarmsStorage.edit();
+        editor.remove(String.valueOf(alarmID));
+        editor.apply();
+
+    }
+
 
     private void saveSunriseTime(Date time) {
         SharedPreferences sunriseStorage = getSharedPreferences(Values.SUNRISE_TIME_CACHE, Context.MODE_PRIVATE);
