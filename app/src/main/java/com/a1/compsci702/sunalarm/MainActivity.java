@@ -199,7 +199,7 @@ public class MainActivity extends AppCompatActivity {
                 FetchSunriseData sunriseTask = new FetchSunriseData(location, date);
                 sunriseTask.execute();
 
-                /*alarm = new Alarm();
+                /*alarm = new AlarmBroadcastReceiver();
                 alarm.setAlarm(MainActivity.this, seconds);*/
 
             } catch (NoConnectionException e) {
