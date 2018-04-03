@@ -64,6 +64,7 @@ public class MainActivity extends AppCompatActivity {
         askForPermission();
         setUpUIComponents();
         loadAlarms();
+        cacheDates();
     }
 
     private void askForPermission() {
