@@ -3,7 +3,9 @@ package com.a1.compsci702.sunalarm;
 import android.Manifest;
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.app.AlarmManager;
 import android.app.AlertDialog;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -20,6 +22,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import com.a1.compsci702.sunalarm.Exceptions.NoConnectionException;
@@ -36,9 +39,14 @@ public class MainActivity extends AppCompatActivity {
     private ArrayList<String> permissions = new ArrayList<>();
     private ArrayList<String> permissionsToRequest;
     private ArrayList<String> permissionsRejected = new ArrayList<>();
+    private ListView alarmListView;
     private FloatingActionButton mAddAlarm;
     private boolean canGetLocation = true;
     private ArrayList<Integer> alarmIds;
+
+    private String offsetSign;
+    private int hour;
+    private int minute;
 
 
     private final static int PICK_ALARM_TIME = 0;
@@ -80,7 +88,6 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Log.d(TAG, "Button Pressed.");
-                getSunriseTime();
 
                 Intent newAlarmIntent = new Intent(v.getContext(), AddAlarmActivity.class);
                 startActivityForResult(newAlarmIntent, PICK_ALARM_TIME);
@@ -97,6 +104,17 @@ public class MainActivity extends AppCompatActivity {
             // Make sure the request was successful
             if (resultCode == RESULT_OK) {
                 String result = data.getStringExtra("addAlarmResult");
+
+                String[] splitResult = result.split(":");
+
+                offsetSign = splitResult[0];
+                hour = Integer.parseInt(splitResult[1]);
+                minute = Integer.parseInt(splitResult[2]);
+
+                Calendar c = Calendar.getInstance();
+                c.add(Calendar.DATE, 1);
+                Log.d(TAG, c.getTime().toString());
+                getSunriseTime(c.getTime());
 
                 Log.d(TAG, "protected void onActivityResult() " + result);
             }
@@ -228,7 +246,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    private void getSunriseTime() {
+    private void getSunriseTime(Date date) {
 
         if (canGetLocation) {
 
@@ -242,10 +260,6 @@ public class MainActivity extends AppCompatActivity {
                 Double longitude = location.getLongitude();
 
                 Toast.makeText(getApplicationContext(), "Sunrise !  Location - Latitude: " + latitude + " Longitude: " + longitude, Toast.LENGTH_LONG).show();
-
-                Calendar cal = Calendar.getInstance();
-                cal.set(2018, Calendar.APRIL, 9); //Year, month, day of month, hours, minutes and seconds
-                Date date = cal.getTime();
 
                 FetchSunriseData sunriseTask = new FetchSunriseData(location, date);
                 sunriseTask.execute();
@@ -289,9 +303,71 @@ public class MainActivity extends AppCompatActivity {
             if (result != null) {
                 super.onPostExecute(result);
                 Log.d(TAG, "JSON: " + result.toString());
+
+                Calendar c = convertDateToCalendar(result);
+
+                if (offsetSign.equals("-")) {
+                    hour = -hour;
+                    minute = -minute;
+                }
+
+                    c.add(Calendar.HOUR, hour);
+                    c.add(Calendar.MINUTE, minute);
+
+                    Log.d(TAG,c.toString());
+                    setAlarm(c.getTime(), 1);
             } else {
                 Toast.makeText(getApplicationContext(), "Unable to connect to server", Toast.LENGTH_LONG).show();
             }
         }
+
+    }
+
+    /**
+     *
+     * @param date Time for alarm
+     * @param alarmID
+     */
+    public void setAlarm(Date date, int alarmID) {
+        /*AlarmManager am =( AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
+        Intent intent = new Intent(context, AlarmBroadcastReceiver.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, intent, 0);*/
+        //am.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), 1000 * 60 * 10, pendingIntent); // Millisec * Second * Minute
+        //am.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis()* seconds * 1000, pendingIntent);
+
+        Calendar c = convertDateToCalendar(date);
+
+        Intent intent = new Intent(this, AlarmBroadcastReceiver.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, alarmID, intent,0);
+        AlarmManager am = (AlarmManager)getSystemService(this.ALARM_SERVICE);
+        // am.set(AlarmManager.RTC_WAKEUP,System.currentTimeMillis() + seconds * 1000, pendingIntent );
+        am.set(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(), pendingIntent );
+        Log.d(TAG, "alarm set " + date.toString());
+        Toast.makeText(getApplicationContext(), date.toString(), Toast.LENGTH_LONG).show();
+        saveToStorage(alarmID);
+    }
+
+
+    public void cancelAlarm(int alarmID) {
+        Intent intent = new Intent(this, AlarmBroadcastReceiver.class);
+        PendingIntent sender = PendingIntent.getBroadcast(this, alarmID, intent, 0);
+        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        alarmManager.cancel(sender);
+    }
+
+
+    private Calendar convertDateToCalendar(Date date) {
+        Calendar c = Calendar.getInstance();
+        c.setTime(date);
+        return c;
+    }
+
+    private void saveToStorage(int alarmID){
+
+        SharedPreferences alarmsStorage = getSharedPreferences(Values.STORED_ALARMS, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = alarmsStorage.edit();
+        editor.putInt(String.valueOf(alarmID), alarmID);
+        editor.apply();
+
     }
 }
