@@ -139,7 +139,7 @@ public class MainActivity extends AppCompatActivity {
                     c.add(Calendar.MINUTE, minute);
 
                     Log.d(TAG,c.toString());
-                    setAlarm(c.getTime(), 1);
+                    setAlarm(c.getTime());
 
                 Log.d(TAG, "protected void onActivityResult() " + result);
             }
@@ -363,9 +363,8 @@ public class MainActivity extends AppCompatActivity {
     /**
      *
      * @param date Time for alarm
-     * @param alarmID
      */
-    public void setAlarm(Date date, int alarmID) {
+    public void setAlarm(Date date) {
         /*AlarmManager am =( AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
         Intent intent = new Intent(context, AlarmBroadcastReceiver.class);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, intent, 0);*/
@@ -373,6 +372,7 @@ public class MainActivity extends AppCompatActivity {
         //am.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis()* seconds * 1000, pendingIntent);
 
         Calendar c = convertDateToCalendar(date);
+        int alarmID = getNextAlarmID();
 
         Intent intent = new Intent(this, AlarmBroadcastReceiver.class);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(this, alarmID, intent,0);
@@ -413,5 +413,14 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences.Editor editor = sunriseStorage.edit();
         editor.putLong(dateToString(time), time.getTime());
         editor.apply();
+    }
+
+    private int getNextAlarmID() {
+        SharedPreferences alarmStorage = getSharedPreferences(Values.ALARM_ID, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = alarmStorage.edit();
+        int id = alarmStorage.getInt("ID", 0) + 1;
+        editor.putInt("ID", id);
+        editor.apply();
+        return id;
     }
 }
