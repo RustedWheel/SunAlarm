@@ -14,12 +14,12 @@ import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.AsyncTask;
 import android.os.Build;
+import android.os.Bundle;
 import android.provider.Settings;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ListView;
@@ -31,6 +31,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Hashtable;
 import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
@@ -43,6 +44,7 @@ public class MainActivity extends AppCompatActivity {
     private FloatingActionButton mAddAlarm;
     private boolean canGetLocation = true;
     private ArrayList<Integer> alarmIds;
+    private Hashtable<String, Long> sunriseTimes = new Hashtable<String, Long>(); //remove when cache is done
 
     private String offsetSign;
     private int hour;
@@ -60,6 +62,7 @@ public class MainActivity extends AppCompatActivity {
         askForPermission();
         setUpUIComponents();
         loadAlarms();
+        //cacheDates(); NEED TO REMOVE OFFSET ETC BEFORE THIS WORKS
     }
 
     private void askForPermission() {
@@ -271,6 +274,18 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    private void cacheDates() {
+
+        for(int i = 1; i <= 7; i++) {
+            Calendar c = Calendar.getInstance();
+            c.add(Calendar.DATE, i);
+            getSunriseTime(c.getTime());
+        }
+    }
+
+    private String dateToString(Date date) {
+        return date.getYear() + "-" + date.getMonth() + "-" + date.getDay();
+    }
 
     private class FetchSunriseData extends AsyncTask<Void, Void, Date> {
 
@@ -303,6 +318,7 @@ public class MainActivity extends AppCompatActivity {
             if (result != null) {
                 super.onPostExecute(result);
                 Log.d(TAG, "JSON: " + result.toString());
+                sunriseTimes.put(dateToString(result), result.getTime());
 
                 Calendar c = convertDateToCalendar(result);
 
