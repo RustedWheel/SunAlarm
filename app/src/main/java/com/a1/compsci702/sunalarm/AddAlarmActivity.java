@@ -1,59 +1,72 @@
 package com.a1.compsci702.sunalarm;
 
+import android.annotation.TargetApi;
+import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
-
-import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
-import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
+import android.view.View;
+import android.widget.Button;
+import android.widget.NumberPicker;
+import android.widget.TimePicker;
+import android.widget.Toast;
 
 import java.util.Calendar;
 import java.util.Date;
 
-
-public class AddAlarmActivity extends AppCompatActivity implements
-        TimePickerDialog.OnTimeSetListener,
-        DatePickerDialog.OnDateSetListener {
+public class AddAlarmActivity extends AppCompatActivity {
 
     private final String TAG = "AddAlarmActivity";
+    private Button confirmButton;
+    private NumberPicker offsetPicker;
+
+    private TimePicker _alarmTimePicker;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_add_alarm);
 
-        this.setTime();
-    }
+        this.confirmButton = findViewById(R.id.confirm_button);
+        this.offsetPicker = findViewById(R.id.offset_picker);
 
-    private void setTime(){
-        Calendar now = Calendar.getInstance();
-        TimePickerDialog tpd = TimePickerDialog.newInstance(
-                AddAlarmActivity.this,
-                now.get(Calendar.HOUR_OF_DAY),
-                now.get(Calendar.MINUTE),
-                false
-        );
 
-        tpd.setThemeDark(false);
-        tpd.show(getFragmentManager(), "Timepickerdialog");
-    }
 
-    @Override
-    public void onDateSet(DatePickerDialog view, int year, int monthOfYear, int dayOfMonth) {
-    }
+        final String[] offsetStrings = new String[]{"+","-"};
+        offsetPicker.setMinValue(0);
+        offsetPicker.setMaxValue(offsetStrings.length-1);
 
-    @Override
-    public void onTimeSet(TimePickerDialog view, int hourOfDay, int minute, int second) {
-        String time = "You picked the following time: "+hourOfDay+"h"+minute+"m";
+        offsetPicker.setFormatter(new NumberPicker.Formatter() {
+            @Override
+            public String format(int value) {
+                return offsetStrings[value];
+            }
+        });
 
-        Log.d(TAG, time);
+        confirmButton.setOnClickListener(new View.OnClickListener() {
+            @TargetApi(Build.VERSION_CODES.M)
+            public void onClick(View v) {
 
-        finish();
+                Toast.makeText(getApplicationContext(), offsetStrings[(offsetPicker.getValue())] + "Time:" + _alarmTimePicker.getHour() + _alarmTimePicker.getMinute() , Toast.LENGTH_LONG).show();
+
+                String offsetSign = offsetStrings[(offsetPicker.getValue())];
+                String offsetString = offsetSign + " " + _alarmTimePicker.getHour() + ":" + _alarmTimePicker.getMinute();
+
+                Intent returnAddAlarmIntent = new Intent();
+                returnAddAlarmIntent.putExtra("addAlarmResult",offsetString);
+                setResult(Activity.RESULT_OK,returnAddAlarmIntent);
+                finish();
+            }
+        });
+        this._alarmTimePicker = findViewById(R.id.alarmTimePicker);
+
+        _alarmTimePicker.setIs24HourView(true);
     }
 
     /**

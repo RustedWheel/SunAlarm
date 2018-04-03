@@ -2,6 +2,7 @@ package com.a1.compsci702.sunalarm;
 
 import android.Manifest;
 import android.annotation.TargetApi;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -39,6 +40,8 @@ public class MainActivity extends AppCompatActivity {
     private boolean canGetLocation = true;
     private ArrayList<Integer> alarmIds;
 
+
+    private final static int PICK_ALARM_TIME = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,12 +83,29 @@ public class MainActivity extends AppCompatActivity {
                 getSunriseTime();
 
                 Intent newAlarmIntent = new Intent(v.getContext(), AddAlarmActivity.class);
-                startActivity(newAlarmIntent);
+                startActivityForResult(newAlarmIntent, PICK_ALARM_TIME);
             }
         });
-
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        Log.d(TAG, "onActivityResult()");
+
+        // Check which request we're responding to
+        if (requestCode == PICK_ALARM_TIME) {
+            // Make sure the request was successful
+            if (resultCode == RESULT_OK) {
+                String result = data.getStringExtra("addAlarmResult");
+
+                Log.d(TAG, "protected void onActivityResult() " + result);
+            }
+            if (resultCode == Activity.RESULT_CANCELED) {
+                //Write your code if there's no result
+                Log.e(TAG, "resultCode == " + Activity.RESULT_CANCELED);
+            }
+        }
+    }
 
     private void loadAlarms(){
 
@@ -223,24 +243,17 @@ public class MainActivity extends AppCompatActivity {
 
                 Toast.makeText(getApplicationContext(), "Sunrise !  Location - Latitude: " + latitude + " Longitude: " + longitude, Toast.LENGTH_LONG).show();
 
-                SunriseTime sunriseTime = new SunriseTime();
-
                 Calendar cal = Calendar.getInstance();
                 cal.set(2018, Calendar.APRIL, 9); //Year, month, day of month, hours, minutes and seconds
                 Date date = cal.getTime();
 
                 FetchSunriseData sunriseTask = new FetchSunriseData(location, date);
                 sunriseTask.execute();
-
-                /*alarm = new AlarmBroadcastReceiver();
-                alarm.setAlarm(MainActivity.this, seconds);*/
-
             } catch (NoConnectionException e) {
                 showGPSSettingsAlert();
             } catch (SecurityException e) {
                 showPermissionDenied();
             }
-
         }
     }
 
