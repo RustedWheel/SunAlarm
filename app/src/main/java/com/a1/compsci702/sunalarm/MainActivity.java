@@ -379,7 +379,7 @@ public class MainActivity extends AppCompatActivity {
         AlarmManager am = (AlarmManager)getSystemService(this.ALARM_SERVICE);
         // am.set(AlarmManager.RTC_WAKEUP,System.currentTimeMillis() + seconds * 1000, pendingIntent );
         am.set(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(), pendingIntent );
-        Log.d(TAG, "alarm set " + date.toString());
+        Log.d(TAG, "alarm set " + date.toString() + " ALARM ID: " + alarmID);
         Toast.makeText(getApplicationContext(), date.toString(), Toast.LENGTH_LONG).show();
         saveToStorage(alarmID);
     }
