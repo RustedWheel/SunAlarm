@@ -4,6 +4,7 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -59,9 +60,9 @@ public class AddAlarmActivity extends AppCompatActivity implements
      *
      * @param context
      * @param date Time for alarm
-     * @param alarmRequestCode
+     * @param alarmID
      */
-    public void setAlarm(Context context, Date date, int alarmRequestCode) {
+    public void setAlarm(Context context, Date date, int alarmID) {
         /*AlarmManager am =( AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
         Intent intent = new Intent(context, AlarmBroadcastReceiver.class);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, intent, 0);*/
@@ -71,23 +72,17 @@ public class AddAlarmActivity extends AppCompatActivity implements
         Calendar c = convertDateToCalendar(date);
 
         Intent intent = new Intent(context, AlarmBroadcastReceiver.class);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(context,alarmRequestCode, intent,0);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, alarmID, intent,0);
         AlarmManager am = (AlarmManager)context.getSystemService(context.ALARM_SERVICE);
         // am.set(AlarmManager.RTC_WAKEUP,System.currentTimeMillis() + seconds * 1000, pendingIntent );
         am.set(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(), pendingIntent );
-
-        /*Calendar calendar = Calendar.getInstance();
-        calendar.setTimeInMillis(System.currentTimeMillis());
-        calendar.set(Calendar.HOUR_OF_DAY, 23);
-        calendar.set(Calendar.MINUTE, 59);
-        calendar.set(Calendar.SECOND, 0);
-        am.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);*/
+        saveToStorage(alarmID);
     }
 
 
-    public void cancelAlarm(Context context, int alarmRequestCode) {
+    public void cancelAlarm(Context context, int alarmID) {
         Intent intent = new Intent(context, AlarmBroadcastReceiver.class);
-        PendingIntent sender = PendingIntent.getBroadcast(context, alarmRequestCode, intent, 0);
+        PendingIntent sender = PendingIntent.getBroadcast(context, alarmID, intent, 0);
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         alarmManager.cancel(sender);
     }
@@ -97,5 +92,14 @@ public class AddAlarmActivity extends AppCompatActivity implements
         Calendar c = Calendar.getInstance();
         c.setTime(date);
         return c;
+    }
+
+    private void saveToStorage(int alarmID){
+
+        SharedPreferences alarmsStorage = getSharedPreferences(Values.STORED_ALARMS, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = alarmsStorage.edit();
+        editor.putInt(String.valueOf(alarmID), alarmID);
+        editor.apply();
+
     }
 }

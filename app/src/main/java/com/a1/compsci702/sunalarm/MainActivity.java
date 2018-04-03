@@ -3,8 +3,10 @@ package com.a1.compsci702.sunalarm;
 import android.Manifest;
 import android.annotation.TargetApi;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.AsyncTask;
@@ -25,6 +27,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
     private final static int ALL_PERMISSIONS_RESULT = 101;
@@ -34,6 +37,8 @@ public class MainActivity extends AppCompatActivity {
     private ArrayList<String> permissionsRejected = new ArrayList<>();
     private FloatingActionButton mAddAlarm;
     private boolean canGetLocation = true;
+    private ArrayList<Integer> alarmIds;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
 
         askForPermission();
         setUpUIComponents();
-
+        loadAlarms();
     }
 
     private void askForPermission() {
@@ -78,6 +83,22 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(newAlarmIntent);
             }
         });
+
+    }
+
+
+    private void loadAlarms(){
+
+        SharedPreferences alarmsStorage = getSharedPreferences(Values.STORED_ALARMS, Context.MODE_PRIVATE);
+
+        alarmIds = new ArrayList<>();
+
+        Map<String, ?> allExistingAlarmEntries =alarmsStorage.getAll();
+        for (Map.Entry<String, ?> alarmId : allExistingAlarmEntries.entrySet()) {
+
+            alarmIds.add(Integer.valueOf(alarmId.getKey()));
+
+        }
 
     }
 
