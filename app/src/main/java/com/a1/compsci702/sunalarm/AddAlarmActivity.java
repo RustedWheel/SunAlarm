@@ -55,7 +55,12 @@ public class AddAlarmActivity extends AppCompatActivity implements
         finish();
     }
 
-
+    /**
+     *
+     * @param context
+     * @param date Time for alarm
+     * @param alarmRequestCode
+     */
     public void setAlarm(Context context, Date date, int alarmRequestCode) {
         /*AlarmManager am =( AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
         Intent intent = new Intent(context, AlarmBroadcastReceiver.class);
@@ -63,12 +68,13 @@ public class AddAlarmActivity extends AppCompatActivity implements
         //am.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), 1000 * 60 * 10, pendingIntent); // Millisec * Second * Minute
         //am.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis()* seconds * 1000, pendingIntent);
 
+        Calendar c = convertDateToCalendar(date);
 
         Intent intent = new Intent(context, AlarmBroadcastReceiver.class);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context,alarmRequestCode, intent,0);
         AlarmManager am = (AlarmManager)context.getSystemService(context.ALARM_SERVICE);
         // am.set(AlarmManager.RTC_WAKEUP,System.currentTimeMillis() + seconds * 1000, pendingIntent );
-        am.set(AlarmManager.RTC_WAKEUP,System.currentTimeMillis(), pendingIntent );
+        am.set(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(), pendingIntent );
 
         /*Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(System.currentTimeMillis());
@@ -87,7 +93,9 @@ public class AddAlarmActivity extends AppCompatActivity implements
     }
 
 
-    private void convertDateToCalendar(Date date){
-
+    private Calendar convertDateToCalendar(Date date) {
+        Calendar c = Calendar.getInstance();
+        c.setTime(date);
+        return c;
     }
 }

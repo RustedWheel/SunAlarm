@@ -101,14 +101,8 @@ public class SunriseTime {
         }
 
         Log.d(TAG, convertedDate.toString());
+
         return convertedDate;
-
-    }
-
-    public Calendar dateToCalendar(Date date) {
-        Calendar c = Calendar.getInstance();
-        c.setTime(date);
-        return c;
     }
 
 }
