@@ -105,4 +105,10 @@ public class SunriseTime {
 
     }
 
+    public Calendar dateToCalendar(Date date) {
+        Calendar c = Calendar.getInstance();
+        c.setTime(date);
+        return c;
+    }
+
 }
