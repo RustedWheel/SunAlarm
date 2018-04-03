@@ -132,6 +132,12 @@ public class MainActivity extends AppCompatActivity {
                                                         new String[permissionsRejected.size()]), ALL_PERMISSIONS_RESULT);
                                             }
                                         }
+                                    },
+                                    new DialogInterface.OnCancelListener() {
+                                        @Override
+                                        public void onCancel(DialogInterface dialogInterface) {
+                                            finish();
+                                        }
                                     });
                             return;
                         }
@@ -141,11 +147,17 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void showMessageOKCancel(String message, DialogInterface.OnClickListener okListener) {
+    private void showMessageOKCancel(String message, DialogInterface.OnClickListener okListener, DialogInterface.OnCancelListener cancelListener) {
         new AlertDialog.Builder(MainActivity.this)
                 .setMessage(message)
                 .setPositiveButton("OK", okListener)
-                .setNegativeButton("Cancel", null)
+                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        finish();
+                    }
+                })
+                .setOnCancelListener(cancelListener)
                 .create()
                 .show();
     }
