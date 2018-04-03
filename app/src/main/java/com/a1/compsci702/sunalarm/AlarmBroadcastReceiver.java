@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
+import android.media.MediaPlayer;
 import android.os.Build;
 import android.os.PowerManager;
 import android.os.VibrationEffect;
@@ -26,6 +27,9 @@ public class AlarmBroadcastReceiver extends BroadcastReceiver
         PowerManager pm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
         PowerManager.WakeLock wl = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "");
         wl.acquire();
+
+        final MediaPlayer mp = MediaPlayer.create(context, R.raw.alarm);
+        mp.start();
 
         // Better to play a video animation i guess?
         Toast.makeText(context, "Sunrise !", Toast.LENGTH_LONG).show();
