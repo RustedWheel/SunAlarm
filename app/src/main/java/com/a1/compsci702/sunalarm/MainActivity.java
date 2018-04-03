@@ -252,8 +252,12 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(Date result) {
-            super.onPostExecute(result);
-            Log.d(TAG, "JSON: " + result.toString());
+            if (result != null) {
+                super.onPostExecute(result);
+                Log.d(TAG, "JSON: " + result.toString());
+            } else {
+                Toast.makeText(getApplicationContext(), "Unable to connect to server", Toast.LENGTH_LONG).show();
+            }
         }
     }
 }
