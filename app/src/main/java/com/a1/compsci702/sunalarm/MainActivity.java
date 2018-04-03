@@ -91,7 +91,7 @@ public class MainActivity extends AppCompatActivity {
         if (requestCode == PICK_ALARM_TIME) {
             // Make sure the request was successful
             if (resultCode == RESULT_OK) {
-                String result = data.getStringExtra("result");
+                String result = data.getStringExtra("addAlarmResult");
 
                 Log.d(TAG, "protected void onActivityResult() " + result);
             }
@@ -210,24 +210,17 @@ public class MainActivity extends AppCompatActivity {
 
                 Toast.makeText(getApplicationContext(), "Sunrise !  Location - Latitude: " + latitude + " Longitude: " + longitude, Toast.LENGTH_LONG).show();
 
-                SunriseTime sunriseTime = new SunriseTime();
-
                 Calendar cal = Calendar.getInstance();
                 cal.set(2018, Calendar.APRIL, 9); //Year, month, day of month, hours, minutes and seconds
                 Date date = cal.getTime();
 
                 FetchSunriseData sunriseTask = new FetchSunriseData(location, date);
                 sunriseTask.execute();
-
-                /*alarm = new Alarm();
-                alarm.setAlarm(MainActivity.this, seconds);*/
-
             } catch (NoConnectionException e) {
                 showGPSSettingsAlert();
             } catch (SecurityException e) {
                 showPermissionDenied();
             }
-
         }
     }
 

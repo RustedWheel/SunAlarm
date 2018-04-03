@@ -1,6 +1,8 @@
 package com.a1.compsci702.sunalarm;
 
 import android.annotation.TargetApi;
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -45,6 +47,14 @@ public class AddAlarmActivity extends AppCompatActivity {
             public void onClick(View v) {
 
                 Toast.makeText(getApplicationContext(), offsetStrings[(offsetPicker.getValue())] + "Time:" + _alarmTimePicker.getHour() + _alarmTimePicker.getMinute() , Toast.LENGTH_LONG).show();
+
+                String offsetSign = offsetStrings[(offsetPicker.getValue())];
+                String offsetString = offsetSign + " " + _alarmTimePicker.getHour() + ":" + _alarmTimePicker.getMinute();
+
+                Intent returnAddAlarmIntent = new Intent();
+                returnAddAlarmIntent.putExtra("addAlarmResult",offsetString);
+                setResult(Activity.RESULT_OK,returnAddAlarmIntent);
+                finish();
             }
         });
         this._alarmTimePicker = findViewById(R.id.alarmTimePicker);
