@@ -22,9 +22,14 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.a1.compsci702.sunalarm.Utilities.DateConverter;
+import com.a1.compsci702.sunalarm.Utilities.Storage;
 import com.a1.compsci702.sunalarm.Exceptions.NoConnectionException;
 
 import java.io.IOException;
@@ -43,6 +48,8 @@ public class MainActivity extends AppCompatActivity {
     private FloatingActionButton mAddAlarm;
     private boolean canGetLocation = true;
     private ArrayList<Integer> alarmIds;
+    private ArrayAdapter<Integer> simpleAdapter;
+    private Storage storage;
 
 /*
     private String offsetSign;
@@ -58,10 +65,11 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        storage = new Storage();
 
         askForPermission();
-        setUpUIComponents();
         loadAlarms();
+        setUpUIComponents();
         cacheDates();
     }
 
@@ -96,67 +104,32 @@ public class MainActivity extends AppCompatActivity {
                 startActivityForResult(newAlarmIntent, PICK_ALARM_TIME);
             }
         });
+
+        alarmListView = findViewById(R.id.alarmList);
+        simpleAdapter = new ArrayAdapter<Integer>(this, R.layout.list_item, alarmIds);
+        alarmListView.setAdapter(simpleAdapter);
+
+        alarmListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                String text = ((TextView)view).getText().toString();
+                cancelAlarm(Integer.valueOf(text), position);
+                Toast.makeText(getApplicationContext(),"Alarm + " + text + " deleted!", Toast.LENGTH_LONG).show();
+
+            }
+
+        });
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        Log.d(TAG, "onActivityResult()");
-
-        // Check which request we're responding to
-        if (requestCode == PICK_ALARM_TIME) {
-            // Make sure the request was successful
-            if (resultCode == RESULT_OK) {
-                String result = data.getStringExtra("addAlarmResult");
-
-                String[] splitResult = result.split(":");
-
-                String offsetSign = splitResult[0];
-                int hour = Integer.parseInt(splitResult[1]);
-                int minute = Integer.parseInt(splitResult[2]);
-
-                //get sunrise time for tomorrow
-                //calculate offset time
-                //set alarm
-                Calendar today = Calendar.getInstance();
-                today.add(Calendar.DATE, 1);
-                String dateTomorrow = dateToString(today.getTime());
-                Log.d(TAG, "Date tomorrow is : " + dateTomorrow);
-
-                //change later on to set date of alarm
-                SharedPreferences sunriseStorage = getSharedPreferences(Values.SUNRISE_TIME_CACHE, Context.MODE_PRIVATE);
-                Date nextSunrise = new Date(sunriseStorage.getLong(dateTomorrow, 0L));
-
-                Log.d(TAG, "Sunrise tomorrow is : " + nextSunrise);
-
-                Calendar c = convertDateToCalendar(nextSunrise);
-
-                if (offsetSign.equals("-")) {
-                    hour = -hour;
-                    minute = -minute;
-                }
-
-                    c.add(Calendar.HOUR, hour);
-                    c.add(Calendar.MINUTE, minute);
-
-                    Log.d(TAG,c.toString());
-                    setAlarm(c.getTime());
-
-                Log.d(TAG, "protected void onActivityResult() " + result);
-            }
-            if (resultCode == Activity.RESULT_CANCELED) {
-                //Write your code if there's no result
-                Log.e(TAG, "resultCode == " + Activity.RESULT_CANCELED);
-            }
-        }
-    }
-
-    private void loadAlarms(){
+    private void loadAlarms() {
 
         SharedPreferences alarmsStorage = getSharedPreferences(Values.STORED_ALARMS, Context.MODE_PRIVATE);
 
         alarmIds = new ArrayList<>();
 
-        Map<String, ?> allExistingAlarmEntries =alarmsStorage.getAll();
+        Map<String, ?> allExistingAlarmEntries = alarmsStorage.getAll();
         for (Map.Entry<String, ?> alarmId : allExistingAlarmEntries.entrySet()) {
 
             alarmIds.add(Integer.valueOf(alarmId.getKey()));
@@ -271,6 +244,59 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        Log.d(TAG, "onActivityResult()");
+
+        // Check which request we're responding to
+        if (requestCode == PICK_ALARM_TIME) {
+            // Make sure the request was successful
+            if (resultCode == RESULT_OK) {
+                String result = data.getStringExtra("addAlarmResult");
+
+                String[] splitResult = result.split(":");
+
+                String offsetSign = splitResult[0];
+                int hour = Integer.parseInt(splitResult[1]);
+                int minute = Integer.parseInt(splitResult[2]);
+
+                //get sunrise time for tomorrow
+                //calculate offset time
+                //set alarm
+                Calendar today = Calendar.getInstance();
+                today.add(Calendar.DATE, 1);
+                String dateTomorrow = DateConverter.dateToString(today.getTime());
+                Log.d(TAG, "Date tomorrow is : " + dateTomorrow);
+
+                //change later on to set date of alarm
+                SharedPreferences sunriseStorage = getSharedPreferences(Values.SUNRISE_TIME_CACHE, Context.MODE_PRIVATE);
+                Date nextSunrise = new Date(sunriseStorage.getLong(dateTomorrow, 0L));
+
+                Log.d(TAG, "Sunrise tomorrow is : " + nextSunrise);
+
+                Calendar c = DateConverter.convertDateToCalendar(nextSunrise);
+
+                if (offsetSign.equals("-")) {
+                    hour = -hour;
+                    minute = -minute;
+                }
+
+                c.add(Calendar.HOUR, hour);
+                c.add(Calendar.MINUTE, minute);
+
+                Log.d(TAG, c.toString());
+                addAlarm(c.getTime());
+
+                Log.d(TAG, "protected void onActivityResult() " + result);
+            }
+            if (resultCode == Activity.RESULT_CANCELED) {
+                //Write your code if there's no result
+                Log.e(TAG, "resultCode == " + Activity.RESULT_CANCELED);
+            }
+        }
+    }
+
+
     private void getSunriseTime(Date date) {
 
         if (canGetLocation) {
@@ -303,21 +329,17 @@ public class MainActivity extends AppCompatActivity {
 
         SharedPreferences sunriseStorage = getSharedPreferences(Values.SUNRISE_TIME_CACHE, Context.MODE_PRIVATE);
 
-        for(int i = 1; i <= 7; i++) {
+        for (int i = 1; i <= 7; i++) {
             Calendar c = Calendar.getInstance();
             c.add(Calendar.DATE, i);
             //check if already in cache
-            if (sunriseStorage.contains(dateToString(c.getTime()))) {
+            if (sunriseStorage.contains(DateConverter.dateToString(c.getTime()))) {
                 Log.d(TAG, "Already cached : " + c.getTime());
             } else {
                 Log.d(TAG, "Accessing date : " + c.getTime());
                 getSunriseTime(c.getTime());
             }
         }
-    }
-
-    private String dateToString(Date date) {
-        return date.getYear() + "-" + date.getMonth() + "-" + date.getDay();
     }
 
     private class FetchSunriseData extends AsyncTask<Void, Void, Date> {
@@ -351,7 +373,7 @@ public class MainActivity extends AppCompatActivity {
             if (result != null) {
                 super.onPostExecute(result);
                 Log.d(TAG, "JSON: " + result.toString());
-                saveSunriseTime(result);
+                storage.saveSunriseTime(MainActivity.this, result);
 
             } else {
                 Toast.makeText(getApplicationContext(), "Unable to connect to server", Toast.LENGTH_LONG).show();
@@ -361,73 +383,37 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /**
-     *
      * @param date Time for alarm
      */
-    public void setAlarm(Date date) {
+    public void addAlarm(Date date) {
 
-        Calendar c = convertDateToCalendar(date);
-        int alarmID = getNextAlarmID();
+        Calendar c = DateConverter.convertDateToCalendar(date);
+        int alarmID = storage.getNextAlarmID(this);
 
         Intent intent = new Intent(this, AlarmBroadcastReceiver.class);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, alarmID, intent,0);
-        AlarmManager am = (AlarmManager)getSystemService(this.ALARM_SERVICE);
+        intent.putExtra("ID", alarmID);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, alarmID, intent, 0);
+        AlarmManager am = (AlarmManager) getSystemService(this.ALARM_SERVICE);
         // am.set(AlarmManager.RTC_WAKEUP,System.currentTimeMillis() + seconds * 1000, pendingIntent );
-        am.set(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(), pendingIntent );
+        am.set(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(), pendingIntent);
         Log.d(TAG, "alarm set " + date.toString() + " ALARM ID: " + alarmID);
         Toast.makeText(getApplicationContext(), date.toString(), Toast.LENGTH_LONG).show();
-        saveAlarm(alarmID);
+        storage.saveAlarm(this, alarmID);
+        alarmIds.add(alarmID);
+        simpleAdapter.notifyDataSetChanged();
     }
 
 
-    public void cancelAlarm(int alarmID) {
+    public void cancelAlarm(int alarmID, int index) {
         Intent intent = new Intent(this, AlarmBroadcastReceiver.class);
         PendingIntent sender = PendingIntent.getBroadcast(this, alarmID, intent, 0);
         AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
         alarmManager.cancel(sender);
-        deleteAlarm(alarmID);
+        storage.deleteAlarm(this, alarmID);
+        alarmIds.remove(index);
+        simpleAdapter.notifyDataSetChanged();
     }
 
 
-    private Calendar convertDateToCalendar(Date date) {
-        Calendar c = Calendar.getInstance();
-        c.setTime(date);
-        return c;
-    }
 
-    private void saveAlarm(int alarmID){
-
-        SharedPreferences alarmsStorage = getSharedPreferences(Values.STORED_ALARMS, Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = alarmsStorage.edit();
-        editor.putInt(String.valueOf(alarmID), alarmID);
-        editor.apply();
-
-    }
-
-
-    private void deleteAlarm(int alarmID){
-
-        SharedPreferences alarmsStorage = getSharedPreferences(Values.STORED_ALARMS, Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = alarmsStorage.edit();
-        editor.remove(String.valueOf(alarmID));
-        editor.apply();
-
-    }
-
-
-    private void saveSunriseTime(Date time) {
-        SharedPreferences sunriseStorage = getSharedPreferences(Values.SUNRISE_TIME_CACHE, Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sunriseStorage.edit();
-        editor.putLong(dateToString(time), time.getTime());
-        editor.apply();
-    }
-
-    private int getNextAlarmID() {
-        SharedPreferences alarmStorage = getSharedPreferences(Values.ALARM_ID, Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = alarmStorage.edit();
-        int id = alarmStorage.getInt("ID", 0) + 1;
-        editor.putInt("ID", id);
-        editor.apply();
-        return id;
-    }
 }

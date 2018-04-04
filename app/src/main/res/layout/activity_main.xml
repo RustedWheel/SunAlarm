@@ -19,7 +19,7 @@
         app:srcCompat="@android:drawable/ic_input_add" />
 
     <ListView
-        android:id="@+id/list"
+        android:id="@+id/alarmList"
         android:layout_width="match_parent"
         android:layout_height="match_parent" >
 
