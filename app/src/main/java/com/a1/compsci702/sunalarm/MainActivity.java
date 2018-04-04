@@ -52,6 +52,7 @@ public class MainActivity extends AppCompatActivity {
     private ArrayAdapter<Integer> simpleAdapter;
     private Storage storage;
     private RelativeLayout loadingScreen;
+    private boolean attemptedToCached = false;
 
 /*
     private String offsetSign;
@@ -72,13 +73,17 @@ public class MainActivity extends AppCompatActivity {
         askForPermission();
         loadAlarms();
         setUpUIComponents();
-        cacheDates();
+
+        if(!(permissionsToRequest.size() > 0)){
+            attemptedToCached = true;
+            cacheDates();
+        }
     }
 
     private void askForPermission() {
         permissions.add(Manifest.permission.ACCESS_FINE_LOCATION);
         permissions.add(Manifest.permission.ACCESS_COARSE_LOCATION);
-        permissionsToRequest = findUnAskedPermissions(permissions);
+        permissionsToRequest = getUngrantedPermissions(permissions);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
 
@@ -143,12 +148,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    private ArrayList findUnAskedPermissions(ArrayList<String> wanted) {
+    private ArrayList getUngrantedPermissions(ArrayList<String> permissionsWanted) {
         ArrayList result = new ArrayList();
 
-        for (String perm : wanted) {
-            if (!hasPermission(perm)) {
-                result.add(perm);
+        for (String permission : permissionsWanted) {
+            if (!hasPermission(permission)) {
+                result.add(permission);
             }
         }
 
@@ -203,6 +208,12 @@ public class MainActivity extends AppCompatActivity {
                             return;
                         }
                     }
+                } else {
+
+                    if(!attemptedToCached){
+                        cacheDates();
+                    }
+
                 }
                 break;
         }
