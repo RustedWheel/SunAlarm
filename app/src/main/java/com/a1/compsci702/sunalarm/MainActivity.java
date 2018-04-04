@@ -114,9 +114,9 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                String text = ((TextView)view).getText().toString();
+                String text = ((TextView) view).getText().toString();
                 cancelAlarm(Integer.valueOf(text), position);
-                Toast.makeText(getApplicationContext(),"Alarm + " + text + " deleted!", Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), "Alarm + " + text + " deleted!", Toast.LENGTH_LONG).show();
 
             }
 
@@ -297,7 +297,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    private void getSunriseTime(Date date) {
+    private void getSunriseTime(Date date, int numDays) {
 
         if (canGetLocation) {
 
@@ -313,7 +313,7 @@ public class MainActivity extends AppCompatActivity {
                 //Toast.makeText(getApplicationContext(), "Sunrise !  Location - Latitude: " + latitude + " Longitude: " + longitude, Toast.LENGTH_LONG).show();
                 Log.d(TAG, "Sunrise !  Location - Latitude: " + latitude + " Longitude: " + longitude);
 
-                FetchSunriseData sunriseTask = new FetchSunriseData(location, date);
+                FetchSunriseData sunriseTask = new FetchSunriseData(location, date, numDays);
                 sunriseTask.execute();
             } catch (NoConnectionException e) {
                 showGPSSettingsAlert();
@@ -329,18 +329,6 @@ public class MainActivity extends AppCompatActivity {
 
         SharedPreferences sunriseStorage = getSharedPreferences(Values.SUNRISE_TIME_CACHE, Context.MODE_PRIVATE);
 
-        for (int i = 0; i <= 7; i++) {
-            Calendar c = Calendar.getInstance();
-            c.add(Calendar.DATE, i);
-            //check if already in cache
-            if (sunriseStorage.contains(DateConverter.dateToString(c.getTime()))) {
-                Log.d(TAG, "Already cached : " + c.getTime());
-            } else {
-                Log.d(TAG, "Accessing date : " + c.getTime());
-                getSunriseTime(c.getTime());
-            }
-        }
-
         Calendar c = Calendar.getInstance();
         int today = Integer.parseInt(DateConverter.dateToString(c.getTime()));
 
@@ -352,27 +340,44 @@ public class MainActivity extends AppCompatActivity {
                 Log.d(TAG, "Future date : " + entry.getKey());
             }
         }
+
+        getSunriseTime(c.getTime(), 7);
+
     }
 
     private class FetchSunriseData extends AsyncTask<Void, Void, Date> {
 
         private Location _location;
         private Date _alarmDate;
+        private int _numDays;
 
-        public FetchSunriseData(Location location, Date alarmDate) {
+        public FetchSunriseData(Location location, Date alarmDate, int numDays) {
             _location = location;
             _alarmDate = alarmDate;
+            _numDays = numDays;
         }
 
         @Override
         protected Date doInBackground(Void... params) {
 
             SunriseTime sunriseTime = new SunriseTime();
+            SharedPreferences sunriseStorage = getSharedPreferences(Values.SUNRISE_TIME_CACHE, Context.MODE_PRIVATE);
 
             try {
-                Date date = sunriseTime.getSunriseTime(_location, _alarmDate);
+                for (int i = 0; i <= _numDays; i++) {
+                    Calendar c = Calendar.getInstance();
+                    c.add(Calendar.DATE, i);
+                    //check if already in cache
+                    if (sunriseStorage.contains(DateConverter.dateToString(c.getTime()))) {
+                        Log.d(TAG, "Already cached : " + c.getTime());
+                    } else {
+                        Log.d(TAG, "Accessing date : " + c.getTime());
+                        Date date = sunriseTime.getSunriseTime(_location, c.getTime());
+                        storage.saveSunriseTime(MainActivity.this, date);
+                    }
+                }
 
-                return date;
+                return new Date();
             } catch (IOException e) {
 
                 Log.e(TAG, "Failed to fetch sunrise time!");
@@ -384,8 +389,7 @@ public class MainActivity extends AppCompatActivity {
         protected void onPostExecute(Date result) {
             if (result != null) {
                 super.onPostExecute(result);
-                Log.d(TAG, "JSON: " + result.toString());
-                storage.saveSunriseTime(MainActivity.this, result);
+                Log.d(TAG, "FINISHED CACHING DATA");
 
             } else {
                 Toast.makeText(getApplicationContext(), "Unable to connect to server", Toast.LENGTH_LONG).show();
@@ -425,7 +429,6 @@ public class MainActivity extends AppCompatActivity {
         alarmIds.remove(index);
         simpleAdapter.notifyDataSetChanged();
     }
-
 
 
 }
