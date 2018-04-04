@@ -74,7 +74,7 @@ public class MainActivity extends AppCompatActivity {
         loadAlarms();
         setUpUIComponents();
 
-        if(!(permissionsToRequest.size() > 0)){
+        if(!(permissionsToRequest.size() > 0) && !attemptedToCached){
             attemptedToCached = true;
             cacheDates();
         }
@@ -211,6 +211,7 @@ public class MainActivity extends AppCompatActivity {
                 } else {
 
                     if(!attemptedToCached){
+                        attemptedToCached = true;
                         cacheDates();
                     }
 
