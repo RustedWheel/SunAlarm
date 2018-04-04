@@ -76,7 +76,7 @@ public class MainActivity extends AppCompatActivity {
         loadAlarms();
         setUpUIComponents();
 
-        if(!(permissionsToRequest.size() > 0) && !attemptedToCached){
+        if (!(permissionsToRequest.size() > 0) && !attemptedToCached) {
             attemptedToCached = true;
             cacheDates();
         }
@@ -220,8 +220,10 @@ public class MainActivity extends AppCompatActivity {
                         }
                     }
                 } else {
-
-                    if(!attemptedToCached){
+                    Log.d(TAG, "can now get location");
+                    canGetLocation = true;
+                    if (!attemptedToCached) {
+                        Log.d(TAG, "now caching dates");
                         attemptedToCached = true;
                         cacheDates();
                     }
@@ -387,9 +389,14 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected Date doInBackground(Void... params) {
 
-            alarmListView.setVisibility(View.INVISIBLE);
-            mAddAlarm.setVisibility(View.INVISIBLE);
-            loadingScreen.setVisibility(View.VISIBLE);
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    alarmListView.setVisibility(View.INVISIBLE);
+                    mAddAlarm.setVisibility(View.INVISIBLE);
+                    loadingScreen.setVisibility(View.VISIBLE);
+                }
+            });
 
             SunriseTime sunriseTime = new SunriseTime();
             SharedPreferences sunriseStorage = getSharedPreferences(Values.SUNRISE_TIME_CACHE, Context.MODE_PRIVATE);
