@@ -7,51 +7,60 @@
     tools:context="com.a1.compsci702.sunalarm.MainActivity">
 
     <RelativeLayout
+        android:id="@+id/main_menu"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/main_menu">
+        android:layout_height="match_parent">
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/add_alarm"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:clickable="true"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        app:backgroundTint="@color/colorPrimary"
-        app:fabSize="normal"
-        app:srcCompat="@android:drawable/ic_input_add" />
 
-    <ListView
-        android:id="@+id/alarmList"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" >
-    </ListView>
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/add_alarm"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:clickable="true"
+            app:backgroundTint="@color/colorPrimary"
+            app:fabSize="normal"
+            app:srcCompat="@android:drawable/ic_input_add" />
+
+        <ListView
+            android:id="@+id/alarmList"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"></ListView>
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/clear_cache_button"
+            android:layout_margin="15dp"
+            android:text="Clear sunrise time cache"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            />
+
 
     </RelativeLayout>
 
     <RelativeLayout
+        android:id="@+id/loading_screen"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/loading_screen"
         android:visibility="invisible">
 
         <ProgressBar
+            android:id="@+id/progressBar"
             android:layout_width="80dp"
             android:layout_height="80dp"
-            android:id="@+id/progressBar"
-            android:layout_centerInParent="true"
-            />
+            android:layout_centerInParent="true" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/loading"
-            android:layout_centerHorizontal="true"
             android:layout_below="@id/progressBar"
-            android:textSize="24sp"
+            android:layout_centerHorizontal="true"
             android:layout_marginTop="16dp"
-            />
+            android:text="@string/loading"
+            android:textSize="24sp" />
 
     </RelativeLayout>
 

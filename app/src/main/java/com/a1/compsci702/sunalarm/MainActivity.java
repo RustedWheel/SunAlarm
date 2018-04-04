@@ -24,6 +24,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -47,6 +48,7 @@ public class MainActivity extends AppCompatActivity {
     private ArrayList<String> permissionsRejected = new ArrayList<>();
     private ListView alarmListView;
     private FloatingActionButton mAddAlarm;
+    private Button clearCacheButton;
     private boolean canGetLocation = true;
     private ArrayList<Integer> alarmIds;
     private ArrayAdapter<Integer> simpleAdapter;
@@ -100,7 +102,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void setUpUIComponents() {
 
-        loadingScreen = (RelativeLayout) findViewById(R.id.loading_screen);
+        loadingScreen = findViewById(R.id.loading_screen);
 
         mAddAlarm = findViewById(R.id.add_alarm);
 
@@ -130,6 +132,15 @@ public class MainActivity extends AppCompatActivity {
             }
 
         });
+
+        clearCacheButton = findViewById(R.id.clear_cache_button);
+        clearCacheButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                storage.removeAllSunriseTime(MainActivity.this);
+            }
+        });
+
     }
 
     private void loadAlarms() {
