@@ -25,6 +25,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -50,6 +51,7 @@ public class MainActivity extends AppCompatActivity {
     private ArrayList<Integer> alarmIds;
     private ArrayAdapter<Integer> simpleAdapter;
     private Storage storage;
+    private RelativeLayout loadingScreen;
 
 /*
     private String offsetSign;
@@ -92,6 +94,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setUpUIComponents() {
+
+        loadingScreen = (RelativeLayout) findViewById(R.id.loading_screen);
 
         mAddAlarm = findViewById(R.id.add_alarm);
 
@@ -360,6 +364,10 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected Date doInBackground(Void... params) {
 
+            alarmListView.setVisibility(View.INVISIBLE);
+            mAddAlarm.setVisibility(View.INVISIBLE);
+            loadingScreen.setVisibility(View.VISIBLE);
+
             SunriseTime sunriseTime = new SunriseTime();
             SharedPreferences sunriseStorage = getSharedPreferences(Values.SUNRISE_TIME_CACHE, Context.MODE_PRIVATE);
 
@@ -394,6 +402,10 @@ public class MainActivity extends AppCompatActivity {
             } else {
                 Toast.makeText(getApplicationContext(), "Unable to connect to server", Toast.LENGTH_LONG).show();
             }
+
+            alarmListView.setVisibility(View.VISIBLE);
+            mAddAlarm.setVisibility(View.VISIBLE);
+            loadingScreen.setVisibility(View.INVISIBLE);
         }
 
     }

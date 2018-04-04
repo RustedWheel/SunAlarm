@@ -6,6 +6,10 @@
     android:layout_height="match_parent"
     tools:context="com.a1.compsci702.sunalarm.MainActivity">
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/main_menu">
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/add_alarm"
@@ -22,7 +26,33 @@
         android:id="@+id/alarmList"
         android:layout_width="match_parent"
         android:layout_height="match_parent" >
-
     </ListView>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/loading_screen"
+        android:visibility="invisible">
+
+        <ProgressBar
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:id="@+id/progressBar"
+            android:layout_centerInParent="true"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/loading"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@id/progressBar"
+            android:textSize="24sp"
+            android:layout_marginTop="16dp"
+            />
+
+    </RelativeLayout>
 
 </RelativeLayout>
