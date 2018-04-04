@@ -2,9 +2,11 @@ package com.a1.compsci702.sunalarm.Utilities;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.util.Log;
+
 import com.a1.compsci702.sunalarm.Values;
+
 import java.util.Date;
-import com.a1.compsci702.sunalarm.Utilities.DateConverter;
 
 public final class Storage {
 
@@ -32,6 +34,14 @@ public final class Storage {
         SharedPreferences sunriseStorage = context.getSharedPreferences(Values.SUNRISE_TIME_CACHE, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sunriseStorage.edit();
         editor.putLong(DateConverter.dateToString(time), time.getTime());
+        editor.apply();
+    }
+
+    public void removeSunriseTime(Context context, String date) {
+        SharedPreferences sunriseStorage = context.getSharedPreferences(Values.SUNRISE_TIME_CACHE, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sunriseStorage.edit();
+        editor.remove(date);
+        Log.d("REMOVE_OLD_DATES", "Removing expired date: : " + date);
         editor.apply();
     }
 

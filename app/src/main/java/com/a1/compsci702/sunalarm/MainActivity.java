@@ -329,7 +329,7 @@ public class MainActivity extends AppCompatActivity {
 
         SharedPreferences sunriseStorage = getSharedPreferences(Values.SUNRISE_TIME_CACHE, Context.MODE_PRIVATE);
 
-        for (int i = 1; i <= 7; i++) {
+        for (int i = 0; i <= 7; i++) {
             Calendar c = Calendar.getInstance();
             c.add(Calendar.DATE, i);
             //check if already in cache
@@ -338,6 +338,18 @@ public class MainActivity extends AppCompatActivity {
             } else {
                 Log.d(TAG, "Accessing date : " + c.getTime());
                 getSunriseTime(c.getTime());
+            }
+        }
+
+        Calendar c = Calendar.getInstance();
+        int today = Integer.parseInt(DateConverter.dateToString(c.getTime()));
+
+        Map<String, ?> allEntries = sunriseStorage.getAll();
+        for (Map.Entry<String, ?> entry : allEntries.entrySet()) {
+            if (today > Integer.parseInt(entry.getKey())) {
+                storage.removeSunriseTime(this, entry.getKey());
+            } else {
+                Log.d(TAG, "Future date : " + entry.getKey());
             }
         }
     }
