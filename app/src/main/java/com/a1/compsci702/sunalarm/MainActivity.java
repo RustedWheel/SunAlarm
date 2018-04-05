@@ -456,7 +456,7 @@ public class MainActivity extends AppCompatActivity {
         am.set(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(), pendingIntent);
         Log.d(TAG, "alarm set " + date.toString() + " ALARM ID: " + alarmID);
         Toast.makeText(getApplicationContext(), date.toString(), Toast.LENGTH_LONG).show();
-        storage.saveAlarm(this, alarmID);
+        storage.saveAlarm(this, alarmID, date);
         alarmIds.add(alarmID);
         simpleAdapter.notifyDataSetChanged();
     }

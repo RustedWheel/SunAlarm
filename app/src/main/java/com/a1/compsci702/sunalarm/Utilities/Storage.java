@@ -10,12 +10,13 @@ import java.util.Date;
 
 public final class Storage {
 
-    public void saveAlarm(Context context, int alarmID) {
+    public void saveAlarm(Context context, int alarmID, Date time) {
 
         SharedPreferences alarmsStorage = context.getSharedPreferences(Values.STORED_ALARMS, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = alarmsStorage.edit();
-        editor.putInt(String.valueOf(alarmID), alarmID);
+        editor.putLong(String.valueOf(alarmID), time.getTime());
         editor.apply();
+        Log.d("SAVE_ALARM", "Alarm at : " + time.toString() + " stored as Long : " + time.getTime());
 
     }
 
