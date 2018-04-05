@@ -3,8 +3,6 @@ package com.a1.compsci702.sunalarm;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.app.AlarmManager;
-import android.app.PendingIntent;
 import android.media.MediaPlayer;
 import android.os.Build;
 import android.os.Bundle;
