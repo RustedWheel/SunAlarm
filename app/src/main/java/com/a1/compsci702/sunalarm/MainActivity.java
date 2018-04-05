@@ -30,9 +30,13 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.a1.compsci702.sunalarm.Alarm.Alarm;
+import com.a1.compsci702.sunalarm.Alarm.AlarmBroadcastReceiver;
+import com.a1.compsci702.sunalarm.Alarm.AlarmType;
 import com.a1.compsci702.sunalarm.Exceptions.NoConnectionException;
 import com.a1.compsci702.sunalarm.Utilities.DateConverter;
 import com.a1.compsci702.sunalarm.Utilities.Storage;
+import com.google.gson.Gson;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -51,6 +55,9 @@ public class MainActivity extends AppCompatActivity {
     private FloatingActionButton mAddAlarm;
     private Button clearCacheButton;
     private boolean canGetLocation = true;
+
+    private ArrayList<Alarm> _alarms;
+
     private ArrayList<Integer> alarmIds;
     private ArrayAdapter<Integer> _alarmAdapter;
     private Storage storage;
@@ -112,8 +119,12 @@ public class MainActivity extends AppCompatActivity {
 
         alarmListView = findViewById(R.id.alarmList);
 
-        _alarmAdapter = new ArrayAdapter(this, R.layout.list_item, getAlarmTimeFromAlarmIds(alarmIds));
-        Log.d(TAG, "new ArrayAdapter<Integer>(this, R.layout.list_item, " + getAlarmTimeFromAlarmIds(alarmIds));
+        // _alarmAdapter = new ArrayAdapter(this, R.layout.list_item, getAlarmTimeFromAlarmIds(alarmIds));
+        // Log.d(TAG, "new ArrayAdapter<Integer>(this, R.layout.list_item, " + getAlarmTimeFromAlarmIds(alarmIds));
+
+        // Used for testing
+        _alarmAdapter = new ArrayAdapter(this, R.layout.list_item, alarmIds);
+        // Log.d(TAG, "new ArrayAdapter<Integer>(this, R.layout.list_item, " + getAlarmTimeFromAlarmIds(alarmIds));
 
         alarmListView.setAdapter(_alarmAdapter);
 
@@ -123,7 +134,7 @@ public class MainActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
                 String text = ((TextView) view).getText().toString();
-                cancelAlarm(Integer.valueOf(text), position);
+                // cancelAlarm(Integer.valueOf(text), position);
                 Toast.makeText(getApplicationContext(), "Alarm + " + text + " deleted!", Toast.LENGTH_LONG).show();
 
             }
@@ -159,17 +170,26 @@ public class MainActivity extends AppCompatActivity {
         return alarmTimes;
     }
 
+    /**
+     * Load all the alarm objects stored inside SharedPreference
+     *
+     */
     private void loadAlarms() {
 
         SharedPreferences alarmsStorage = getSharedPreferences(Values.STORED_ALARMS, Context.MODE_PRIVATE);
 
+        _alarms = new ArrayList<>();
         alarmIds = new ArrayList<>();
 
         Map<String, ?> allExistingAlarmEntries = alarmsStorage.getAll();
-        for (Map.Entry<String, ?> alarmId : allExistingAlarmEntries.entrySet()) {
+        for (Map.Entry<String, ?> alarm : allExistingAlarmEntries.entrySet()) {
 
-            alarmIds.add(Integer.valueOf(alarmId.getKey()));
+            Gson gson = new Gson();
+            String json = alarm.getValue().toString();
+            Alarm obj = gson.fromJson(json, Alarm.class);
 
+            _alarms.add(obj);
+            alarmIds.add(obj.getId());
         }
 
     }
@@ -329,7 +349,8 @@ public class MainActivity extends AppCompatActivity {
                 c.add(Calendar.MINUTE, minute);
 
                 Log.d(TAG, c.toString());
-                addAlarm(c.getTime());
+
+                addAlarm("default", c.getTime(), false, false, AlarmType.type.sunrise);
 
                 Log.d(TAG, "protected void onActivityResult() " + result);
             }
@@ -457,32 +478,39 @@ public class MainActivity extends AppCompatActivity {
     /**
      * @param date Time for alarm
      */
-    public void addAlarm(Date date) {
+    public void addAlarm(String name, Date date, boolean isSnooze, boolean isRepeat, AlarmType.type type) {
 
-        Calendar c = DateConverter.convertDateToCalendar(date);
         int alarmID = storage.getNextAlarmID(this);
 
-        Intent intent = new Intent(this, AlarmBroadcastReceiver.class);
-        intent.putExtra("ID", alarmID);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, alarmID, intent, 0);
-        AlarmManager am = (AlarmManager) getSystemService(this.ALARM_SERVICE);
+        Alarm alarm = new Alarm(name, alarmID, date, isSnooze, isRepeat, type);
+        alarm.setAlarm(getApplicationContext());
 
-        am.set(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(), pendingIntent);
         Log.d(TAG, "alarm set " + date.toString() + " ALARM ID: " + alarmID);
         Toast.makeText(getApplicationContext(), date.toString(), Toast.LENGTH_LONG).show();
-        storage.saveAlarm(this, alarmID, date);
+
+        storage.saveAlarm(this, alarm);
+
+        // Add the alarm
+        _alarms.add(alarm);
+
+        // Add the alarm ID if needed
+        // Delete this line if to use the alarm class as the adapter
         alarmIds.add(alarmID);
         _alarmAdapter.notifyDataSetChanged();
     }
 
 
-    public void cancelAlarm(int alarmID, int index) {
-        Intent intent = new Intent(this, AlarmBroadcastReceiver.class);
-        PendingIntent sender = PendingIntent.getBroadcast(this, alarmID, intent, 0);
-        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-        alarmManager.cancel(sender);
-        storage.deleteAlarm(this, alarmID);
+    public void cancelAlarm(Alarm alarm, int index) {
+
+        storage.deleteAlarm(this, alarm.getId());
+
+        alarm.cancelAlarm(getApplicationContext());
+
+        _alarms.remove(index);
+
+        // Again delete this if not needed
         alarmIds.remove(index);
+
         _alarmAdapter.notifyDataSetChanged();
     }
 
