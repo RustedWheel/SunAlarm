@@ -60,7 +60,6 @@ public class MainActivity extends AppCompatActivity {
     private boolean attemptedToCached = false;
 
     private final static int PICK_ALARM_TIME = 0;
-    private final static int ALARM_NAME = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -325,10 +324,6 @@ public class MainActivity extends AppCompatActivity {
 
                     Log.d(TAG, "protected void onActivityResult() " + result);
                 }
-                break;
-
-            case ALARM_NAME:
-//                todo use alarm name
                 break;
         }
     }
