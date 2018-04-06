@@ -3,8 +3,10 @@
     <string name="set_alarm">Set Alarm</string>
     <string name="input_hint">Set time after sunrise</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+
 
     <string name="loading">Loading...</string>
+
+    <string name="alarm_name_hint">(Compulsory) Enter Alarm Name ...</string>
+    <string name="alarm_name">Alarm Name</string>
 </resources>
