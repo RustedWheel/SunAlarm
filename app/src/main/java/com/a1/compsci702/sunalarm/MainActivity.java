@@ -116,9 +116,6 @@ public class MainActivity extends AppCompatActivity {
 
         alarmListView = findViewById(R.id.alarmList);
 
-        // _alarmAdapter = new ArrayAdapter(this, R.layout.list_item, getAlarmTimeFromAlarmIds(alarmIds));
-        // Log.d(TAG, "new ArrayAdapter<Integer>(this, R.layout.list_item, " + getAlarmTimeFromAlarmIds(alarmIds));
-
         // Used for testing
         _alarmAdapter = new ArrayAdapter(this, R.layout.list_item, alarmIds);
         // Log.d(TAG, "new ArrayAdapter<Integer>(this, R.layout.list_item, " + getAlarmTimeFromAlarmIds(alarmIds));
