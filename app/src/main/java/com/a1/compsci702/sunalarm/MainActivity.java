@@ -291,9 +291,9 @@ public class MainActivity extends AppCompatActivity {
 
                     String[] splitResult = result.split(":");
 
-                String offsetSign = splitResult[0];
-                int hour = Integer.parseInt(splitResult[1]);
-                int minute = Integer.parseInt(splitResult[2]);
+                    String offsetSign = splitResult[0];
+                    int hour = Integer.parseInt(splitResult[1]);
+                    int minute = Integer.parseInt(splitResult[2]);
 
                     //get sunrise time for tomorrow
                     //calculate offset time
