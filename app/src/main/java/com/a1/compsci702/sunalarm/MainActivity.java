@@ -117,7 +117,7 @@ public class MainActivity extends AppCompatActivity {
         alarmListView = findViewById(R.id.alarmList);
 
         // Used for testing
-        _alarmAdapter = new ArrayAdapter(this, R.layout.list_item, alarmIds);
+        _alarmAdapter = new ArrayAdapter(this, R.layout.list_item, _alarms);
 
         alarmListView.setAdapter(_alarmAdapter);
 
