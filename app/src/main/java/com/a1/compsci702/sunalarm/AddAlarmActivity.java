@@ -2,11 +2,7 @@ package com.a1.compsci702.sunalarm;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
-import android.app.AlarmManager;
-import android.app.PendingIntent;
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.TextInputLayout;
@@ -16,9 +12,6 @@ import android.widget.Button;
 import android.widget.NumberPicker;
 import android.widget.TimePicker;
 import android.widget.Toast;
-
-import java.util.Calendar;
-import java.util.Date;
 
 public class AddAlarmActivity extends AppCompatActivity {
 
@@ -66,7 +59,10 @@ public class AddAlarmActivity extends AppCompatActivity {
 
 
                 Intent returnAddAlarmIntent = new Intent();
+
                 returnAddAlarmIntent.putExtra("addAlarmResult",offsetString);
+                returnAddAlarmIntent.putExtra("alarmName", alarmName);
+
                 setResult(Activity.RESULT_OK,returnAddAlarmIntent);
                 finish();
             }
