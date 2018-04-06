@@ -2,7 +2,6 @@ package com.a1.compsci702.sunalarm;
 
 import android.Manifest;
 import android.annotation.TargetApi;
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -39,7 +38,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
@@ -61,8 +59,8 @@ public class MainActivity extends AppCompatActivity {
     private RelativeLayout loadingScreen;
     private boolean attemptedToCached = false;
 
-    private int PICK_ALARM_TIME = 0;
-    private int ALARM_NAME = 1;
+    private final static int PICK_ALARM_TIME = 0;
+    private final static int ALARM_NAME = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -146,7 +144,6 @@ public class MainActivity extends AppCompatActivity {
 
     /**
      * Load all the alarm objects stored inside SharedPreference
-     *
      */
     private void loadAlarms() {
 
@@ -286,52 +283,53 @@ public class MainActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         Log.d(TAG, "onActivityResult()");
 
-        // Check which request we're responding to
-        if (requestCode == PICK_ALARM_TIME) {
-            // Make sure the request was successful
-            if (resultCode == RESULT_OK) {
-                String result = data.getStringExtra("addAlarmResult");
+        switch (requestCode) {
+            case PICK_ALARM_TIME:
+                // Make sure the request was successful
+                if (resultCode == RESULT_OK) {
+                    String result = data.getStringExtra("addAlarmResult");
 
-                String[] splitResult = result.split(":");
+                    String[] splitResult = result.split(":");
 
                 String offsetSign = splitResult[0];
                 int hour = Integer.parseInt(splitResult[1]);
                 int minute = Integer.parseInt(splitResult[2]);
 
-                //get sunrise time for tomorrow
-                //calculate offset time
-                //set alarm
-                Calendar today = Calendar.getInstance();
-                today.add(Calendar.DATE, 1);
-                String dateTomorrow = DateConverter.dateToString(today.getTime());
-                Log.d(TAG, "Date tomorrow is : " + dateTomorrow);
+                    //get sunrise time for tomorrow
+                    //calculate offset time
+                    //set alarm
+                    Calendar today = Calendar.getInstance();
+                    today.add(Calendar.DATE, 1);
+                    String dateTomorrow = DateConverter.dateToString(today.getTime());
+                    Log.d(TAG, "Date tomorrow is : " + dateTomorrow);
 
-                //change later on to set date of alarm
-                SharedPreferences sunriseStorage = getSharedPreferences(Values.SUNRISE_TIME_CACHE, Context.MODE_PRIVATE);
-                Date nextSunrise = new Date(sunriseStorage.getLong(dateTomorrow, 0L));
+                    //change later on to set date of alarm
+                    SharedPreferences sunriseStorage = getSharedPreferences(Values.SUNRISE_TIME_CACHE, Context.MODE_PRIVATE);
+                    Date nextSunrise = new Date(sunriseStorage.getLong(dateTomorrow, 0L));
 
-                Log.d(TAG, "Sunrise tomorrow is : " + nextSunrise);
+                    Log.d(TAG, "Sunrise tomorrow is : " + nextSunrise);
 
-                Calendar c = DateConverter.convertDateToCalendar(nextSunrise);
+                    Calendar c = DateConverter.convertDateToCalendar(nextSunrise);
 
-                if (offsetSign.equals("-")) {
-                    hour = -hour;
-                    minute = -minute;
+                    if (offsetSign.equals("-")) {
+                        hour = -hour;
+                        minute = -minute;
+                    }
+
+                    c.add(Calendar.HOUR, hour);
+                    c.add(Calendar.MINUTE, minute);
+
+                    Log.d(TAG, c.toString());
+
+                    addAlarm("default", c.getTime(), false, false, AlarmType.type.sunrise);
+
+                    Log.d(TAG, "protected void onActivityResult() " + result);
                 }
+                break;
 
-                c.add(Calendar.HOUR, hour);
-                c.add(Calendar.MINUTE, minute);
-
-                Log.d(TAG, c.toString());
-
-                addAlarm("default", c.getTime(), false, false, AlarmType.type.sunrise);
-
-                Log.d(TAG, "protected void onActivityResult() " + result);
-            }
-            if (resultCode == Activity.RESULT_CANCELED) {
-                //Write your code if there's no result
-                Log.e(TAG, "resultCode == " + Activity.RESULT_CANCELED);
-            }
+            case ALARM_NAME:
+//                todo use alarm name
+                break;
         }
     }
 
