@@ -77,7 +77,7 @@ public class AddAlarmActivity extends AppCompatActivity {
         if (alarmName == null || alarmName.equals("")) {
             _alarmNameWrapper.setError("Not a valid email address!");
         }
-        
+
         return alarmName;
     }
 }

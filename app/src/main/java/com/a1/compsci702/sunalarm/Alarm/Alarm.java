@@ -88,6 +88,6 @@ public class Alarm {
     }
 
     public String toString() {
-        return this._alarmTime.toString();
+        return this._name;
     }
 }
