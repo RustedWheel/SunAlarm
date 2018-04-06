@@ -9,13 +9,13 @@
         android:id="@+id/alarmTimePicker"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/confirm_button"
-        android:layout_alignStart="@+id/confirm_button"
+
         android:layout_below="@+id/textView"
-        android:layout_marginTop="22dp"
-        android:timePickerMode="spinner"
-        tools:layout_editor_absoluteX="1dp"
-        tools:layout_editor_absoluteY="57dp" />
+        android:layout_marginLeft="30dp"
+        android:layout_marginStart="30dp"
+        android:layout_toEndOf="@+id/offset_picker"
+        android:layout_toRightOf="@+id/offset_picker"
+        android:timePickerMode="spinner" />
 
     <Button
         android:id="@+id/confirm_button"
@@ -33,30 +33,30 @@
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/alarmTimePicker"
+        android:layout_alignLeft="@+id/confirm_button"
         android:layout_alignParentTop="true"
-        android:layout_alignStart="@+id/alarmTimePicker"
-        android:layout_marginTop="20dp"
+        android:layout_alignStart="@+id/confirm_button"
+        android:layout_marginTop="21dp"
         android:text="Pick Alarm Time"
-        android:textSize = "25dp"/>
+        android:textSize="25dp" />
 
     <NumberPicker
         android:id="@+id/offset_picker"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/alarmTimePicker"
-        android:layout_marginTop="12dp"
-        android:layout_toEndOf="@+id/alarmTimePicker"
-        android:layout_toRightOf="@+id/alarmTimePicker"
-        android:descendantFocusability="blocksDescendants" />
+        android:layout_alignBottom="@+id/alarmTimePicker"
+        android:layout_alignLeft="@+id/textView"
+        android:layout_alignStart="@+id/textView"
+        android:layout_marginBottom="11dp" />
 
     <TextView
         android:id="@+id/textView2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/alarmTimePicker"
-        android:layout_alignStart="@+id/alarmTimePicker"
+        android:layout_alignLeft="@+id/offset_picker"
+        android:layout_alignStart="@+id/offset_picker"
         android:layout_below="@+id/alarmTimePicker"
+        android:layout_marginTop="31dp"
         android:text="@string/alarm_name"
         android:textSize="25dp" />
 
@@ -71,9 +71,10 @@
 
         <android.support.design.widget.TextInputEditText
             android:id="@+id/alarmName"
-            android:layout_width="match_parent"
+            android:layout_width="743dp"
             android:layout_height="wrap_content"
-            android:hint="@string/alarm_name_hint" />
+            android:hint="@string/alarm_name_hint"
+            android:singleLine="true" />
     </android.support.design.widget.TextInputLayout>
 
 </RelativeLayout>
