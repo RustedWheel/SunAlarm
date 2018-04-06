@@ -143,26 +143,6 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    //    Return Alarm Time for a particular alarm using the alarm Id
-    private List getAlarmTimeFromAlarmIds(ArrayList<Integer> alarmIds) {
-        List<Date> alarmTimes = new ArrayList<>();
-
-        SharedPreferences alarmsStorage = getSharedPreferences(Values.STORED_ALARMS, Context.MODE_PRIVATE);
-
-        Log.d(TAG, "getAlarmTimeFromAlarmIds(ArrayList<Integer> "+ alarmIds);
-
-        for (int alarmId : alarmIds) {
-            //todo
-            Date alarmDate = new Date(alarmsStorage.getLong(String.valueOf(alarmId), 0L));
-
-            alarmTimes.add(alarmDate);
-        }
-
-        Log.d(TAG, "return " +alarmTimes);
-
-        return alarmTimes;
-    }
-
     /**
      * Load all the alarm objects stored inside SharedPreference
      *
