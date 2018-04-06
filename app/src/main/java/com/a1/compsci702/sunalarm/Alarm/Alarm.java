@@ -86,4 +86,8 @@ public class Alarm {
     public AlarmType.type getType(){
         return _type;
     }
+
+    public String toString() {
+        return this._alarmTime.toString();
+    }
 }
