@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
@@ -27,6 +28,8 @@ public class AddAlarmActivity extends AppCompatActivity {
 
     private TimePicker _alarmTimePicker;
 
+    private TextInputLayout _alarmNameWrapper;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,7 +39,7 @@ public class AddAlarmActivity extends AppCompatActivity {
         this.confirmButton = findViewById(R.id.confirm_button);
         this.offsetPicker = findViewById(R.id.offset_picker);
 
-
+        this._alarmNameWrapper = findViewById(R.id.alarmNameWrapper);
 
         final String[] offsetStrings = new String[]{"+","-"};
         offsetPicker.setMinValue(0);
@@ -57,6 +60,10 @@ public class AddAlarmActivity extends AppCompatActivity {
 
                 String offsetSign = offsetStrings[(offsetPicker.getValue())];
                 String offsetString = offsetSign + ":" + _alarmTimePicker.getHour() + ":" + _alarmTimePicker.getMinute();
+
+                String alarmName = _alarmNameWrapper.getEditText().getText().toString();
+                //todo use alarmName when creating the object
+
 
                 Intent returnAddAlarmIntent = new Intent();
                 returnAddAlarmIntent.putExtra("addAlarmResult",offsetString);
