@@ -52,16 +52,15 @@ public class AddAlarmActivity extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), offsetStrings[(offsetPicker.getValue())] + "Time:" + _alarmTimePicker.getHour() + _alarmTimePicker.getMinute() , Toast.LENGTH_LONG).show();
 
                 String offsetSign = offsetStrings[(offsetPicker.getValue())];
-                String offsetString = offsetSign + ":" + _alarmTimePicker.getHour() + ":" + _alarmTimePicker.getMinute();
 
-                String alarmName = _alarmNameWrapper.getEditText().getText().toString();
                 //todo use alarmName when creating the object
+                String alarmName = getAlarmName();
 
+                String alarmString = offsetSign + ":" + _alarmTimePicker.getHour() + ":" + _alarmTimePicker.getMinute() + ":" + alarmName;
 
                 Intent returnAddAlarmIntent = new Intent();
 
-                returnAddAlarmIntent.putExtra("addAlarmResult",offsetString);
-                returnAddAlarmIntent.putExtra("alarmName", alarmName);
+                returnAddAlarmIntent.putExtra("addAlarmResult",alarmString);
 
                 setResult(Activity.RESULT_OK,returnAddAlarmIntent);
                 finish();
@@ -70,5 +69,15 @@ public class AddAlarmActivity extends AppCompatActivity {
         this._alarmTimePicker = findViewById(R.id.alarmTimePicker);
 
         _alarmTimePicker.setIs24HourView(true);
+    }
+
+    private String getAlarmName() {
+        String alarmName = this._alarmNameWrapper.getEditText().getText().toString();
+
+        if (alarmName == null || alarmName.equals("")) {
+            _alarmNameWrapper.setError("Not a valid email address!");
+        }
+        
+        return alarmName;
     }
 }
