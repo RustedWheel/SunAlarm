@@ -61,7 +61,8 @@ public class MainActivity extends AppCompatActivity {
     private RelativeLayout loadingScreen;
     private boolean attemptedToCached = false;
 
-    private final static int PICK_ALARM_TIME = 0;
+    private int PICK_ALARM_TIME = 0;
+    private int ALARM_NAME = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
