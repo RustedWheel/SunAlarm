@@ -118,7 +118,6 @@ public class MainActivity extends AppCompatActivity {
 
         // Used for testing
         _alarmAdapter = new ArrayAdapter(this, R.layout.list_item, alarmIds);
-        // Log.d(TAG, "new ArrayAdapter<Integer>(this, R.layout.list_item, " + getAlarmTimeFromAlarmIds(alarmIds));
 
         alarmListView.setAdapter(_alarmAdapter);
 
@@ -128,7 +127,7 @@ public class MainActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
                 String text = ((TextView) view).getText().toString();
-                // cancelAlarm(Integer.valueOf(text), position);
+
                 Toast.makeText(getApplicationContext(), "Alarm + " + text + " deleted!", Toast.LENGTH_LONG).show();
 
             }
