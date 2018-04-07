@@ -16,10 +16,10 @@ public class Alarm {
     private int _alarmId;
     private Date _alarmTime;
     private boolean _snooze;
-    private boolean _repeat;
+    private String _repeat;
     private AlarmType.type _type;
 
-    public Alarm(String name, int alarmId, Date alarmTime, boolean snooze, boolean repeat, AlarmType.type type) {
+    public Alarm(String name, int alarmId, Date alarmTime, boolean snooze, String repeat, AlarmType.type type) {
 
         _name = name;
         _alarmId = alarmId;
@@ -77,7 +77,7 @@ public class Alarm {
     }
 
 
-    public boolean isRepeat(){
+    public String isRepeat(){
         return _repeat;
     }
 
