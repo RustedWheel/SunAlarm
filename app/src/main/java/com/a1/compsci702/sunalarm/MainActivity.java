@@ -457,23 +457,28 @@ public class MainActivity extends AppCompatActivity {
      */
     public void addAlarm(String name, Date date, boolean isSnooze, boolean isRepeat, AlarmType.type type) {
 
-        int alarmID = storage.getNextAlarmID(this);
+        if (date.getTime() < Calendar.getInstance().getTime().getTime()) {
+            Toast.makeText(getApplicationContext(), "Unable to make an alarm in the past", Toast.LENGTH_LONG).show();
+        } else {
 
-        Alarm alarm = new Alarm(name, alarmID, date, isSnooze, isRepeat, type);
-        alarm.setAlarm(getApplicationContext());
+            int alarmID = storage.getNextAlarmID(this);
 
-        Log.d(TAG, "alarm set " + date.toString() + " ALARM ID: " + alarmID);
-        Toast.makeText(getApplicationContext(), date.toString(), Toast.LENGTH_LONG).show();
+            Alarm alarm = new Alarm(name, alarmID, date, isSnooze, isRepeat, type);
+            alarm.setAlarm(getApplicationContext());
 
-        storage.saveAlarm(this, alarm);
+            Log.d(TAG, "alarm set " + date.toString() + " ALARM ID: " + alarmID);
+            Toast.makeText(getApplicationContext(), date.toString(), Toast.LENGTH_LONG).show();
 
-        // Add the alarm
-        _alarms.add(alarm);
+            storage.saveAlarm(this, alarm);
 
-        // Add the alarm ID if needed
-        // Delete this line if to use the alarm class as the adapter
-        alarmIds.add(alarmID);
-        _alarmAdapter.notifyDataSetChanged();
+            // Add the alarm
+            _alarms.add(alarm);
+
+            // Add the alarm ID if needed
+            // Delete this line if to use the alarm class as the adapter
+            alarmIds.add(alarmID);
+            _alarmAdapter.notifyDataSetChanged();
+        }
     }
 
 
