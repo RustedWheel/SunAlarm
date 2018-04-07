@@ -325,14 +325,10 @@ public class MainActivity extends AppCompatActivity {
                     Log.d(TAG, "snooze = " + isSnooze);
 
                     String alarmName = data.getStringExtra("alarmName");
-                    addAlarm(alarmName, c.getTime(), isSnooze, false, AlarmType.type.sunrise);
 
-                    Log.d(TAG, "protected void onActivityResult() " + alarmTime);
-
-                    // test
                     String repeat = data.getStringExtra("repeat");
-                    Log.d(TAG, "repeat = " + repeat);
-                    //test
+
+                    addAlarm(alarmName, c.getTime(), isSnooze, repeat, AlarmType.type.sunrise);
                 }
                 break;
         }
@@ -455,7 +451,7 @@ public class MainActivity extends AppCompatActivity {
     /**
      * @param date Time for alarm
      */
-    public void addAlarm(String name, Date date, boolean isSnooze, boolean isRepeat, AlarmType.type type) {
+    public void addAlarm(String name, Date date, boolean isSnooze, String isRepeat, AlarmType.type type) {
 
         if (date.getTime() < Calendar.getInstance().getTime().getTime()) {
             Toast.makeText(getApplicationContext(), "Unable to make an alarm in the past", Toast.LENGTH_LONG).show();
