@@ -51,6 +51,8 @@ public class AddAlarmActivity extends AppCompatActivity implements RecurrencePic
     private Switch _snoozeSwitch;
     private TextView _sunriseTomorrow;
 
+    private String _repeatString;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -102,6 +104,8 @@ public class AddAlarmActivity extends AppCompatActivity implements RecurrencePic
 
                 boolean isSnooze = _snoozeSwitch.isChecked();
                 returnAddAlarmIntent.putExtra("snooze", Boolean.toString(isSnooze));
+
+                returnAddAlarmIntent.putExtra("repeat", _repeatString);
 
                 setResult(Activity.RESULT_OK,returnAddAlarmIntent);
 
@@ -171,11 +175,15 @@ public class AddAlarmActivity extends AppCompatActivity implements RecurrencePic
 
     private void populateRepeats() {
         Resources r = getResources();
-        String repeatString = "";
+
         if (!TextUtils.isEmpty(mRrule)) {
-            repeatString = EventRecurrenceFormatter.getRepeatString(this, r, mEventRecurrence, true);
+            this._repeatString = EventRecurrenceFormatter.getRepeatString(this, r, mEventRecurrence, true);
         }
 
-        Toast.makeText(this, mRrule + "\n" + repeatString, Toast.LENGTH_LONG).show();
+        Toast.makeText(this, mRrule + "\n" + this._repeatString, Toast.LENGTH_LONG).show();
+
+//        Intent returnAddAlarmIntent = new Intent();
+//        returnAddAlarmIntent.putExtra("repeat", this._repeatString);
+//        setResult(Activity.RESULT_OK,returnAddAlarmIntent);
     }
 }

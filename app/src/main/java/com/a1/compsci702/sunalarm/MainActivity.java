@@ -329,6 +329,9 @@ public class MainActivity extends AppCompatActivity {
                     // test
                     String snooze = data.getStringExtra("snooze");
                     Log.d(TAG, "snooze = " + snooze);
+
+                    String repeat = data.getStringExtra("repeat");
+                    Log.d(TAG, "repeat = " + repeat);
                     //test
                 }
                 break;
