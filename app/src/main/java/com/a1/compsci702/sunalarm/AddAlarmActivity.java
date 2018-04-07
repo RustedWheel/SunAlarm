@@ -7,6 +7,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.NumberPicker;
@@ -54,7 +55,12 @@ public class AddAlarmActivity extends AppCompatActivity {
                 String offsetSign = offsetStrings[(offsetPicker.getValue())];
 
                 //todo use alarmName when creating the object
-                String alarmName = getAlarmName();
+                String alarmName = _alarmNameWrapper.getEditText().getText().toString();
+
+                if (alarmName == null || alarmName.equals("") || alarmName.matches("")) {
+                    _alarmNameWrapper.setError("Not a valid alarm name!");
+                    return;
+                }
 
                 String alarmString = offsetSign + ":" + _alarmTimePicker.getHour() + ":" + _alarmTimePicker.getMinute() + ":" + alarmName;
 
@@ -63,21 +69,14 @@ public class AddAlarmActivity extends AppCompatActivity {
                 returnAddAlarmIntent.putExtra("addAlarmResult",alarmString);
 
                 setResult(Activity.RESULT_OK,returnAddAlarmIntent);
+
                 finish();
             }
         });
+
         this._alarmTimePicker = findViewById(R.id.alarmTimePicker);
 
         _alarmTimePicker.setIs24HourView(true);
     }
 
-    private String getAlarmName() {
-        String alarmName = this._alarmNameWrapper.getEditText().getText().toString();
-
-        if (alarmName == null || alarmName.equals("")) {
-            _alarmNameWrapper.setError("Not a valid email address!");
-        }
-
-        return alarmName;
-    }
 }
