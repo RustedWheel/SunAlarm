@@ -5,6 +5,42 @@
     android:layout_height="match_parent"
     tools:context="com.a1.compsci702.sunalarm.AddAlarmActivity">
 
+    <TextView
+        android:id="@+id/sunrise_tomorrow"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:layout_alignLeft="@+id/alarm_name"
+        android:layout_alignParentTop="true"
+        android:layout_alignStart="@+id/confirm_button"
+
+        android:text="@string/sunrise_tomorrow"
+        android:textSize="25dp" />
+
+    <TextView
+        android:id="@+id/sunrise_time_tomorrow"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:layout_alignLeft="@+id/confirm_button"
+        android:layout_below="@+id/sunrise_tomorrow"
+
+        android:textColor="@color/colorAccent"
+        android:text="sunrise time tomorrow goes here"
+        />
+
+    <TextView
+        android:id="@+id/pick_alarm_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:layout_below="@+id/sunrise_time_tomorrow"
+
+        android:layout_alignLeft="@+id/confirm_button"
+
+        android:text="@string/pick_alarm_time"
+        android:textSize="25dp" />
+
     <TimePicker
         android:id="@+id/alarmTimePicker"
         android:layout_width="wrap_content"
@@ -25,27 +61,6 @@
         android:layout_below="@+id/pick_alarm_time"
         android:layout_marginTop="15dp" />
 
-    <Button
-        android:id="@+id/confirm_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginBottom="15dp"
-        android:layout_marginLeft="15dp"
-        android:layout_marginStart="15dp"
-        android:text="@string/confirm_button" />
-
-    <TextView
-        android:id="@+id/pick_alarm_time"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/confirm_button"
-        android:layout_alignParentTop="true"
-        android:layout_alignStart="@+id/confirm_button"
-        android:text="@string/pick_alarm_time"
-        android:textSize="25dp" />
 
     <TextView
         android:id="@+id/alarm_name"
@@ -84,5 +99,24 @@
         android:text="@string/alarm_snooze"
         android:textSize="25dp" />
 
+    <Switch
+        android:id="@+id/snooze_switch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:layout_alignLeft="@+id/alarm_name"
+        android:layout_below="@+id/snooze" />
+
+    <Button
+        android:id="@+id/confirm_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginBottom="15dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginStart="15dp"
+        android:text="@string/confirm_button" />
 
 </RelativeLayout>
