@@ -15,5 +15,5 @@
     <string name="confirm_button">Confirm</string>
     <string name="sunrise_tomorrow">Sunrise Tomorrow</string>
     <string name="repeat">Repeat</string>
-    <string name="repeat_button_label">Pick repeat</string>
+    <string name="repeat_button_label">Configure repeat</string>
 </resources>
