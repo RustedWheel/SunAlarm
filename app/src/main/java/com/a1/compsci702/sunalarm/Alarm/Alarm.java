@@ -12,7 +12,6 @@ import java.util.Date;
 
 public class Alarm {
 
-    private static final String TAG = "Alarm";
     private String _name;
     private int _alarmId;
     private Date _alarmTime;
