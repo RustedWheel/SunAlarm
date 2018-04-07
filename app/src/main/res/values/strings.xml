@@ -9,4 +9,7 @@
 
     <string name="alarm_name_hint">(Compulsory) Enter Alarm Name ...</string>
     <string name="alarm_name">Alarm Name</string>
+
+    <string name="pick_alarm_time">Pick Alarm Time</string>
+    <string name="alarm_snooze">Snooze</string>
 </resources>
