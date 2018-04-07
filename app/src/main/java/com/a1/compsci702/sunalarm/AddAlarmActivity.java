@@ -16,6 +16,7 @@ import android.text.format.Time;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.NumberPicker;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -39,6 +40,7 @@ public class AddAlarmActivity extends AppCompatActivity implements RecurrencePic
     private NumberPicker offsetPicker;
 
     private TimePicker _alarmTimePicker;
+    private DatePicker _datePicker;
 
     private TextInputLayout _alarmNameWrapper;
 
@@ -60,7 +62,10 @@ public class AddAlarmActivity extends AppCompatActivity implements RecurrencePic
         setContentView(R.layout.activity_add_alarm);
 
         this.confirmButton = findViewById(R.id.confirm_button);
+
         this.offsetPicker = findViewById(R.id.offset_picker);
+        this._datePicker = findViewById(R.id.alarmDatePicker);
+
         this._repeatButton = findViewById(R.id.repeat_button);
         this._snoozeSwitch = findViewById(R.id.snooze_switch);
 
@@ -106,6 +111,15 @@ public class AddAlarmActivity extends AppCompatActivity implements RecurrencePic
                 returnAddAlarmIntent.putExtra("snooze", Boolean.toString(isSnooze));
 
                 returnAddAlarmIntent.putExtra("repeat", _repeatString);
+
+                int day = _datePicker.getDayOfMonth();
+                int month = _datePicker.getMonth();
+                int year =  _datePicker.getYear();
+
+                Calendar calendar = Calendar.getInstance();
+                calendar.set(year, month, day);
+
+                returnAddAlarmIntent.putExtra("alarmDate", calendar.toString());
 
                 setResult(Activity.RESULT_OK,returnAddAlarmIntent);
 
