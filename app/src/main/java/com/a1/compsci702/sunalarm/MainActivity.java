@@ -286,14 +286,13 @@ public class MainActivity extends AppCompatActivity {
             case PICK_ALARM_TIME:
                 // Make sure the request was successful
                 if (resultCode == RESULT_OK) {
-                    String result = data.getStringExtra("addAlarmResult");
+                    String alarmTime = data.getStringExtra("alarmTime");
 
-                    String[] splitResult = result.split(":");
+                    String[] splitResult = alarmTime.split(":");
 
                     String offsetSign = splitResult[0];
                     int hour = Integer.parseInt(splitResult[1]);
                     int minute = Integer.parseInt(splitResult[2]);
-                    String alarmName =  splitResult[3];
 
                     //get sunrise time for tomorrow
                     //calculate offset time
@@ -321,9 +320,11 @@ public class MainActivity extends AppCompatActivity {
 
                     Log.d(TAG, c.toString());
 
+
+                    String alarmName = data.getStringExtra("alarmName");
                     addAlarm(alarmName, c.getTime(), false, false, AlarmType.type.sunrise);
 
-                    Log.d(TAG, "protected void onActivityResult() " + result);
+                    Log.d(TAG, "protected void onActivityResult() " + alarmTime);
                 }
                 break;
         }

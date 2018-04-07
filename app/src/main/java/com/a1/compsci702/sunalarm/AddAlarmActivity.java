@@ -73,19 +73,22 @@ public class AddAlarmActivity extends AppCompatActivity implements RecurrencePic
 
                 String offsetSign = offsetStrings[(offsetPicker.getValue())];
 
-                //todo use alarmName when creating the object
+                Intent returnAddAlarmIntent = new Intent();
+
+                String alarmTime = offsetSign + ":" + _alarmTimePicker.getHour() + ":" + _alarmTimePicker.getMinute();
+                returnAddAlarmIntent.putExtra("alarmTime", alarmTime);
+
+
                 String alarmName = _alarmNameWrapper.getEditText().getText().toString();
 
                 if (alarmName == null || alarmName.equals("") || alarmName.matches("")) {
                     _alarmNameWrapper.setError("Not a valid alarm name!");
                     return;
                 }
+                returnAddAlarmIntent.putExtra("alarmName", alarmName);
 
-                String alarmString = offsetSign + ":" + _alarmTimePicker.getHour() + ":" + _alarmTimePicker.getMinute() + ":" + alarmName;
 
-                Intent returnAddAlarmIntent = new Intent();
 
-                returnAddAlarmIntent.putExtra("addAlarmResult",alarmString);
 
                 setResult(Activity.RESULT_OK,returnAddAlarmIntent);
 
@@ -120,8 +123,6 @@ public class AddAlarmActivity extends AppCompatActivity implements RecurrencePic
                 rpd.show(fm, FRAG_TAG_RECUR_PICKER);
             }
         });
-
-
 
         this._alarmTimePicker = findViewById(R.id.alarmTimePicker);
 
