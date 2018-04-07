@@ -179,11 +179,5 @@ public class AddAlarmActivity extends AppCompatActivity implements RecurrencePic
         if (!TextUtils.isEmpty(mRrule)) {
             this._repeatString = EventRecurrenceFormatter.getRepeatString(this, r, mEventRecurrence, true);
         }
-
-        Toast.makeText(this, mRrule + "\n" + this._repeatString, Toast.LENGTH_LONG).show();
-
-//        Intent returnAddAlarmIntent = new Intent();
-//        returnAddAlarmIntent.putExtra("repeat", this._repeatString);
-//        setResult(Activity.RESULT_OK,returnAddAlarmIntent);
     }
 }
