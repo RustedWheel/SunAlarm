@@ -325,6 +325,11 @@ public class MainActivity extends AppCompatActivity {
                     addAlarm(alarmName, c.getTime(), false, false, AlarmType.type.sunrise);
 
                     Log.d(TAG, "protected void onActivityResult() " + alarmTime);
+
+                    // test
+                    String snooze = data.getStringExtra("snooze");
+                    Log.d(TAG, "snooze = " + snooze);
+                    //test
                 }
                 break;
         }
