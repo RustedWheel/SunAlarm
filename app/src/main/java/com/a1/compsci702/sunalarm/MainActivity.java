@@ -320,16 +320,16 @@ public class MainActivity extends AppCompatActivity {
 
                     Log.d(TAG, c.toString());
 
+                    String snoozeString = data.getStringExtra("snooze");
+                    boolean isSnooze = Boolean.valueOf(snoozeString);
+                    Log.d(TAG, "snooze = " + isSnooze);
 
                     String alarmName = data.getStringExtra("alarmName");
-                    addAlarm(alarmName, c.getTime(), false, false, AlarmType.type.sunrise);
+                    addAlarm(alarmName, c.getTime(), isSnooze, false, AlarmType.type.sunrise);
 
                     Log.d(TAG, "protected void onActivityResult() " + alarmTime);
 
                     // test
-                    String snooze = data.getStringExtra("snooze");
-                    Log.d(TAG, "snooze = " + snooze);
-
                     String repeat = data.getStringExtra("repeat");
                     Log.d(TAG, "repeat = " + repeat);
                     //test
