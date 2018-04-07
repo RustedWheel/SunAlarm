@@ -5,146 +5,130 @@
     android:layout_height="match_parent"
     tools:context="com.a1.compsci702.sunalarm.AddAlarmActivity">
 
+
     <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/scrollView1"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:fillViewport="true">
+        android:fillViewport="true"
+        android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/sunrise_tomorrow"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-
-            android:layout_alignLeft="@+id/alarm_name"
-            android:layout_alignParentTop="true"
-            android:layout_alignStart="@+id/confirm_button"
-
-            android:text="@string/sunrise_tomorrow"
-            android:textSize="25dp" />
-
-        <TextView
-            android:id="@+id/sunrise_time_tomorrow"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-
-            android:layout_alignLeft="@+id/confirm_button"
-            android:layout_below="@+id/sunrise_tomorrow"
-
-            android:text="sunrise time tomorrow goes here"
-            android:textColor="@color/colorAccent" />
-
-        <TextView
-            android:id="@+id/repeat"
-
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-
-            android:layout_alignLeft="@+id/confirm_button"
-            android:layout_below="@+id/sunrise_time_tomorrow"
-
-            android:text="@string/repeat"
-            android:textSize="25dp" />
-
-        <Button
-            android:id="@+id/repeat_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-
-
-            android:layout_alignLeft="@+id/confirm_button"
-            android:layout_below="@+id/repeat"
-
-            android:text="@string/repeat_button_label" />
-
-        <TextView
-            android:id="@+id/pick_alarm_time"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-
-            android:layout_alignLeft="@+id/confirm_button"
-
-            android:layout_below="@+id/repeat_button"
-
-            android:text="@string/pick_alarm_time"
-            android:textSize="25dp" />
-
-        <TimePicker
-            android:id="@+id/alarmTimePicker"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-
-            android:layout_below="@+id/pick_alarm_time"
-            android:layout_toEndOf="@+id/offset_picker"
-            android:layout_toRightOf="@+id/offset_picker"
-            android:timePickerMode="spinner" />
-
-        <NumberPicker
-            android:id="@+id/offset_picker"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-
-            android:layout_alignLeft="@+id/pick_alarm_time"
-            android:layout_alignStart="@+id/pick_alarm_time"
-            android:layout_below="@+id/pick_alarm_time"
-            android:layout_marginTop="15dp" />
-
-
-        <TextView
-            android:id="@+id/alarm_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignLeft="@+id/offset_picker"
-            android:layout_alignStart="@+id/offset_picker"
-            android:layout_below="@+id/alarmTimePicker"
-            android:text="@string/alarm_name"
-            android:textSize="25dp" />
-
-        <android.support.design.widget.TextInputLayout
-            android:id="@+id/alarmNameWrapper"
+        <LinearLayout
+            android:id="@+id/sunrise_section"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignLeft="@+id/alarm_name"
-            android:layout_alignStart="@+id/alarm_name"
-            android:layout_below="@+id/alarm_name">
-
-            <android.support.design.widget.TextInputEditText
-                android:id="@+id/alarmName"
-                android:layout_width="743dp"
-                android:layout_height="wrap_content"
-                android:hint="@string/alarm_name_hint"
-                android:singleLine="true" />
-        </android.support.design.widget.TextInputLayout>
-
-        <TextView
-            android:id="@+id/snooze"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-
-            android:layout_alignLeft="@+id/alarm_name"
-            android:layout_below="@+id/alarmNameWrapper"
-
-            android:text="@string/alarm_snooze"
-            android:textSize="25dp" />
-
-        <Switch
-            android:id="@+id/snooze_switch"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-
-            android:layout_alignLeft="@+id/alarm_name"
-            android:layout_below="@+id/snooze" />
-
-        <Button
-            android:id="@+id/confirm_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_marginBottom="15dp"
+            android:layout_height="match_parent"
             android:layout_marginLeft="15dp"
-            android:layout_marginStart="15dp"
-            android:text="@string/confirm_button" />
+
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/sunrise_tomorrow"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:layout_alignLeft="@+id/alarm_name"
+                android:layout_alignParentTop="true"
+
+                android:text="@string/sunrise_tomorrow"
+                android:textSize="25dp" />
+
+            <TextView
+                android:id="@+id/sunrise_time_tomorrow"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:text="sunrise time tomorrow goes here"
+                android:textColor="@color/colorAccent" />
+
+            <TextView
+                android:id="@+id/repeat"
+
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:text="@string/repeat"
+                android:textSize="25dp" />
+
+            <Button
+                android:id="@+id/repeat_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:text="@string/repeat_button_label" />
+
+            <TextView
+                android:id="@+id/pick_alarm_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:text="@string/pick_alarm_time"
+                android:textSize="25dp" />
+
+            <LinearLayout
+                android:id="@+id/pick_time_section"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:gravity="center"
+
+                android:orientation="horizontal">
+
+                <NumberPicker
+                    android:id="@+id/offset_picker"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <TimePicker
+                    android:id="@+id/alarmTimePicker"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+
+                    android:timePickerMode="spinner" />
+            </LinearLayout>
+
+
+            <TextView
+                android:id="@+id/alarm_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:text="@string/alarm_name"
+                android:textSize="25dp" />
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/alarmNameWrapper"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <android.support.design.widget.TextInputEditText
+                    android:id="@+id/alarmName"
+                    android:layout_width="743dp"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/alarm_name_hint"
+                    android:singleLine="true" />
+            </android.support.design.widget.TextInputLayout>
+
+            <TextView
+                android:id="@+id/snooze"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:text="@string/alarm_snooze"
+                android:textSize="25dp" />
+
+            <Switch
+                android:id="@+id/snooze_switch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <Button
+                android:id="@+id/confirm_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:text="@string/confirm_button" />
+        </LinearLayout>
 
     </ScrollView>
 
