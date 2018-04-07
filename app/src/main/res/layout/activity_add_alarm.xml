@@ -30,11 +30,33 @@
         />
 
     <TextView
+        android:id="@+id/repeat"
+
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:layout_alignLeft="@+id/confirm_button"
+        android:layout_below="@+id/sunrise_time_tomorrow"
+
+        android:text="@string/repeat"
+        android:textSize="25dp" />
+
+    <Button android:id="@+id/repeat_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+
+        android:layout_below="@+id/repeat"
+        android:layout_alignLeft="@+id/confirm_button"
+
+        android:text="@string/repeat_button_label" />
+
+    <TextView
         android:id="@+id/pick_alarm_time"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
 
-        android:layout_below="@+id/sunrise_time_tomorrow"
+        android:layout_below="@+id/repeat_button"
 
         android:layout_alignLeft="@+id/confirm_button"
 
