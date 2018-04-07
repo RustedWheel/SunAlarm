@@ -293,6 +293,7 @@ public class MainActivity extends AppCompatActivity {
                     String offsetSign = splitResult[0];
                     int hour = Integer.parseInt(splitResult[1]);
                     int minute = Integer.parseInt(splitResult[2]);
+                    String alarmName =  splitResult[3];
 
                     //get sunrise time for tomorrow
                     //calculate offset time
@@ -320,7 +321,7 @@ public class MainActivity extends AppCompatActivity {
 
                     Log.d(TAG, c.toString());
 
-                    addAlarm("default", c.getTime(), false, false, AlarmType.type.sunrise);
+                    addAlarm(alarmName, c.getTime(), false, false, AlarmType.type.sunrise);
 
                     Log.d(TAG, "protected void onActivityResult() " + result);
                 }
