@@ -47,13 +47,9 @@ public class AddAlarmActivity extends AppCompatActivity implements RecurrencePic
     private static final String FRAG_TAG_RECUR_PICKER = "recurrencePickerDialogFragment";
     private EventRecurrence mEventRecurrence = new EventRecurrence();
     private String mRrule;
-<<<<<<< HEAD
 
     private Switch _snoozeSwitch;
-=======
     private TextView _sunriseTomorrow;
->>>>>>> afa3faa50db41bba4dcbd6b96bbfbd7acfe4e34b
-
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
