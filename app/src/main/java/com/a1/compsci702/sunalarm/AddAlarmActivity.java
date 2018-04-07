@@ -2,7 +2,9 @@ package com.a1.compsci702.sunalarm;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.os.Build;
 import android.os.Bundle;
@@ -11,6 +13,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.text.format.Time;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.NumberPicker;
@@ -18,10 +21,14 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.a1.compsci702.sunalarm.Utilities.DateConverter;
 import com.codetroopers.betterpickers.recurrencepicker.EventRecurrence;
 import com.codetroopers.betterpickers.recurrencepicker.EventRecurrenceFormatter;
 import com.codetroopers.betterpickers.recurrencepicker.RecurrencePickerDialogFragment;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 
 
 public class AddAlarmActivity extends AppCompatActivity implements RecurrencePickerDialogFragment.OnRecurrenceSetListener {
@@ -39,7 +46,7 @@ public class AddAlarmActivity extends AppCompatActivity implements RecurrencePic
     private static final String FRAG_TAG_RECUR_PICKER = "recurrencePickerDialogFragment";
     private EventRecurrence mEventRecurrence = new EventRecurrence();
     private String mRrule;
-
+    private TextView _sunriseTomorrow;
 
 
     @Override
@@ -53,6 +60,9 @@ public class AddAlarmActivity extends AppCompatActivity implements RecurrencePic
         this._repeatButton = findViewById(R.id.repeat_button);
 
         this._alarmNameWrapper = findViewById(R.id.alarmNameWrapper);
+        this._sunriseTomorrow = findViewById(R.id.sunrise_time_tomorrow);
+
+        retrieveSunrise();
 
         final String[] offsetStrings = new String[]{"+","-"};
         offsetPicker.setMinValue(0);
@@ -127,6 +137,23 @@ public class AddAlarmActivity extends AppCompatActivity implements RecurrencePic
         this._alarmTimePicker = findViewById(R.id.alarmTimePicker);
 
         _alarmTimePicker.setIs24HourView(true);
+    }
+
+    private void retrieveSunrise() {
+        //get sunrise time for tomorrow
+        Calendar today = Calendar.getInstance();
+        today.add(Calendar.DATE, 1);
+        String dateTomorrow = DateConverter.dateToString(today.getTime());
+        Log.d(TAG, "Date tomorrow is : " + dateTomorrow);
+
+        //change later on to set date of alarm
+        SharedPreferences sunriseStorage = getSharedPreferences(Values.SUNRISE_TIME_CACHE, Context.MODE_PRIVATE);
+        Date nextSunrise = new Date(sunriseStorage.getLong(dateTomorrow, 0L));
+
+        //format date
+        SimpleDateFormat formatted = new SimpleDateFormat("hh:mm a");
+
+        _sunriseTomorrow.setText(formatted.format(nextSunrise));
     }
 
     @Override
