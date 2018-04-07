@@ -12,4 +12,5 @@
 
     <string name="pick_alarm_time">Pick Alarm Time</string>
     <string name="alarm_snooze">Snooze</string>
+    <string name="confirm_button">Confirm</string>
 </resources>
