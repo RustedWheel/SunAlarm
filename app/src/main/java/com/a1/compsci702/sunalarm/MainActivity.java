@@ -329,6 +329,12 @@ public class MainActivity extends AppCompatActivity {
                     String repeat = data.getStringExtra("repeat");
 
                     addAlarm(alarmName, c.getTime(), isSnooze, repeat, AlarmType.type.sunrise);
+
+                    // test
+                    String date = data.getStringExtra("alarmDate");
+
+                    Log.d(TAG, "date = "+ date);
+                    // test
                 }
                 break;
         }
