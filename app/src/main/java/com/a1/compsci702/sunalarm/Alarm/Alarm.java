@@ -15,17 +15,15 @@ public class Alarm {
     private String _name;
     private int _alarmId;
     private Date _alarmTime;
-    private boolean _snooze;
-    private String _repeat;
+    private RepeatInfo _repeatInfo;
     private AlarmType.type _type;
 
-    public Alarm(String name, int alarmId, Date alarmTime, boolean snooze, String repeat, AlarmType.type type) {
+    public Alarm(String name, int alarmId, Date alarmTime, RepeatInfo repeatInfo, AlarmType.type type) {
 
         _name = name;
         _alarmId = alarmId;
         _alarmTime = alarmTime;
-        _snooze = snooze;
-        _repeat = repeat;
+        _repeatInfo = repeatInfo;
         _type = type;
 
     }
@@ -72,19 +70,15 @@ public class Alarm {
     }
 
 
-    public boolean isSnooze(){
-        return _snooze;
-    }
-
-
-    public String isRepeat(){
-        return _repeat;
+    public RepeatInfo getRepeatInfo(){
+        return _repeatInfo;
     }
 
 
     public AlarmType.type getType(){
         return _type;
     }
+
 
     public String toString() {
         return this._name;

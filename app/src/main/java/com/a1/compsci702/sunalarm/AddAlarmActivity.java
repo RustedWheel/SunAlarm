@@ -40,7 +40,6 @@ public class AddAlarmActivity extends AppCompatActivity implements RecurrencePic
     private NumberPicker offsetPicker;
 
     private TimePicker _alarmTimePicker;
-    private DatePicker _datePicker;
 
     private TextInputLayout _alarmNameWrapper;
 
@@ -64,7 +63,6 @@ public class AddAlarmActivity extends AppCompatActivity implements RecurrencePic
         this.confirmButton = findViewById(R.id.confirm_button);
 
         this.offsetPicker = findViewById(R.id.offset_picker);
-        this._datePicker = findViewById(R.id.alarmDatePicker);
 
         this._repeatButton = findViewById(R.id.repeat_button);
         this._snoozeSwitch = findViewById(R.id.snooze_switch);
@@ -112,14 +110,7 @@ public class AddAlarmActivity extends AppCompatActivity implements RecurrencePic
 
                 returnAddAlarmIntent.putExtra("repeat", _repeatString);
 
-                int day = _datePicker.getDayOfMonth();
-                int month = _datePicker.getMonth();
-                int year =  _datePicker.getYear();
-
-                Calendar calendar = Calendar.getInstance();
-                calendar.set(year, month, day);
-
-                returnAddAlarmIntent.putExtra("alarmDate", calendar.toString());
+                Log.d(TAG, "Repeat information from the picker: " + _repeatString);
 
                 setResult(Activity.RESULT_OK,returnAddAlarmIntent);
 

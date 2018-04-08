@@ -42,35 +42,6 @@
                 android:textColor="@color/colorAccent" />
 
             <TextView
-                android:id="@+id/repeat"
-
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-
-                android:text="@string/repeat"
-                android:textSize="25dp" />
-
-            <Button
-                android:id="@+id/repeat_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-
-                android:text="@string/repeat_button_label" />
-
-            <TextView
-                android:id="@+id/pick_alarm_date"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-
-                android:text="@string/pick_alarm_date"
-                android:textSize="25dp" />
-
-            <DatePicker
-                android:id="@+id/alarmDatePicker"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-
-            <TextView
                 android:id="@+id/pick_alarm_time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -100,6 +71,21 @@
                     android:timePickerMode="spinner" />
             </LinearLayout>
 
+            <TextView
+                android:id="@+id/repeat"
+
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:text="@string/repeat"
+                android:textSize="25dp" />
+
+            <Button
+                android:id="@+id/repeat_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:text="@string/repeat_button_label" />
 
             <TextView
                 android:id="@+id/alarm_name"

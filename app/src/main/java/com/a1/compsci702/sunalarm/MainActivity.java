@@ -29,6 +29,7 @@ import android.widget.Toast;
 
 import com.a1.compsci702.sunalarm.Alarm.Alarm;
 import com.a1.compsci702.sunalarm.Alarm.AlarmType;
+import com.a1.compsci702.sunalarm.Alarm.RepeatInfo;
 import com.a1.compsci702.sunalarm.Exceptions.NoConnectionException;
 import com.a1.compsci702.sunalarm.Utilities.DateConverter;
 import com.a1.compsci702.sunalarm.Utilities.Storage;
@@ -328,16 +329,20 @@ public class MainActivity extends AppCompatActivity {
 
                     String repeat = data.getStringExtra("repeat");
 
-                    addAlarm(alarmName, c.getTime(), isSnooze, repeat, AlarmType.type.sunrise);
+                    RepeatInfo repeatInfo = parseRepeatInfo(repeat);
 
-                    // test
-                    String date = data.getStringExtra("alarmDate");
+                    addAlarm(alarmName, c.getTime(), repeatInfo, AlarmType.type.sunrise);
 
-                    Log.d(TAG, "date = "+ date);
-                    // test
                 }
                 break;
         }
+    }
+
+    private RepeatInfo parseRepeatInfo(String repeatInfoString) {
+
+        RepeatInfo repeatInfo = new RepeatInfo(false, null);
+
+       return repeatInfo;
     }
 
 
@@ -457,7 +462,7 @@ public class MainActivity extends AppCompatActivity {
     /**
      * @param date Time for alarm
      */
-    public void addAlarm(String name, Date date, boolean isSnooze, String isRepeat, AlarmType.type type) {
+    public void addAlarm(String name, Date date, RepeatInfo repeatInfo, AlarmType.type type) {
 
         if (date.getTime() < Calendar.getInstance().getTime().getTime()) {
             Toast.makeText(getApplicationContext(), "Unable to make an alarm in the past", Toast.LENGTH_LONG).show();
@@ -465,7 +470,7 @@ public class MainActivity extends AppCompatActivity {
 
             int alarmID = storage.getNextAlarmID(this);
 
-            Alarm alarm = new Alarm(name, alarmID, date, isSnooze, isRepeat, type);
+            Alarm alarm = new Alarm(name, alarmID, date, repeatInfo, type);
             alarm.setAlarm(getApplicationContext());
 
             Log.d(TAG, "alarm set " + date.toString() + " ALARM ID: " + alarmID);
