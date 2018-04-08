@@ -7,18 +7,18 @@ import java.util.ArrayList;
 public class RepeatInfo {
 
     private boolean _isRepeatOn;
-    private ArrayList<DayOfWeek> _repeatWeekDays;
+    private ArrayList<DayOfWeek.Day> _repeatWeekDays;
 
-    public RepeatInfo(Boolean isRepeatOn, ArrayList<DayOfWeek> repeatWeekDays){
+    public RepeatInfo(Boolean isRepeatOn, ArrayList<DayOfWeek.Day> repeatWeekDays){
         _isRepeatOn = isRepeatOn;
         _repeatWeekDays = repeatWeekDays;
     }
 
-    public void setRepeatWeekDays(ArrayList<DayOfWeek> repeatWeekDays){
+    public void setRepeatWeekDays(ArrayList<DayOfWeek.Day> repeatWeekDays){
         _repeatWeekDays = repeatWeekDays;
     }
 
-    public ArrayList<DayOfWeek> getRepeatWeekDays(){
+    public ArrayList<DayOfWeek.Day> getRepeatWeekDays(){
         return _repeatWeekDays;
     }
 
