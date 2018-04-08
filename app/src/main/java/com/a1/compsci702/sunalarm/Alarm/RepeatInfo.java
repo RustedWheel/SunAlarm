@@ -1,6 +1,7 @@
 package com.a1.compsci702.sunalarm.Alarm;
 
-import java.time.DayOfWeek;
+import com.a1.compsci702.sunalarm.Utilities.DayOfWeek;
+
 import java.util.ArrayList;
 
 public class RepeatInfo {

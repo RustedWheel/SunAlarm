@@ -340,6 +340,15 @@ public class MainActivity extends AppCompatActivity {
 
     private RepeatInfo parseRepeatInfo(String repeatInfoString) {
 
+        String[] days = repeatInfoString.substring(9).split(", ");
+
+        Log.d(TAG, "Repeat days: ");
+        for(String day : days){
+            Log.d(TAG, day);
+        }
+
+
+
         RepeatInfo repeatInfo = new RepeatInfo(false, null);
 
        return repeatInfo;
