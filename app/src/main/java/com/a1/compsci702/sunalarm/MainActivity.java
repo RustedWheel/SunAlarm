@@ -17,14 +17,13 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.ListView;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.a1.compsci702.sunalarm.Alarm.Alarm;
@@ -33,6 +32,7 @@ import com.a1.compsci702.sunalarm.Alarm.RepeatInfo;
 import com.a1.compsci702.sunalarm.Exceptions.NoConnectionException;
 import com.a1.compsci702.sunalarm.Utilities.DateConverter;
 import com.a1.compsci702.sunalarm.Utilities.DayOfWeek;
+import com.a1.compsci702.sunalarm.Utilities.RecyclerViewAdapter;
 import com.a1.compsci702.sunalarm.Utilities.Storage;
 import com.google.gson.Gson;
 
@@ -48,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
     private ArrayList<String> permissions = new ArrayList<>();
     private ArrayList<String> permissionsToRequest;
     private ArrayList<String> permissionsRejected = new ArrayList<>();
-    private ListView alarmListView;
+
     private FloatingActionButton mAddAlarm;
     private Button clearCacheButton;
     private boolean canGetLocation = true;
@@ -60,6 +60,12 @@ public class MainActivity extends AppCompatActivity {
     private Storage storage;
     private RelativeLayout loadingScreen;
     private boolean attemptedToCached = false;
+
+    private RecyclerView _recyclerView;
+    private RecyclerView.Adapter _adapter;
+    private RecyclerView.LayoutManager _layoutManager;
+
+
 
     private final static int PICK_ALARM_TIME = 0;
 
@@ -114,25 +120,21 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        alarmListView = findViewById(R.id.alarmList);
+        _recyclerView = findViewById(R.id.recycler_view);
+
+        // use a linear layout manager
+        _layoutManager = new LinearLayoutManager(this);
+        _recyclerView.setLayoutManager(_layoutManager);
+
+        // specify an adapter (see also next example)
+        _adapter = new RecyclerViewAdapter(_alarms);
+        _recyclerView.setAdapter(_adapter);
+
 
         // Used for testing
         _alarmAdapter = new ArrayAdapter(this, R.layout.list_item, _alarms);
 
-        alarmListView.setAdapter(_alarmAdapter);
 
-        alarmListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-                String text = ((TextView) view).getText().toString();
-
-                Toast.makeText(getApplicationContext(), "Alarm + " + text + " deleted!", Toast.LENGTH_LONG).show();
-
-            }
-
-        });
 
         clearCacheButton = findViewById(R.id.clear_cache_button);
         clearCacheButton.setOnClickListener(new View.OnClickListener() {
@@ -445,7 +447,6 @@ public class MainActivity extends AppCompatActivity {
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    alarmListView.setVisibility(View.INVISIBLE);
                     mAddAlarm.setVisibility(View.INVISIBLE);
                     loadingScreen.setVisibility(View.VISIBLE);
                 }
@@ -486,7 +487,7 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), "Unable to connect to server", Toast.LENGTH_LONG).show();
             }
 
-            alarmListView.setVisibility(View.VISIBLE);
+
             mAddAlarm.setVisibility(View.VISIBLE);
             loadingScreen.setVisibility(View.INVISIBLE);
         }
