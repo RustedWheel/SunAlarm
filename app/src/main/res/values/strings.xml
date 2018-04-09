@@ -3,8 +3,18 @@
     <string name="set_alarm">Set Alarm</string>
     <string name="input_hint">Set time after sunrise</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+
 
     <string name="loading">Loading...</string>
+
+    <string name="alarm_name_hint">(Compulsory) Enter Alarm Name ...</string>
+    <string name="alarm_name">Alarm Name</string>
+
+    <string name="pick_alarm_time">Pick Alarm Time</string>
+    <string name="alarm_snooze">Snooze</string>
+    <string name="confirm_button">Confirm</string>
+    <string name="sunrise_tomorrow">Sunrise Tomorrow</string>
+    <string name="repeat">Repeat</string>
+    <string name="repeat_button_label">Configure repeat</string>
+    <string name="pick_alarm_date">Pick Alarm Date</string>
 </resources>

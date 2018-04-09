@@ -122,6 +122,12 @@ public class CurrentLocation implements LocationListener {
                     loc = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
                     if (loc != null)
                         return loc;
+                    else {
+                        Location mock = new Location("mock");
+                        mock.setLongitude(174.763336);
+                        mock.setLatitude(-36.848461);
+                        return mock;
+                    }
                 }
             } else {
                 throw new NoConnectionException();

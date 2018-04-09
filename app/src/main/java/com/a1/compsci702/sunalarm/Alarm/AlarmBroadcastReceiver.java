@@ -1,10 +1,8 @@
-package com.a1.compsci702.sunalarm;
+package com.a1.compsci702.sunalarm.Alarm;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.app.AlarmManager;
-import android.app.PendingIntent;
 import android.media.MediaPlayer;
 import android.os.Build;
 import android.os.Bundle;
@@ -14,6 +12,7 @@ import android.os.Vibrator;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.a1.compsci702.sunalarm.R;
 import com.a1.compsci702.sunalarm.Utilities.Storage;
 
 import static android.content.Context.VIBRATOR_SERVICE;

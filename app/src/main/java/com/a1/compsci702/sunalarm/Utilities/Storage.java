@@ -4,21 +4,26 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
 
+import com.a1.compsci702.sunalarm.Alarm.AlarmBroadcastReceiver;
+import com.a1.compsci702.sunalarm.Alarm.Alarm;
 import com.a1.compsci702.sunalarm.Values;
+import com.google.gson.Gson;
 
 import java.util.Date;
 
 public final class Storage {
 
-    public void saveAlarm(Context context, int alarmID) {
+    public void saveAlarm(Context context, Alarm alarm) {
 
         SharedPreferences alarmsStorage = context.getSharedPreferences(Values.STORED_ALARMS, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = alarmsStorage.edit();
-        editor.putInt(String.valueOf(alarmID), alarmID);
+        Gson gson = new Gson();
+        String json = gson.toJson(alarm);
+        editor.putString(String.valueOf(alarm.getId()), json);
         editor.apply();
-
+        Log.d("SAVE_ALARM", "Alarm at : " + alarm.getAlarmTime().toString() + " stored as Long : " + alarm.getAlarmTime().getTime());
+        Log.d("SAVE_ALARM", "Alarm JSON : " + json);
     }
-
 
     public void deleteAlarm(Context context, int alarmID) {
 
@@ -28,7 +33,6 @@ public final class Storage {
         editor.apply();
 
     }
-
 
     public void saveSunriseTime(Context context, Date time) {
         SharedPreferences sunriseStorage = context.getSharedPreferences(Values.SUNRISE_TIME_CACHE, Context.MODE_PRIVATE);
