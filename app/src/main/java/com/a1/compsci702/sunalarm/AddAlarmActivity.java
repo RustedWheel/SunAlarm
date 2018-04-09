@@ -16,9 +16,7 @@ import android.text.format.Time;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.DatePicker;
 import android.widget.NumberPicker;
-import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
@@ -49,7 +47,6 @@ public class AddAlarmActivity extends AppCompatActivity implements RecurrencePic
     private EventRecurrence mEventRecurrence = new EventRecurrence();
     private String mRrule;
 
-    private Switch _snoozeSwitch;
     private TextView _sunriseTomorrow;
 
     private String _repeatString;
@@ -65,7 +62,6 @@ public class AddAlarmActivity extends AppCompatActivity implements RecurrencePic
         this.offsetPicker = findViewById(R.id.offset_picker);
 
         this._repeatButton = findViewById(R.id.repeat_button);
-        this._snoozeSwitch = findViewById(R.id.snooze_switch);
 
         this._alarmNameWrapper = findViewById(R.id.alarmNameWrapper);
         this._sunriseTomorrow = findViewById(R.id.sunrise_time_tomorrow);
@@ -104,9 +100,6 @@ public class AddAlarmActivity extends AppCompatActivity implements RecurrencePic
                     return;
                 }
                 returnAddAlarmIntent.putExtra("alarmName", alarmName);
-
-                boolean isSnooze = _snoozeSwitch.isChecked();
-                returnAddAlarmIntent.putExtra("snooze", Boolean.toString(isSnooze));
 
                 returnAddAlarmIntent.putExtra("repeat", _repeatString);
 

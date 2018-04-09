@@ -322,10 +322,6 @@ public class MainActivity extends AppCompatActivity {
 
                     Log.d(TAG, c.toString());
 
-                    String snoozeString = data.getStringExtra("snooze");
-                    boolean isSnooze = Boolean.valueOf(snoozeString);
-                    Log.d(TAG, "snooze = " + isSnooze);
-
                     String alarmName = data.getStringExtra("alarmName");
 
                     String repeat = data.getStringExtra("repeat");
