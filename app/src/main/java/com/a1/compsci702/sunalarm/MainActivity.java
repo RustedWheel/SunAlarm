@@ -125,6 +125,12 @@ public class MainActivity extends AppCompatActivity implements SunriseTab.OnFrag
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
+                // Set visibility of app components depending on selected tab
+                if (tab.getPosition() == 0) {
+                    alarmListView.setVisibility(View.VISIBLE);
+                } else {
+                    alarmListView.setVisibility(View.GONE);
+                }
                 viewPager.setCurrentItem(tab.getPosition());
             }
 

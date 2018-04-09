@@ -26,7 +26,8 @@
         <ListView
             android:id="@+id/alarmList"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            android:layout_below="@+id/tab_layout" />
 
         <Button
             android:layout_width="wrap_content"
