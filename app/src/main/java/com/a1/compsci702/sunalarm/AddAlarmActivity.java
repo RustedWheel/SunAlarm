@@ -35,6 +35,8 @@ public class AddAlarmActivity extends AppCompatActivity {
     private TextInputLayout _alarmNameWrapper;
 
     private TextView _sunriseTomorrow;
+    private TextView _alarmTime;
+    private Date _nextSunrise;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -48,17 +50,22 @@ public class AddAlarmActivity extends AppCompatActivity {
 
         this._alarmNameWrapper = findViewById(R.id.alarmNameWrapper);
         this._sunriseTomorrow = findViewById(R.id.sunrise_time_tomorrow);
+        this._alarmTime = findViewById(R.id.actual_alarm_time_text);
 
         retrieveSunrise();
 
         final String[] offsetStrings = new String[]{"+", "-"};
         offsetPicker.setMinValue(0);
         offsetPicker.setMaxValue(offsetStrings.length - 1);
+        offsetPicker.setDescendantFocusability(NumberPicker.FOCUS_BLOCK_DESCENDANTS);
 
-        offsetPicker.setFormatter(new NumberPicker.Formatter() {
+        offsetPicker.setDisplayedValues(offsetStrings);
+        offsetPicker.setValue(1);
+
+        offsetPicker.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
             @Override
-            public String format(int value) {
-                return offsetStrings[value];
+            public void onValueChange(NumberPicker numberPicker, int i, int i1) {
+                changeAlarmTime();
             }
         });
 
@@ -100,6 +107,15 @@ public class AddAlarmActivity extends AppCompatActivity {
         this._alarmTimePicker = findViewById(R.id.alarmTimePicker);
 
         _alarmTimePicker.setIs24HourView(true);
+        _alarmTimePicker.setOnTimeChangedListener(new TimePicker.OnTimeChangedListener() {
+            @Override
+            public void onTimeChanged(TimePicker timePicker, int i, int i1) {
+                changeAlarmTime();
+            }
+
+        });
+        _alarmTimePicker.setCurrentHour(0);
+        _alarmTimePicker.setCurrentMinute(0);
     }
 
     private void retrieveSunrise() {
@@ -111,11 +127,29 @@ public class AddAlarmActivity extends AppCompatActivity {
 
         //change later on to set date of alarm
         SharedPreferences sunriseStorage = getSharedPreferences(Values.SUNRISE_TIME_CACHE, Context.MODE_PRIVATE);
-        Date nextSunrise = new Date(sunriseStorage.getLong(dateTomorrow, 0L));
+        _nextSunrise = new Date(sunriseStorage.getLong(dateTomorrow, 0L));
 
         //format date
         SimpleDateFormat formatted = new SimpleDateFormat("hh:mm a");
 
-        _sunriseTomorrow.setText(formatted.format(nextSunrise));
+        _sunriseTomorrow.setText(formatted.format(_nextSunrise));
+    }
+
+    private void changeAlarmTime() {
+        Calendar c = DateConverter.convertDateToCalendar(_nextSunrise);
+
+        int hour = _alarmTimePicker.getCurrentHour();
+        int min = _alarmTimePicker.getCurrentMinute();
+
+        if (offsetPicker.getValue() == 1) {
+            hour = -hour;
+            min = -min;
+        }
+        c.add(Calendar.HOUR, hour);
+        c.add(Calendar.MINUTE, min);
+
+        //format date
+        SimpleDateFormat formatted = new SimpleDateFormat("dd MMM hh:mm a");
+        _alarmTime.setText(formatted.format(c.getTime()));
     }
 }
