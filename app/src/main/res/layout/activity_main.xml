@@ -23,6 +23,14 @@
             app:fabSize="normal"
             app:srcCompat="@android:drawable/ic_input_add" />
 
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/sunrise_recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/tab_layout"
+            android:scrollbars="vertical"
+            tools:listitem="@layout/list_item" />
+
         <ListView
             android:id="@+id/alarmList"
             android:layout_width="match_parent"

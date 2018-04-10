@@ -20,6 +20,8 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
@@ -67,6 +69,10 @@ public class MainActivity extends AppCompatActivity implements SunriseTab.OnFrag
     private RelativeLayout loadingScreen;
     private boolean attemptedToCached = false;
 
+    private RecyclerView sunriseRecyclerView;
+    private RecyclerView.Adapter sunriseViewAdapter;
+    private RecyclerView.LayoutManager sunriseViewLayout;
+
     private final static int PICK_ALARM_TIME = 0;
 
     @Override
@@ -110,6 +116,14 @@ public class MainActivity extends AppCompatActivity implements SunriseTab.OnFrag
         mAddAlarm = findViewById(R.id.add_alarm);
         toolbar = findViewById(R.id.toolbar);
         tabLayout = findViewById(R.id.tab_layout);
+        sunriseRecyclerView = findViewById(R.id.sunrise_recycler_view);
+
+        sunriseRecyclerView.setVisibility(View.GONE);
+        String[] tempDataSet = {"test", "test2"}; // Test data: Replace with Sunrise times
+        sunriseViewLayout = new LinearLayoutManager(this);
+        sunriseViewAdapter = new SunriseRecyclerViewAdapter(tempDataSet);
+        sunriseRecyclerView.setLayoutManager(sunriseViewLayout);
+        sunriseRecyclerView.setAdapter(sunriseViewAdapter);
 
         setSupportActionBar(toolbar);
         tabLayout.addTab(tabLayout.newTab().setText("Alarms"));
@@ -127,8 +141,10 @@ public class MainActivity extends AppCompatActivity implements SunriseTab.OnFrag
                 // Set visibility of app components depending on selected tab
                 if (tab.getPosition() == 0) {
                     alarmListView.setVisibility(View.VISIBLE);
+                    sunriseRecyclerView.setVisibility(View.GONE);
                 } else {
                     alarmListView.setVisibility(View.GONE);
+                    sunriseRecyclerView.setVisibility(View.VISIBLE);
                 }
                 viewPager.setCurrentItem(tab.getPosition());
             }
