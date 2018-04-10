@@ -119,9 +119,8 @@ public class MainActivity extends AppCompatActivity implements SunriseTab.OnFrag
         sunriseRecyclerView = findViewById(R.id.sunrise_recycler_view);
 
         sunriseRecyclerView.setVisibility(View.GONE);
-        String[] tempDataSet = {"test", "test2"}; // Test data: Replace with Sunrise times
         sunriseViewLayout = new LinearLayoutManager(this);
-        sunriseViewAdapter = new SunriseRecyclerViewAdapter(tempDataSet);
+        sunriseViewAdapter = new SunriseRecyclerViewAdapter(getSunriseDates());
         sunriseRecyclerView.setLayoutManager(sunriseViewLayout);
         sunriseRecyclerView.setAdapter(sunriseViewAdapter);
 
@@ -146,6 +145,9 @@ public class MainActivity extends AppCompatActivity implements SunriseTab.OnFrag
                     alarmListView.setVisibility(View.GONE);
                     sunriseRecyclerView.setVisibility(View.VISIBLE);
                 }
+                // Update displayed data
+                sunriseViewAdapter.notifyDataSetChanged();
+                _alarmAdapter.notifyDataSetChanged();
                 viewPager.setCurrentItem(tab.getPosition());
             }
 
@@ -195,6 +197,21 @@ public class MainActivity extends AppCompatActivity implements SunriseTab.OnFrag
                 storage.removeAllSunriseTime(MainActivity.this);
             }
         });
+    }
+
+    /*
+     * Retrieve Sunrise Dates from cache
+     */
+    private ArrayList<String> getSunriseDates() {
+        SharedPreferences sunriseStorage = getSharedPreferences(Values.SUNRISE_TIME_CACHE, Context.MODE_PRIVATE);
+        ArrayList<String> sunriseData = new ArrayList<>();
+
+        Map<String, ?> allEntries = sunriseStorage.getAll();
+        for (Map.Entry<String, ?> entry : allEntries.entrySet()) {
+            sunriseData.add(entry.getValue().toString());
+            Log.d(TAG, "getSunriseDates(): Sunrise Time: " + entry.getValue());
+        }
+        return sunriseData;
     }
 
     /**

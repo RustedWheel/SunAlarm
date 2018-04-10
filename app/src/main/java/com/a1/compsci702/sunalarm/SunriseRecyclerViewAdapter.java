@@ -5,8 +5,14 @@ import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Date;
+
 public class SunriseRecyclerViewAdapter extends RecyclerView.Adapter<SunriseRecyclerViewAdapter.ViewHolder> {
-    private String[] sunriseData;
+    private ArrayList<String> sunriseData;
 
     // Provide a reference to the views for each data item
     // Complex data items may need more than one view per item, and
@@ -21,7 +27,7 @@ public class SunriseRecyclerViewAdapter extends RecyclerView.Adapter<SunriseRecy
     }
 
     // Provide a suitable constructor (depends on the kind of dataset)
-    public SunriseRecyclerViewAdapter(String[] dataSet) {
+    public SunriseRecyclerViewAdapter(ArrayList<String> dataSet) {
         sunriseData = dataSet;
     }
 
@@ -42,13 +48,15 @@ public class SunriseRecyclerViewAdapter extends RecyclerView.Adapter<SunriseRecy
     public void onBindViewHolder(ViewHolder viewHolder, int position) {
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
-        viewHolder.textView.setText(sunriseData[position]);
-
+        Collections.sort(sunriseData);
+        Date date = new Date(Long.parseLong(sunriseData.get(position)));
+        DateFormat df = new SimpleDateFormat("EEE, dd MMM yyyy hh:mm aaa");
+        viewHolder.textView.setText(df.format(date));
     }
 
     // Return the size of your dataset (invoked by the layout manager)
     @Override
     public int getItemCount() {
-        return sunriseData.length;
+        return sunriseData.size();
     }
 }
