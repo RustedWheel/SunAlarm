@@ -70,23 +70,7 @@
 
                     android:timePickerMode="spinner" />
             </LinearLayout>
-
-            <TextView
-                android:id="@+id/repeat"
-
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-
-                android:text="@string/repeat"
-                android:textSize="25dp" />
-
-            <Button
-                android:id="@+id/repeat_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-
-                android:text="@string/repeat_button_label" />
-
+            
             <TextView
                 android:id="@+id/alarm_name"
                 android:layout_width="wrap_content"
