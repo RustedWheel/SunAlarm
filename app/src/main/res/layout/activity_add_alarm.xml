@@ -49,6 +49,12 @@
                 android:text="@string/pick_alarm_time"
                 android:textSize="25dp" />
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:text="(Before or After Sunrise)" />
+
             <LinearLayout
                 android:id="@+id/pick_time_section"
                 android:layout_width="wrap_content"
@@ -70,7 +76,23 @@
 
                     android:timePickerMode="spinner" />
             </LinearLayout>
-            
+
+            <TextView
+                android:id="@+id/actual_alarm_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:text="@string/actual_alarm_time"
+                android:textSize="25dp" />
+
+            <TextView
+                android:id="@+id/actual_alarm_time_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:text="actual alarm time goes here"
+                android:textColor="@color/colorAccent" />
+
             <TextView
                 android:id="@+id/alarm_name"
                 android:layout_width="wrap_content"

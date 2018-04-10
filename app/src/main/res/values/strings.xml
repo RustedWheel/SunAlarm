@@ -17,4 +17,5 @@
     <string name="repeat">Repeat</string>
     <string name="repeat_button_label">Configure repeat</string>
     <string name="pick_alarm_date">Pick Alarm Date</string>
+    <string name="actual_alarm_time">Actual Alarm Time</string>
 </resources>
