@@ -361,6 +361,8 @@ public class MainActivity extends AppCompatActivity implements SunriseTab.OnFrag
                     Log.d(TAG, c.toString());
 
                     String alarmName = data.getStringExtra("alarmName");
+
+                    addAlarm(alarmName, c.getTime(), null, AlarmType.type.sunrise);
                 }
                 break;
         }
