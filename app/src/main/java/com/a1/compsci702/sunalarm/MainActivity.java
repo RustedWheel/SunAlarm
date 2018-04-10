@@ -9,14 +9,18 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Location;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -41,7 +45,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Map;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements SunriseTab.OnFragmentInteractionListener,
+                                                                AlarmTab.OnFragmentInteractionListener{
     private final static int ALL_PERMISSIONS_RESULT = 101;
     private final String TAG = "MainActivity";
     private ArrayList<String> permissions = new ArrayList<>();
@@ -50,6 +55,8 @@ public class MainActivity extends AppCompatActivity {
     private ListView alarmListView;
     private FloatingActionButton mAddAlarm;
     private Button clearCacheButton;
+    private Toolbar toolbar;
+    private TabLayout tabLayout;
     private boolean canGetLocation = true;
 
     private ArrayList<Alarm> _alarms;
@@ -100,8 +107,40 @@ public class MainActivity extends AppCompatActivity {
     private void setUpUIComponents() {
 
         loadingScreen = findViewById(R.id.loading_screen);
-
         mAddAlarm = findViewById(R.id.add_alarm);
+        toolbar = findViewById(R.id.toolbar);
+        tabLayout = findViewById(R.id.tab_layout);
+
+        setSupportActionBar(toolbar);
+        tabLayout.addTab(tabLayout.newTab().setText("Alarms"));
+        tabLayout.addTab(tabLayout.newTab().setText("Sunrise"));
+        tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
+
+        final ViewPager viewPager = findViewById(R.id.pager);
+        final PagerAdapter pagerAdapter = new PagerAdapter(getSupportFragmentManager(), tabLayout.getTabCount());
+        viewPager.setAdapter(pagerAdapter);
+        viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
+
+        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                // Set visibility of app components depending on selected tab
+                if (tab.getPosition() == 0) {
+                    alarmListView.setVisibility(View.VISIBLE);
+                } else {
+                    alarmListView.setVisibility(View.GONE);
+                }
+                viewPager.setCurrentItem(tab.getPosition());
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+            }
+        });
 
         mAddAlarm.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -372,6 +411,11 @@ public class MainActivity extends AppCompatActivity {
 
         getSunriseTime(c.getTime(), 7);
 
+    }
+
+    @Override
+    public void onFragmentInteraction(Uri uri) {
+        // Needed for communication between Fragments (Sunrise Tab and AlarmTab)
     }
 
     private class FetchSunriseData extends AsyncTask<Void, Void, Date> {
