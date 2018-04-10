@@ -89,9 +89,16 @@ public class AddAlarmActivity extends AppCompatActivity implements RecurrencePic
 
                 Intent returnAddAlarmIntent = new Intent();
 
-                String alarmTime = offsetSign + ":" + _alarmTimePicker.getHour() + ":" + _alarmTimePicker.getMinute();
-                returnAddAlarmIntent.putExtra("alarmTime", alarmTime);
+                // Call different get time methods according to build API level
+                String alarmTime;
 
+                if (Build.VERSION.SDK_INT < 23) {
+                    alarmTime = offsetSign + ":" + _alarmTimePicker.getCurrentHour() + ":" + _alarmTimePicker.getCurrentMinute();
+                } else {
+                    alarmTime = offsetSign + ":" + _alarmTimePicker.getHour() + ":" + _alarmTimePicker.getMinute();
+                }
+
+                returnAddAlarmIntent.putExtra("alarmTime", alarmTime);
 
                 String alarmName = _alarmNameWrapper.getEditText().getText().toString();
 
