@@ -68,9 +68,9 @@ public class AddAlarmActivity extends AppCompatActivity implements RecurrencePic
 
         retrieveSunrise();
 
-        final String[] offsetStrings = new String[]{"+","-"};
+        final String[] offsetStrings = new String[]{"+", "-"};
         offsetPicker.setMinValue(0);
-        offsetPicker.setMaxValue(offsetStrings.length-1);
+        offsetPicker.setMaxValue(offsetStrings.length - 1);
 
         offsetPicker.setFormatter(new NumberPicker.Formatter() {
             @Override
@@ -83,7 +83,7 @@ public class AddAlarmActivity extends AppCompatActivity implements RecurrencePic
             @TargetApi(Build.VERSION_CODES.M)
             public void onClick(View v) {
 
-                Toast.makeText(getApplicationContext(), offsetStrings[(offsetPicker.getValue())] + "Time:" + _alarmTimePicker.getHour() + _alarmTimePicker.getMinute() , Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), offsetStrings[(offsetPicker.getValue())] + "Time:" + _alarmTimePicker.getHour() + _alarmTimePicker.getMinute(), Toast.LENGTH_LONG).show();
 
                 String offsetSign = offsetStrings[(offsetPicker.getValue())];
 
@@ -112,7 +112,7 @@ public class AddAlarmActivity extends AppCompatActivity implements RecurrencePic
 
                 Log.d(TAG, "Repeat information from the picker: " + _repeatString);
 
-                setResult(Activity.RESULT_OK,returnAddAlarmIntent);
+                setResult(Activity.RESULT_OK, returnAddAlarmIntent);
 
                 finish();
             }
