@@ -5,14 +5,10 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.res.Resources;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.TextInputLayout;
-import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
-import android.text.TextUtils;
-import android.text.format.Time;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -22,16 +18,13 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.a1.compsci702.sunalarm.Utilities.DateConverter;
-import com.codetroopers.betterpickers.recurrencepicker.EventRecurrence;
-import com.codetroopers.betterpickers.recurrencepicker.EventRecurrenceFormatter;
-import com.codetroopers.betterpickers.recurrencepicker.RecurrencePickerDialogFragment;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
 
-public class AddAlarmActivity extends AppCompatActivity implements RecurrencePickerDialogFragment.OnRecurrenceSetListener {
+public class AddAlarmActivity extends AppCompatActivity {
 
     private final String TAG = "AddAlarmActivity";
     private Button confirmButton;
@@ -41,15 +34,7 @@ public class AddAlarmActivity extends AppCompatActivity implements RecurrencePic
 
     private TextInputLayout _alarmNameWrapper;
 
-    private Button _repeatButton;
-
-    private static final String FRAG_TAG_RECUR_PICKER = "recurrencePickerDialogFragment";
-    private EventRecurrence mEventRecurrence = new EventRecurrence();
-    private String mRrule;
-
     private TextView _sunriseTomorrow;
-
-    private String _repeatString;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -60,8 +45,6 @@ public class AddAlarmActivity extends AppCompatActivity implements RecurrencePic
         this.confirmButton = findViewById(R.id.confirm_button);
 
         this.offsetPicker = findViewById(R.id.offset_picker);
-
-        this._repeatButton = findViewById(R.id.repeat_button);
 
         this._alarmNameWrapper = findViewById(R.id.alarmNameWrapper);
         this._sunriseTomorrow = findViewById(R.id.sunrise_time_tomorrow);
@@ -108,44 +91,11 @@ public class AddAlarmActivity extends AppCompatActivity implements RecurrencePic
                 }
                 returnAddAlarmIntent.putExtra("alarmName", alarmName);
 
-                returnAddAlarmIntent.putExtra("repeat", _repeatString);
-
-                Log.d(TAG, "Repeat information from the picker: " + _repeatString);
-
                 setResult(Activity.RESULT_OK, returnAddAlarmIntent);
 
                 finish();
             }
         });
-
-        /*
-        From: https://github.com/code-troopers/android-betterpickers/blob/master/sample/src/main/java/com/codetroopers/betterpickers/sample/activity/recurrencepicker/SampleRecurrenceBasicUsage.java
-         */
-        _repeatButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                FragmentManager fm = getSupportFragmentManager();
-                Bundle bundle = new Bundle();
-                Time time = new Time();
-                time.setToNow();
-                bundle.putLong(RecurrencePickerDialogFragment.BUNDLE_START_TIME_MILLIS, time.toMillis(false));
-                bundle.putString(RecurrencePickerDialogFragment.BUNDLE_TIME_ZONE, time.timezone);
-
-                // may be more efficient to serialize and pass in EventRecurrence
-                bundle.putString(RecurrencePickerDialogFragment.BUNDLE_RRULE, mRrule);
-
-                RecurrencePickerDialogFragment rpd = (RecurrencePickerDialogFragment) fm.findFragmentByTag(
-                        FRAG_TAG_RECUR_PICKER);
-                if (rpd != null) {
-                    rpd.dismiss();
-                }
-                rpd = new RecurrencePickerDialogFragment();
-                rpd.setArguments(bundle);
-                rpd.setOnRecurrenceSetListener(AddAlarmActivity.this);
-                rpd.show(fm, FRAG_TAG_RECUR_PICKER);
-            }
-        });
-
 
         this._alarmTimePicker = findViewById(R.id.alarmTimePicker);
 
@@ -167,22 +117,5 @@ public class AddAlarmActivity extends AppCompatActivity implements RecurrencePic
         SimpleDateFormat formatted = new SimpleDateFormat("hh:mm a");
 
         _sunriseTomorrow.setText(formatted.format(nextSunrise));
-    }
-
-    @Override
-    public void onRecurrenceSet(String rrule) {
-        mRrule = rrule;
-        if (mRrule != null) {
-            mEventRecurrence.parse(mRrule);
-        }
-        populateRepeats();
-    }
-
-    private void populateRepeats() {
-        Resources r = getResources();
-
-        if (!TextUtils.isEmpty(mRrule)) {
-            this._repeatString = EventRecurrenceFormatter.getRepeatString(this, r, mEventRecurrence, true);
-        }
     }
 }
