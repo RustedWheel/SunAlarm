@@ -20,17 +20,22 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.a1.compsci702.sunalarm.Adapter.AlarmsAdapter;
 import com.a1.compsci702.sunalarm.Alarm.Alarm;
 import com.a1.compsci702.sunalarm.Alarm.AlarmType;
 import com.a1.compsci702.sunalarm.Alarm.RepeatInfo;
@@ -46,7 +51,7 @@ import java.util.Date;
 import java.util.Map;
 
 public class MainActivity extends AppCompatActivity implements SunriseTab.OnFragmentInteractionListener,
-                                                                AlarmTab.OnFragmentInteractionListener{
+        AlarmTab.OnFragmentInteractionListener {
     private final static int ALL_PERMISSIONS_RESULT = 101;
     private final String TAG = "MainActivity";
     private ArrayList<String> permissions = new ArrayList<>();
@@ -57,12 +62,19 @@ public class MainActivity extends AppCompatActivity implements SunriseTab.OnFrag
     private Button clearCacheButton;
     private Toolbar toolbar;
     private TabLayout tabLayout;
+
+    private RecyclerView _recyclerView;
+
+    private AlarmsAdapter _alarmAdapter;
+
+    RecyclerView.LayoutManager _alarmLayoutManager;
+
     private boolean canGetLocation = true;
 
     private ArrayList<Alarm> _alarms;
 
     private ArrayList<Integer> alarmIds;
-    private ArrayAdapter<Integer> _alarmAdapter;
+
     private Storage storage;
     private RelativeLayout loadingScreen;
     private boolean attemptedToCached = false;
@@ -104,6 +116,31 @@ public class MainActivity extends AppCompatActivity implements SunriseTab.OnFrag
         }
     }
 
+    private void setUpRecyclerView() {
+        this._recyclerView = findViewById(R.id.tab_layout);
+
+//        View fragment_alarm_tab = findViewById(R.id.tab_layout);
+//
+//        ViewGroup viewGroup = (ViewGroup) fragment_alarm_tab.getParent();
+//        for(int index = 0; index<((ViewGroup) viewGroup).getChildCount(); ++index) {
+//            View nextChild = ((ViewGroup)viewGroup).getChildAt(index);
+//            Log.e(TAG, "nextChild = " + nextChild);
+//        }
+
+        Log.e(TAG, "_recyclerView = " + _recyclerView);
+
+        this._alarmAdapter = new AlarmsAdapter(_alarms);
+        this._recyclerView.setAdapter(_alarmAdapter);
+
+        Log.e(TAG, "new AlarmsAdapter(" + _alarms);
+
+        this._alarmLayoutManager = new LinearLayoutManager(getApplicationContext());
+
+        this._recyclerView.setLayoutManager(_alarmLayoutManager);
+        this._recyclerView.setItemAnimator(new DefaultItemAnimator());
+    }
+
+
     private void setUpUIComponents() {
 
         loadingScreen = findViewById(R.id.loading_screen);
@@ -120,6 +157,8 @@ public class MainActivity extends AppCompatActivity implements SunriseTab.OnFrag
         final PagerAdapter pagerAdapter = new PagerAdapter(getSupportFragmentManager(), tabLayout.getTabCount());
         viewPager.setAdapter(pagerAdapter);
         viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
+
+        this.setUpRecyclerView();
 
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
@@ -154,10 +193,6 @@ public class MainActivity extends AppCompatActivity implements SunriseTab.OnFrag
 
         alarmListView = findViewById(R.id.alarmList);
 
-        // Used for testing
-        _alarmAdapter = new ArrayAdapter(this, R.layout.list_item, _alarms);
-
-        alarmListView.setAdapter(_alarmAdapter);
 
         alarmListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
@@ -511,6 +546,7 @@ public class MainActivity extends AppCompatActivity implements SunriseTab.OnFrag
             // Add the alarm ID if needed
             // Delete this line if to use the alarm class as the adapter
             alarmIds.add(alarmID);
+
             _alarmAdapter.notifyDataSetChanged();
         }
     }
