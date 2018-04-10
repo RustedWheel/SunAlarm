@@ -32,7 +32,6 @@ import com.a1.compsci702.sunalarm.Alarm.AlarmType;
 import com.a1.compsci702.sunalarm.Alarm.RepeatInfo;
 import com.a1.compsci702.sunalarm.Exceptions.NoConnectionException;
 import com.a1.compsci702.sunalarm.Utilities.DateConverter;
-import com.a1.compsci702.sunalarm.Utilities.DayOfWeek;
 import com.a1.compsci702.sunalarm.Utilities.Storage;
 import com.google.gson.Gson;
 
@@ -323,62 +322,10 @@ public class MainActivity extends AppCompatActivity {
                     Log.d(TAG, c.toString());
 
                     String alarmName = data.getStringExtra("alarmName");
-
-                    String repeat = data.getStringExtra("repeat");
-
-                    RepeatInfo repeatInfo = parseRepeatInfo(repeat);
-
-                    addAlarm(alarmName, c.getTime(), repeatInfo, AlarmType.type.sunrise);
-
                 }
                 break;
         }
     }
-
-    private RepeatInfo parseRepeatInfo(String repeatInfoString) {
-
-        RepeatInfo repeatInfo = null;
-        if(repeatInfoString != null){
-
-            String[] days = repeatInfoString.substring(9).split(", ");
-            ArrayList<DayOfWeek.Day> daysOfWeek = new ArrayList<>();
-
-            Log.d(TAG, "Repeat days: ");
-            for(String day : days){
-
-                switch(day) {
-                    case "Sun" :
-                        daysOfWeek.add(DayOfWeek.Day.Sun);
-                        break;
-                    case "Mon" :
-                        daysOfWeek.add(DayOfWeek.Day.Mon);
-                        break;
-                    case "Tue" :
-                        daysOfWeek.add(DayOfWeek.Day.Tue);
-                        break;
-                    case "Wed" :
-                        daysOfWeek.add(DayOfWeek.Day.Wed);
-                        break;
-                    case "Thu" :
-                        daysOfWeek.add(DayOfWeek.Day.Thu);
-                        break;
-                    case "Fri" :
-                        daysOfWeek.add(DayOfWeek.Day.Fri);
-                        break;
-                    case "Sat" :
-                        daysOfWeek.add(DayOfWeek.Day.Sat);
-                        break;
-                }
-                Log.d(TAG, day);
-            }
-            repeatInfo = new RepeatInfo(true, daysOfWeek);
-        } else {
-            repeatInfo = new RepeatInfo(false, null);
-        }
-
-       return repeatInfo;
-    }
-
 
     private void getSunriseTime(Date date, int numDays) {
 
