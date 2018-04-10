@@ -81,6 +81,7 @@ public class MainActivity extends AppCompatActivity implements SunriseTab.OnFrag
 
     private final static int PICK_ALARM_TIME = 0;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -117,15 +118,11 @@ public class MainActivity extends AppCompatActivity implements SunriseTab.OnFrag
     }
 
     private void setUpRecyclerView() {
-        this._recyclerView = findViewById(R.id.tab_layout);
+        //this._recyclerView = findViewById(R.id.tab_layout);
 
-//        View fragment_alarm_tab = findViewById(R.id.tab_layout);
-//
-//        ViewGroup viewGroup = (ViewGroup) fragment_alarm_tab.getParent();
-//        for(int index = 0; index<((ViewGroup) viewGroup).getChildCount(); ++index) {
-//            View nextChild = ((ViewGroup)viewGroup).getChildAt(index);
-//            Log.e(TAG, "nextChild = " + nextChild);
-//        }
+        View alarmTabView = getLayoutInflater().inflate(R.layout.fragment_alarm_tab, null);
+
+        this._recyclerView = alarmTabView.findViewById(R.id.recycler_view);
 
         Log.e(TAG, "_recyclerView = " + _recyclerView);
 
