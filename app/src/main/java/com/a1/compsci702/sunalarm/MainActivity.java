@@ -322,6 +322,8 @@ public class MainActivity extends AppCompatActivity {
                     Log.d(TAG, c.toString());
 
                     String alarmName = data.getStringExtra("alarmName");
+
+                    addAlarm(alarmName, c.getTime(), null, AlarmType.type.sunrise);
                 }
                 break;
         }
