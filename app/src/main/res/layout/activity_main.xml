@@ -14,11 +14,16 @@
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/add_alarm"
+
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_alignParentRight="true"
+
+            android:layout_margin="15dp"
+
             android:clickable="true"
+
             app:backgroundTint="@color/colorPrimary"
             app:fabSize="normal"
             app:srcCompat="@android:drawable/ic_input_add" />
@@ -62,11 +67,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/toolbar"
-            app:tabMaxWidth="0dp"
-            app:tabGravity="fill"
             android:background="?attr/colorPrimary"
             android:minHeight="?attr/actionBarSize"
-            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" />
+            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+            app:tabGravity="fill"
+            app:tabMaxWidth="0dp" />
 
         <android.support.v4.view.ViewPager
             android:id="@+id/pager"
