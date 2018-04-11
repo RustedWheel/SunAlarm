@@ -2,6 +2,7 @@ package com.a1.compsci702.sunalarm;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
@@ -14,15 +15,14 @@ import java.util.Date;
 public class SunriseRecyclerViewAdapter extends RecyclerView.Adapter<SunriseRecyclerViewAdapter.ViewHolder> {
     private ArrayList<String> sunriseData;
 
-    // Provide a reference to the views for each data item
-    // Complex data items may need more than one view per item, and
-    // you provide access to all the views for a data item in a view holder
     public static class ViewHolder extends RecyclerView.ViewHolder {
         // each data item is just a string in this case
-        public TextView textView;
-        public ViewHolder(TextView v) {
+        public TextView sunriseDate;
+        public TextView sunriseTime;
+        public ViewHolder(View v) {
             super(v);
-            textView = v;
+            sunriseDate = v.findViewById(R.id.sunrise_date);
+            sunriseTime = v.findViewById(R.id.sunrise_time);
         }
     }
 
@@ -36,7 +36,7 @@ public class SunriseRecyclerViewAdapter extends RecyclerView.Adapter<SunriseRecy
     public SunriseRecyclerViewAdapter.ViewHolder onCreateViewHolder(ViewGroup viewGroup,
                                                    int viewType) {
         // create a new view
-        TextView v = (TextView) LayoutInflater.from(viewGroup.getContext())
+        View v = LayoutInflater.from(viewGroup.getContext())
                 .inflate(R.layout.list_item, viewGroup, false);
 
         ViewHolder vh = new ViewHolder(v);
@@ -46,12 +46,12 @@ public class SunriseRecyclerViewAdapter extends RecyclerView.Adapter<SunriseRecy
     // Replace the contents of a view (invoked by the layout manager)
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, int position) {
-        // - get element from your dataset at this position
-        // - replace the contents of the view with that element
         Collections.sort(sunriseData);
         Date date = new Date(Long.parseLong(sunriseData.get(position)));
-        DateFormat df = new SimpleDateFormat("EEE, dd MMM yyyy hh:mm aaa");
-        viewHolder.textView.setText(df.format(date));
+        DateFormat sunriseDateFormat = new SimpleDateFormat("EEE, dd MMM yyyy");
+        DateFormat sunriseTimeFormat = new SimpleDateFormat("hh:mm aaa");
+        viewHolder.sunriseDate.setText(sunriseDateFormat.format(date));
+        viewHolder.sunriseTime.setText(sunriseTimeFormat.format(date));
     }
 
     // Return the size of your dataset (invoked by the layout manager)
