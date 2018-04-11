@@ -20,6 +20,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -128,7 +129,7 @@ public class MainActivity extends AppCompatActivity implements SunriseTab.OnFrag
         sunriseViewAdapter = new SunriseRecyclerViewAdapter(getSunriseDates());
         sunriseRecyclerView.setLayoutManager(sunriseViewLayout);
         sunriseRecyclerView.setAdapter(sunriseViewAdapter);
-
+        sunriseRecyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
 
         this._alarmRecyclerView = findViewById(R.id.alarm_recycler_view);
         this._alarmRecyclerView.setVisibility(View.VISIBLE);
@@ -139,6 +140,7 @@ public class MainActivity extends AppCompatActivity implements SunriseTab.OnFrag
         this._alarmRecyclerView.setAdapter(this._alarmViewAdapter);
 
         this._alarmRecyclerView.setLayoutManager(this._alarmViewLayout);
+        this._alarmRecyclerView.addItemDecoration(new DividerItemDecoration(this, LinearLayoutManager.VERTICAL));
 
         Log.e(TAG, "this._alarmViewAdapter = " + this._alarmViewAdapter + ":" +this._alarmViewAdapter.getItemCount());
 
@@ -196,7 +198,7 @@ public class MainActivity extends AppCompatActivity implements SunriseTab.OnFrag
         });
     }
 
-    /*
+    /**
      * Retrieve Sunrise Dates from cache
      */
     private ArrayList<String> getSunriseDates() {
