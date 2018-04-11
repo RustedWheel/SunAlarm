@@ -4,6 +4,8 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
+import com.a1.compsci702.sunalarm.Tabs.AlarmTab;
+
 public class PagerAdapter extends FragmentStatePagerAdapter {
     private final int ALARM_TAB = 0;
     private final int SUNRISE_TAB = 1;

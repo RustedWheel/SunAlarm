@@ -25,18 +25,16 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.ListView;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
+import com.a1.compsci702.sunalarm.Adapter.AlarmRecyclerViewAdapter;
 import com.a1.compsci702.sunalarm.Alarm.Alarm;
 import com.a1.compsci702.sunalarm.Alarm.AlarmType;
 import com.a1.compsci702.sunalarm.Alarm.RepeatInfo;
 import com.a1.compsci702.sunalarm.Exceptions.NoConnectionException;
+import com.a1.compsci702.sunalarm.Tabs.AlarmTab;
 import com.a1.compsci702.sunalarm.Utilities.DateConverter;
 import com.a1.compsci702.sunalarm.Utilities.Storage;
 import com.google.gson.Gson;
@@ -48,23 +46,24 @@ import java.util.Date;
 import java.util.Map;
 
 public class MainActivity extends AppCompatActivity implements SunriseTab.OnFragmentInteractionListener,
-                                                                AlarmTab.OnFragmentInteractionListener{
+        AlarmTab.OnFragmentInteractionListener {
     private final static int ALL_PERMISSIONS_RESULT = 101;
     private final String TAG = "MainActivity";
     private ArrayList<String> permissions = new ArrayList<>();
     private ArrayList<String> permissionsToRequest;
     private ArrayList<String> permissionsRejected = new ArrayList<>();
-    private ListView alarmListView;
+
     private FloatingActionButton mAddAlarm;
     private Button clearCacheButton;
     private Toolbar toolbar;
     private TabLayout tabLayout;
+
     private boolean canGetLocation = true;
 
     private ArrayList<Alarm> _alarms;
 
     private ArrayList<Integer> alarmIds;
-    private ArrayAdapter<Integer> _alarmAdapter;
+
     private Storage storage;
     private RelativeLayout loadingScreen;
     private boolean attemptedToCached = false;
@@ -73,7 +72,12 @@ public class MainActivity extends AppCompatActivity implements SunriseTab.OnFrag
     private RecyclerView.Adapter sunriseViewAdapter;
     private RecyclerView.LayoutManager sunriseViewLayout;
 
+    private RecyclerView _alarmRecyclerView;
+    private RecyclerView.Adapter _alarmViewAdapter;
+    private RecyclerView.LayoutManager _alarmViewLayout;
+
     private final static int PICK_ALARM_TIME = 0;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -110,6 +114,7 @@ public class MainActivity extends AppCompatActivity implements SunriseTab.OnFrag
         }
     }
 
+
     private void setUpUIComponents() {
 
         loadingScreen = findViewById(R.id.loading_screen);
@@ -123,6 +128,19 @@ public class MainActivity extends AppCompatActivity implements SunriseTab.OnFrag
         sunriseViewAdapter = new SunriseRecyclerViewAdapter(getSunriseDates());
         sunriseRecyclerView.setLayoutManager(sunriseViewLayout);
         sunriseRecyclerView.setAdapter(sunriseViewAdapter);
+
+
+        this._alarmRecyclerView = findViewById(R.id.alarm_recycler_view);
+        this._alarmRecyclerView.setVisibility(View.VISIBLE);
+
+        this._alarmViewLayout = new LinearLayoutManager(this);
+
+        this._alarmViewAdapter = new AlarmRecyclerViewAdapter(_alarms);
+        this._alarmRecyclerView.setAdapter(this._alarmViewAdapter);
+
+        this._alarmRecyclerView.setLayoutManager(this._alarmViewLayout);
+
+        Log.e(TAG, "this._alarmViewAdapter = " + this._alarmViewAdapter + ":" +this._alarmViewAdapter.getItemCount());
 
         setSupportActionBar(toolbar);
         tabLayout.addTab(tabLayout.newTab().setText("Alarms"));
@@ -139,15 +157,14 @@ public class MainActivity extends AppCompatActivity implements SunriseTab.OnFrag
             public void onTabSelected(TabLayout.Tab tab) {
                 // Set visibility of app components depending on selected tab
                 if (tab.getPosition() == 0) {
-                    alarmListView.setVisibility(View.VISIBLE);
+                    _alarmRecyclerView.setVisibility(View.VISIBLE);
                     sunriseRecyclerView.setVisibility(View.GONE);
                 } else {
-                    alarmListView.setVisibility(View.GONE);
+                    _alarmRecyclerView.setVisibility(View.GONE);
                     sunriseRecyclerView.setVisibility(View.VISIBLE);
                 }
                 // Update displayed data
                 sunriseViewAdapter.notifyDataSetChanged();
-                _alarmAdapter.notifyDataSetChanged();
                 viewPager.setCurrentItem(tab.getPosition());
             }
 
@@ -168,26 +185,6 @@ public class MainActivity extends AppCompatActivity implements SunriseTab.OnFrag
                 Intent newAlarmIntent = new Intent(v.getContext(), AddAlarmActivity.class);
                 startActivityForResult(newAlarmIntent, PICK_ALARM_TIME);
             }
-        });
-
-        alarmListView = findViewById(R.id.alarmList);
-
-        // Used for testing
-        _alarmAdapter = new ArrayAdapter(this, R.layout.list_item, _alarms);
-
-        alarmListView.setAdapter(_alarmAdapter);
-
-        alarmListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-                String text = ((TextView) view).getText().toString();
-
-                Toast.makeText(getApplicationContext(), "Alarm + " + text + " deleted!", Toast.LENGTH_LONG).show();
-
-            }
-
         });
 
         clearCacheButton = findViewById(R.id.clear_cache_button);
@@ -471,7 +468,7 @@ public class MainActivity extends AppCompatActivity implements SunriseTab.OnFrag
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    alarmListView.setVisibility(View.INVISIBLE);
+                    _alarmRecyclerView.setVisibility(View.VISIBLE);
                     mAddAlarm.setVisibility(View.INVISIBLE);
                     loadingScreen.setVisibility(View.VISIBLE);
                 }
@@ -512,7 +509,7 @@ public class MainActivity extends AppCompatActivity implements SunriseTab.OnFrag
                 Toast.makeText(getApplicationContext(), "Unable to connect to server", Toast.LENGTH_LONG).show();
             }
 
-            alarmListView.setVisibility(View.VISIBLE);
+           _alarmRecyclerView.setVisibility(View.VISIBLE);
             mAddAlarm.setVisibility(View.VISIBLE);
             loadingScreen.setVisibility(View.INVISIBLE);
         }
@@ -544,7 +541,8 @@ public class MainActivity extends AppCompatActivity implements SunriseTab.OnFrag
             // Add the alarm ID if needed
             // Delete this line if to use the alarm class as the adapter
             alarmIds.add(alarmID);
-            _alarmAdapter.notifyDataSetChanged();
+
+            this._alarmViewAdapter.notifyDataSetChanged();
         }
     }
 
@@ -560,7 +558,7 @@ public class MainActivity extends AppCompatActivity implements SunriseTab.OnFrag
         // Again delete this if not needed
         alarmIds.remove(index);
 
-        _alarmAdapter.notifyDataSetChanged();
+        this._alarmViewAdapter.notifyDataSetChanged();
     }
 
 
