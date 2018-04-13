@@ -31,6 +31,7 @@ import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.a1.compsci702.sunalarm.Adapter.AlarmRecyclerViewAdapter;
+import com.a1.compsci702.sunalarm.Adapter.RecyclerViewClickListener;
 import com.a1.compsci702.sunalarm.Alarm.Alarm;
 import com.a1.compsci702.sunalarm.Alarm.AlarmType;
 import com.a1.compsci702.sunalarm.Alarm.RepeatInfo;
@@ -122,27 +123,30 @@ public class MainActivity extends AppCompatActivity implements SunriseTab.OnFrag
         mAddAlarm = findViewById(R.id.add_alarm);
         toolbar = findViewById(R.id.toolbar);
         tabLayout = findViewById(R.id.tab_layout);
-        sunriseRecyclerView = findViewById(R.id.sunrise_recycler_view);
 
-        sunriseRecyclerView.setVisibility(View.GONE);
+        sunriseRecyclerView = findViewById(R.id.sunrise_recycler_view);
         sunriseViewLayout = new LinearLayoutManager(this);
-        sunriseViewAdapter = new SunriseRecyclerViewAdapter(getSunriseDates());
         sunriseRecyclerView.setLayoutManager(sunriseViewLayout);
-        sunriseRecyclerView.setAdapter(sunriseViewAdapter);
         sunriseRecyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
+        sunriseViewAdapter = new SunriseRecyclerViewAdapter(getSunriseDates());
+        sunriseRecyclerView.setAdapter(sunriseViewAdapter);
+        sunriseRecyclerView.setVisibility(View.GONE);
 
         this._alarmRecyclerView = findViewById(R.id.alarm_recycler_view);
-        this._alarmRecyclerView.setVisibility(View.VISIBLE);
-
         this._alarmViewLayout = new LinearLayoutManager(this);
-
-        this._alarmViewAdapter = new AlarmRecyclerViewAdapter(_alarms);
-        this._alarmRecyclerView.setAdapter(this._alarmViewAdapter);
-
         this._alarmRecyclerView.setLayoutManager(this._alarmViewLayout);
         this._alarmRecyclerView.addItemDecoration(new DividerItemDecoration(this, LinearLayoutManager.VERTICAL));
+        this._alarmViewAdapter = new AlarmRecyclerViewAdapter(_alarms, new RecyclerViewClickListener() {
+            @Override
+            public void onRowClick(View v, int position) {
+                Log.d(TAG, "test click!");
+                Toast.makeText(getApplicationContext(), "Clicked!", Toast.LENGTH_SHORT).show();
+            }
+        });
+        this._alarmRecyclerView.setAdapter(this._alarmViewAdapter);
+        this._alarmRecyclerView.setVisibility(View.VISIBLE);
 
-        Log.e(TAG, "this._alarmViewAdapter = " + this._alarmViewAdapter + ":" +this._alarmViewAdapter.getItemCount());
+        Log.d(TAG, "this._alarmViewAdapter = " + this._alarmViewAdapter + ":" +this._alarmViewAdapter.getItemCount());
 
         setSupportActionBar(toolbar);
         tabLayout.addTab(tabLayout.newTab().setText("Alarms"));
