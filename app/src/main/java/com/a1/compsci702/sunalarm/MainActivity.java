@@ -65,6 +65,8 @@ public class MainActivity extends AppCompatActivity implements SunriseTab.OnFrag
 
     private ArrayList<Integer> alarmIds;
 
+    private ArrayList<String> _sunriseTimes;
+
     private Storage storage;
     private RelativeLayout loadingScreen;
     private boolean attemptedToCached = false;
@@ -123,10 +125,14 @@ public class MainActivity extends AppCompatActivity implements SunriseTab.OnFrag
         toolbar = findViewById(R.id.toolbar);
         tabLayout = findViewById(R.id.tab_layout);
         sunriseRecyclerView = findViewById(R.id.sunrise_recycler_view);
-
         sunriseRecyclerView.setVisibility(View.GONE);
         sunriseViewLayout = new LinearLayoutManager(this);
-        sunriseViewAdapter = new SunriseRecyclerViewAdapter(getSunriseDates());
+
+        _sunriseTimes = new ArrayList<>();
+        for(String date : getSunriseDates()){
+            _sunriseTimes.add(date);
+        }
+        sunriseViewAdapter = new SunriseRecyclerViewAdapter(_sunriseTimes);
         sunriseRecyclerView.setLayoutManager(sunriseViewLayout);
         sunriseRecyclerView.setAdapter(sunriseViewAdapter);
         sunriseRecyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
@@ -415,6 +421,10 @@ public class MainActivity extends AppCompatActivity implements SunriseTab.OnFrag
 
                 Log.d(TAG, "Sunrise !  Location - Latitude: " + latitude + " Longitude: " + longitude);
 
+                _alarmRecyclerView.setVisibility(View.VISIBLE);
+                mAddAlarm.setVisibility(View.INVISIBLE);
+                loadingScreen.setVisibility(View.VISIBLE);
+
                 FetchSunriseData sunriseTask = new FetchSunriseData(location, date, numDays);
                 sunriseTask.execute();
             } catch (NoConnectionException e) {
@@ -467,15 +477,6 @@ public class MainActivity extends AppCompatActivity implements SunriseTab.OnFrag
         @Override
         protected Date doInBackground(Void... params) {
 
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    _alarmRecyclerView.setVisibility(View.VISIBLE);
-                    mAddAlarm.setVisibility(View.INVISIBLE);
-                    loadingScreen.setVisibility(View.VISIBLE);
-                }
-            });
-
             SunriseTime sunriseTime = new SunriseTime();
             SharedPreferences sunriseStorage = getSharedPreferences(Values.SUNRISE_TIME_CACHE, Context.MODE_PRIVATE);
 
@@ -506,6 +507,15 @@ public class MainActivity extends AppCompatActivity implements SunriseTab.OnFrag
             if (result != null) {
                 super.onPostExecute(result);
                 Log.d(TAG, "FINISHED CACHING DATA");
+
+                for(String date : getSunriseDates()){
+
+                    if(!_sunriseTimes.contains(date)){
+                        _sunriseTimes.add(date);
+                    }
+                    Log.d(TAG, "Added new date: " + date);
+                }
+                sunriseViewAdapter.notifyDataSetChanged();
 
             } else {
                 Toast.makeText(getApplicationContext(), "Unable to connect to server", Toast.LENGTH_LONG).show();

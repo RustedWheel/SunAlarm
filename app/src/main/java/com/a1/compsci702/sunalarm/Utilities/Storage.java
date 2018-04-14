@@ -38,7 +38,7 @@ public final class Storage {
         SharedPreferences sunriseStorage = context.getSharedPreferences(Values.SUNRISE_TIME_CACHE, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sunriseStorage.edit();
         editor.putLong(DateConverter.dateToString(time), time.getTime());
-        editor.apply();
+        editor.commit();
     }
 
     public void removeSunriseTime(Context context, String date) {
