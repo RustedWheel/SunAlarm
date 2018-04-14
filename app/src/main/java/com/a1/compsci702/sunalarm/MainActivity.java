@@ -421,7 +421,8 @@ public class MainActivity extends AppCompatActivity implements SunriseTab.OnFrag
 
                 Log.d(TAG, "Sunrise !  Location - Latitude: " + latitude + " Longitude: " + longitude);
 
-                _alarmRecyclerView.setVisibility(View.VISIBLE);
+                sunriseRecyclerView.setVisibility(View.INVISIBLE);
+                _alarmRecyclerView.setVisibility(View.INVISIBLE);
                 mAddAlarm.setVisibility(View.INVISIBLE);
                 loadingScreen.setVisibility(View.VISIBLE);
 
