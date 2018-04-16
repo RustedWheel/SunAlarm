@@ -21,7 +21,7 @@ import static android.content.Context.VIBRATOR_SERVICE;
  * Created by David on 2018/3/22.
  */
 
-public class AlarmBroadcastReceiver extends BroadcastReceiver
+public class    AlarmBroadcastReceiver extends BroadcastReceiver
 {
 
     private String TAG = "Alarm Broadcast Receiver";

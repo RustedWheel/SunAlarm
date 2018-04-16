@@ -63,8 +63,6 @@ public class MainActivity extends AppCompatActivity implements SunriseTab.OnFrag
 
     private ArrayList<Alarm> _alarms;
 
-    private ArrayList<Integer> alarmIds;
-
     private ArrayList<String> _sunriseTimes;
 
     private Storage storage;
@@ -129,9 +127,7 @@ public class MainActivity extends AppCompatActivity implements SunriseTab.OnFrag
         sunriseViewLayout = new LinearLayoutManager(this);
 
         _sunriseTimes = new ArrayList<>();
-        for(String date : getSunriseDates()){
-            _sunriseTimes.add(date);
-        }
+        _sunriseTimes.addAll(getSunriseDates());
         sunriseViewAdapter = new SunriseRecyclerViewAdapter(_sunriseTimes);
         sunriseRecyclerView.setLayoutManager(sunriseViewLayout);
         sunriseRecyclerView.setAdapter(sunriseViewAdapter);
@@ -227,8 +223,8 @@ public class MainActivity extends AppCompatActivity implements SunriseTab.OnFrag
         SharedPreferences alarmsStorage = getSharedPreferences(Values.STORED_ALARMS, Context.MODE_PRIVATE);
 
         _alarms = new ArrayList<>();
-        alarmIds = new ArrayList<>();
 
+        long timeNow = Calendar.getInstance().getTime().getTime();
         Map<String, ?> allExistingAlarmEntries = alarmsStorage.getAll();
         for (Map.Entry<String, ?> alarm : allExistingAlarmEntries.entrySet()) {
 
@@ -236,8 +232,11 @@ public class MainActivity extends AppCompatActivity implements SunriseTab.OnFrag
             String json = alarm.getValue().toString();
             Alarm obj = gson.fromJson(json, Alarm.class);
 
-            _alarms.add(obj);
-            alarmIds.add(obj.getId());
+            if (timeNow > obj.getAlarmTime().getTime()) {
+                storage.deleteAlarm(this, obj.getId());
+            } else {
+                _alarms.add(obj);
+            }
         }
 
     }
@@ -551,10 +550,6 @@ public class MainActivity extends AppCompatActivity implements SunriseTab.OnFrag
             // Add the alarm
             _alarms.add(alarm);
 
-            // Add the alarm ID if needed
-            // Delete this line if to use the alarm class as the adapter
-            alarmIds.add(alarmID);
-
             this._alarmViewAdapter.notifyDataSetChanged();
         }
     }
@@ -567,9 +562,6 @@ public class MainActivity extends AppCompatActivity implements SunriseTab.OnFrag
         alarm.cancelAlarm(getApplicationContext());
 
         _alarms.remove(index);
-
-        // Again delete this if not needed
-        alarmIds.remove(index);
 
         this._alarmViewAdapter.notifyDataSetChanged();
     }

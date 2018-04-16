@@ -38,6 +38,7 @@ public class Alarm {
 
             Calendar c = DateConverter.convertDateToCalendar(_alarmTime);
             Intent intent = new Intent(context, AlarmBroadcastReceiver.class);
+            intent.addFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
             intent.putExtra("ID", _alarmId);
             PendingIntent pendingIntent = PendingIntent.getBroadcast(context, _alarmId, intent, 0);
             AlarmManager am = (AlarmManager) context.getSystemService(context.ALARM_SERVICE);
