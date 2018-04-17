@@ -34,7 +34,7 @@
             android:layout_height="match_parent"
             android:layout_below="@+id/tab_layout"
             android:scrollbars="vertical"
-            tools:listitem="@layout/alarm_list_row"/>
+            tools:listitem="@layout/alarm_list_row" />
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/sunrise_recycler_view"
@@ -43,15 +43,6 @@
             android:layout_below="@+id/tab_layout"
             android:scrollbars="vertical"
             tools:listitem="@layout/list_item" />
-
-        <Button
-            android:id="@+id/clear_cache_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true"
-            android:layout_margin="15dp"
-            android:text="Clear sunrise time cache" />
 
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar"

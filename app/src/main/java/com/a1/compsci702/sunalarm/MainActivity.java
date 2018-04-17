@@ -26,7 +26,6 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
@@ -56,7 +55,6 @@ public class MainActivity extends AppCompatActivity implements SunriseTab.OnFrag
     private ArrayList<String> permissionsRejected = new ArrayList<>();
 
     private FloatingActionButton mAddAlarm;
-    private Button clearCacheButton;
     private Toolbar toolbar;
     private TabLayout tabLayout;
 
@@ -212,14 +210,6 @@ public class MainActivity extends AppCompatActivity implements SunriseTab.OnFrag
 
                 Intent newAlarmIntent = new Intent(v.getContext(), AddAlarmActivity.class);
                 startActivityForResult(newAlarmIntent, PICK_ALARM_TIME);
-            }
-        });
-
-        clearCacheButton = findViewById(R.id.clear_cache_button);
-        clearCacheButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                storage.removeAllSunriseTime(MainActivity.this);
             }
         });
     }
