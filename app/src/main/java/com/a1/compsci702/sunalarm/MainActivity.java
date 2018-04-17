@@ -64,8 +64,6 @@ public class MainActivity extends AppCompatActivity implements SunriseTab.OnFrag
 
     private ArrayList<Alarm> _alarms;
 
-    private ArrayList<Integer> alarmIds;
-
     private Storage storage;
     private RelativeLayout loadingScreen;
     private boolean attemptedToCached = false;
@@ -131,21 +129,45 @@ public class MainActivity extends AppCompatActivity implements SunriseTab.OnFrag
         sunriseViewAdapter = new SunriseRecyclerViewAdapter(getSunriseDates());
         sunriseRecyclerView.setAdapter(sunriseViewAdapter);
 
+        sunriseRecyclerView.setVisibility(View.GONE);
+
         this._alarmRecyclerView = findViewById(R.id.alarm_recycler_view);
         this._alarmViewLayout = new LinearLayoutManager(this);
         this._alarmRecyclerView.setLayoutManager(this._alarmViewLayout);
         this._alarmRecyclerView.addItemDecoration(new DividerItemDecoration(this, LinearLayoutManager.VERTICAL));
         this._alarmViewAdapter = new AlarmRecyclerViewAdapter(_alarms, new RecyclerViewClickListener() {
             @Override
-            public void onRowClick(View v, int position) {
-                Log.d(TAG, "test click!");
-                Toast.makeText(getApplicationContext(), "Clicked!", Toast.LENGTH_SHORT).show();
+            public void onRowClick(View v, final int position) {
+                final AlertDialog deletionAlertDialog = new AlertDialog.Builder(MainActivity.this).create();
+                deletionAlertDialog.setTitle("Delete Alarm");
+                deletionAlertDialog.setMessage("Are you sure  you want to delete this alarm?");
+                deletionAlertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Alarm thisAlarm = _alarms.get(position);
+
+                        cancelAlarm(thisAlarm);
+
+                        _alarmViewAdapter.notifyDataSetChanged();
+
+                        Log.e(TAG, "_alarms after deletion = " + _alarms);
+                    }
+                });
+
+                deletionAlertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "No", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        deletionAlertDialog.hide();
+                    }
+                });
+
+                deletionAlertDialog.show();
             }
         });
         this._alarmRecyclerView.setAdapter(this._alarmViewAdapter);
         this._alarmRecyclerView.setVisibility(View.VISIBLE);
 
-        Log.d(TAG, "this._alarmViewAdapter = " + this._alarmViewAdapter + ":" +this._alarmViewAdapter.getItemCount());
+        Log.d(TAG, "this._alarmViewAdapter = " + this._alarmViewAdapter + ":" + this._alarmViewAdapter.getItemCount());
 
         setSupportActionBar(toolbar);
         tabLayout.addTab(tabLayout.newTab().setText("Alarms"));
@@ -225,7 +247,6 @@ public class MainActivity extends AppCompatActivity implements SunriseTab.OnFrag
         SharedPreferences alarmsStorage = getSharedPreferences(Values.STORED_ALARMS, Context.MODE_PRIVATE);
 
         _alarms = new ArrayList<>();
-        alarmIds = new ArrayList<>();
 
         Map<String, ?> allExistingAlarmEntries = alarmsStorage.getAll();
         for (Map.Entry<String, ?> alarm : allExistingAlarmEntries.entrySet()) {
@@ -235,7 +256,6 @@ public class MainActivity extends AppCompatActivity implements SunriseTab.OnFrag
             Alarm obj = gson.fromJson(json, Alarm.class);
 
             _alarms.add(obj);
-            alarmIds.add(obj.getId());
         }
 
     }
@@ -515,7 +535,7 @@ public class MainActivity extends AppCompatActivity implements SunriseTab.OnFrag
                 Toast.makeText(getApplicationContext(), "Unable to connect to server", Toast.LENGTH_LONG).show();
             }
 
-           _alarmRecyclerView.setVisibility(View.VISIBLE);
+            _alarmRecyclerView.setVisibility(View.VISIBLE);
             mAddAlarm.setVisibility(View.VISIBLE);
             loadingScreen.setVisibility(View.INVISIBLE);
         }
@@ -544,27 +564,25 @@ public class MainActivity extends AppCompatActivity implements SunriseTab.OnFrag
             // Add the alarm
             _alarms.add(alarm);
 
-            // Add the alarm ID if needed
-            // Delete this line if to use the alarm class as the adapter
-            alarmIds.add(alarmID);
 
             this._alarmViewAdapter.notifyDataSetChanged();
         }
     }
 
 
-    public void cancelAlarm(Alarm alarm, int index) {
+    public void cancelAlarm(Alarm alarm) {
+        int index = _alarms.indexOf(alarm);
 
+        Log.d(TAG, "alarm index being deleted: " + index);
+        if (index == -1) {
+            return;
+        }
+
+        _alarms.remove(index);
         storage.deleteAlarm(this, alarm.getId());
 
         alarm.cancelAlarm(getApplicationContext());
-
-        _alarms.remove(index);
-
-        // Again delete this if not needed
-        alarmIds.remove(index);
-
-        this._alarmViewAdapter.notifyDataSetChanged();
+        _alarmViewAdapter.notifyDataSetChanged();
     }
 
 
