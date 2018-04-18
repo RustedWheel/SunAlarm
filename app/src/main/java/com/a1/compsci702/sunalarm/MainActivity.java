@@ -130,7 +130,6 @@ public class MainActivity extends AppCompatActivity implements SunriseTab.OnFrag
         sunriseViewAdapter = new SunriseRecyclerViewAdapter(_sunriseTimes);
         sunriseRecyclerView.setLayoutManager(sunriseViewLayout);
         sunriseRecyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
-        sunriseViewAdapter = new SunriseRecyclerViewAdapter(getSunriseDates());
         sunriseRecyclerView.setAdapter(sunriseViewAdapter);
 
         sunriseRecyclerView.setVisibility(View.GONE);
