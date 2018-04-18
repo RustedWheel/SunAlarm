@@ -26,11 +26,11 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.a1.compsci702.sunalarm.Adapter.AlarmRecyclerViewAdapter;
+import com.a1.compsci702.sunalarm.Adapter.RecyclerViewClickListener;
 import com.a1.compsci702.sunalarm.Alarm.Alarm;
 import com.a1.compsci702.sunalarm.Alarm.AlarmType;
 import com.a1.compsci702.sunalarm.Alarm.RepeatInfo;
@@ -55,7 +55,6 @@ public class MainActivity extends AppCompatActivity implements SunriseTab.OnFrag
     private ArrayList<String> permissionsRejected = new ArrayList<>();
 
     private FloatingActionButton mAddAlarm;
-    private Button clearCacheButton;
     private Toolbar toolbar;
     private TabLayout tabLayout;
 
@@ -130,21 +129,49 @@ public class MainActivity extends AppCompatActivity implements SunriseTab.OnFrag
         _sunriseTimes.addAll(getSunriseDates());
         sunriseViewAdapter = new SunriseRecyclerViewAdapter(_sunriseTimes);
         sunriseRecyclerView.setLayoutManager(sunriseViewLayout);
-        sunriseRecyclerView.setAdapter(sunriseViewAdapter);
         sunriseRecyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
+        sunriseViewAdapter = new SunriseRecyclerViewAdapter(getSunriseDates());
+        sunriseRecyclerView.setAdapter(sunriseViewAdapter);
+
+        sunriseRecyclerView.setVisibility(View.GONE);
 
         this._alarmRecyclerView = findViewById(R.id.alarm_recycler_view);
-        this._alarmRecyclerView.setVisibility(View.VISIBLE);
-
         this._alarmViewLayout = new LinearLayoutManager(this);
-
-        this._alarmViewAdapter = new AlarmRecyclerViewAdapter(_alarms);
-        this._alarmRecyclerView.setAdapter(this._alarmViewAdapter);
-
         this._alarmRecyclerView.setLayoutManager(this._alarmViewLayout);
         this._alarmRecyclerView.addItemDecoration(new DividerItemDecoration(this, LinearLayoutManager.VERTICAL));
+        this._alarmViewAdapter = new AlarmRecyclerViewAdapter(_alarms, new RecyclerViewClickListener() {
+            @Override
+            public void onRowClick(View v, final int position) {
+                final AlertDialog deletionAlertDialog = new AlertDialog.Builder(MainActivity.this).create();
+                deletionAlertDialog.setTitle("Delete Alarm");
+                deletionAlertDialog.setMessage("Are you sure  you want to delete this alarm?");
+                deletionAlertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Alarm thisAlarm = _alarms.get(position);
 
-        Log.e(TAG, "this._alarmViewAdapter = " + this._alarmViewAdapter + ":" +this._alarmViewAdapter.getItemCount());
+                        cancelAlarm(thisAlarm);
+
+                        _alarmViewAdapter.notifyDataSetChanged();
+
+                        Log.e(TAG, "_alarms after deletion = " + _alarms);
+                    }
+                });
+
+                deletionAlertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "No", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        deletionAlertDialog.hide();
+                    }
+                });
+
+                deletionAlertDialog.show();
+            }
+        });
+        this._alarmRecyclerView.setAdapter(this._alarmViewAdapter);
+        this._alarmRecyclerView.setVisibility(View.VISIBLE);
+
+        Log.d(TAG, "this._alarmViewAdapter = " + this._alarmViewAdapter + ":" + this._alarmViewAdapter.getItemCount());
 
         setSupportActionBar(toolbar);
         tabLayout.addTab(tabLayout.newTab().setText("Alarms"));
@@ -155,6 +182,7 @@ public class MainActivity extends AppCompatActivity implements SunriseTab.OnFrag
         final PagerAdapter pagerAdapter = new PagerAdapter(getSupportFragmentManager(), tabLayout.getTabCount());
         viewPager.setAdapter(pagerAdapter);
         viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
+        viewPager.setVisibility(View.GONE);
 
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
@@ -188,14 +216,6 @@ public class MainActivity extends AppCompatActivity implements SunriseTab.OnFrag
 
                 Intent newAlarmIntent = new Intent(v.getContext(), AddAlarmActivity.class);
                 startActivityForResult(newAlarmIntent, PICK_ALARM_TIME);
-            }
-        });
-
-        clearCacheButton = findViewById(R.id.clear_cache_button);
-        clearCacheButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                storage.removeAllSunriseTime(MainActivity.this);
             }
         });
     }
@@ -521,7 +541,7 @@ public class MainActivity extends AppCompatActivity implements SunriseTab.OnFrag
                 Toast.makeText(getApplicationContext(), "Unable to connect to server", Toast.LENGTH_LONG).show();
             }
 
-           _alarmRecyclerView.setVisibility(View.VISIBLE);
+            _alarmRecyclerView.setVisibility(View.VISIBLE);
             mAddAlarm.setVisibility(View.VISIBLE);
             loadingScreen.setVisibility(View.INVISIBLE);
         }
@@ -555,15 +575,19 @@ public class MainActivity extends AppCompatActivity implements SunriseTab.OnFrag
     }
 
 
-    public void cancelAlarm(Alarm alarm, int index) {
+    public void cancelAlarm(Alarm alarm) {
+        int index = _alarms.indexOf(alarm);
 
+        Log.d(TAG, "alarm index being deleted: " + index);
+        if (index == -1) {
+            return;
+        }
+
+        _alarms.remove(index);
         storage.deleteAlarm(this, alarm.getId());
 
         alarm.cancelAlarm(getApplicationContext());
-
-        _alarms.remove(index);
-
-        this._alarmViewAdapter.notifyDataSetChanged();
+        _alarmViewAdapter.notifyDataSetChanged();
     }
 
 
