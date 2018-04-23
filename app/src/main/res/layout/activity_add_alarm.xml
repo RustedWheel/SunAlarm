@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -14,24 +13,6 @@
 
         android:fillViewport="true"
         android:orientation="vertical">
-
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-
-            android:background="?attr/colorPrimary"
-            android:minHeight="?attr/actionBarSize">
-
-            <TextView
-                android:id="@+id/toolbar_title"
-                style="@style/TextAppearance.AppCompat.Widget.ActionBar.Title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-
-                android:text="SunAlarm" />
-
-        </android.support.v7.widget.Toolbar>
 
         <LinearLayout
             android:id="@+id/sunrise_section"
