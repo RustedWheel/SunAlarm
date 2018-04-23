@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -23,6 +24,27 @@
 
             android:orientation="vertical">
 
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/my_toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:layout_marginBottom="5dp"
+
+                android:background="?attr/colorPrimary"
+
+                android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
+
+                app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="SunAlarm"
+
+                    android:textColor="@color/colorWhite"
+                    android:textSize="25dp" />
+
+            </android.support.v7.widget.Toolbar>
 
             <TextView
                 android:id="@+id/sunrise_tomorrow"
@@ -86,8 +108,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
 
-                android:layout_marginBottom="5dp"
-
                 android:text="@string/actual_alarm_time"
                 android:textSize="25dp" />
 
@@ -95,6 +115,8 @@
                 android:id="@+id/actual_alarm_time_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+
+                android:layout_marginBottom="5dp"
 
                 android:text="actual alarm time goes here"
                 android:textColor="@color/colorAccent" />
