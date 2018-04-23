@@ -81,10 +81,7 @@ See also the list of [contributors](https://github.com/your/project/contributors
 This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
 
 ## Acknowledgments
-
-* Hat tip to anyone who's code was used
-* Inspiration
-* etc
+<div>Icons made by <a href="https://www.flaticon.com/authors/freepik" title="sundial">sundial</a> from <a href="https://www.flaticon.com/"     title="Flaticon">www.flaticon.com</a> is licensed by <a href="http://creativecommons.org/licenses/by/3.0/"     title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a></div>
 
 ## APIs
 * https://sunrise-sunset.org/api
