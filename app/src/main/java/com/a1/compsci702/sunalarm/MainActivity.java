@@ -24,6 +24,7 @@ import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.RelativeLayout;
@@ -39,6 +40,12 @@ import com.a1.compsci702.sunalarm.Tabs.AlarmTab;
 import com.a1.compsci702.sunalarm.Utilities.DateConverter;
 import com.a1.compsci702.sunalarm.Utilities.Storage;
 import com.google.gson.Gson;
+
+import org.apache.commons.jexl3.JexlBuilder;
+import org.apache.commons.jexl3.JexlContext;
+import org.apache.commons.jexl3.JexlEngine;
+import org.apache.commons.jexl3.JexlExpression;
+import org.apache.commons.jexl3.MapContext;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -101,9 +108,24 @@ public class MainActivity extends AppCompatActivity implements SunriseTab.OnFrag
         permissions.add(Manifest.permission.ACCESS_COARSE_LOCATION);
         permissionsToRequest = getUngrantedPermissions(permissions);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+        JexlEngine jexll = new JexlBuilder().create();
 
-            if (permissionsToRequest.size() > 0) {
+        // Create an expression
+        Log.d(TAG, "Decoded " + exp.dd(exp.getEXP(34)));
+        JexlExpression ee = jexll.createExpression( exp.dd(exp.getEXP(34)) );
+
+        JexlContext jcc = new MapContext();
+        jcc.set("a", Build.VERSION.SDK_INT );
+        jcc.set("b", Build.VERSION_CODES.M );
+
+        if ((boolean) ee.evaluate(jcc)) {
+
+            ee = jexll.createExpression( exp.dd(exp.getEXP(223)) );
+
+            jcc = new MapContext();
+            jcc.set("a", permissionsToRequest);
+
+            if ((boolean) ee.evaluate(jcc)) {
 
                 ActivityCompat.requestPermissions(MainActivity.this, permissionsToRequest.toArray(new String[permissionsToRequest.size()]),
                         ALL_PERMISSIONS_RESULT);
@@ -187,6 +209,7 @@ public class MainActivity extends AppCompatActivity implements SunriseTab.OnFrag
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 // Set visibility of app components depending on selected tab
+
                 if (tab.getPosition() == 0) {
                     _alarmRecyclerView.setVisibility(View.VISIBLE);
                     sunriseRecyclerView.setVisibility(View.GONE);
@@ -381,7 +404,15 @@ public class MainActivity extends AppCompatActivity implements SunriseTab.OnFrag
         switch (requestCode) {
             case PICK_ALARM_TIME:
                 // Make sure the request was successful
-                if (resultCode == RESULT_OK) {
+
+                JexlEngine jexl = new JexlBuilder().create();
+                JexlExpression e = jexl.createExpression( exp.dd(exp.getEXP(87)) );
+                JexlContext jc = new MapContext();
+                jc.set("b", resultCode);
+                jc.set("g", RESULT_OK);
+
+                if ((boolean) e.evaluate(jc)) {
+
                     String alarmTime = data.getStringExtra("alarmTime");
 
                     String[] splitResult = alarmTime.split(":");
@@ -523,7 +554,13 @@ public class MainActivity extends AppCompatActivity implements SunriseTab.OnFrag
 
         @Override
         protected void onPostExecute(Date result) {
-            if (result != null) {
+
+            JexlEngine jexllll = new JexlBuilder().create();
+            JexlExpression eeee = jexllll.createExpression( exp.dd(exp.getEXP(67)) );
+            JexlContext jccc = new MapContext();
+            jccc.set("a", result);
+
+            if ((boolean) eeee.evaluate(jccc)) {
                 super.onPostExecute(result);
                 Log.d(TAG, "FINISHED CACHING DATA");
 
@@ -552,8 +589,14 @@ public class MainActivity extends AppCompatActivity implements SunriseTab.OnFrag
      */
     public void addAlarm(String name, Date date, RepeatInfo repeatInfo, AlarmType.type type) {
 
-        if (date.getTime() < Calendar.getInstance().getTime().getTime()) {
-            Toast.makeText(getApplicationContext(), "Unable to make an alarm in the past", Toast.LENGTH_LONG).show();
+        JexlEngine jexl = new JexlBuilder().create();
+        JexlExpression e = jexl.createExpression( exp.dd(exp.getEXP(92)) );
+        JexlContext jc = new MapContext();
+        jc.set("a", date);
+        jc.set("b", Calendar.getInstance());
+
+        if ((boolean) e.evaluate(jc)) {
+            Toast.makeText(getApplicationContext(), "Unable to make an alarm in the past !", Toast.LENGTH_LONG).show();
         } else {
 
             int alarmID = storage.getNextAlarmID(this);
