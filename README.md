@@ -17,7 +17,7 @@ Give examples
 ### Installing
 
 * Download all files and open them on Android Studio(Android API version 26).
-* Create a keychain and build a signed APK with that key.
+* Create a keychain and build a signed APK with that key(Remember to choose V1 signing if you want to run it on devices lower that Android 7.0).
 * And you'll get the APK file.
 * Install the APK file on you device and enjoy our APP.
 
