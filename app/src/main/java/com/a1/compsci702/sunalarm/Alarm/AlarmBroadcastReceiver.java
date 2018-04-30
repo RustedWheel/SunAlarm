@@ -21,12 +21,14 @@ import static android.content.Context.VIBRATOR_SERVICE;
  * Created by David on 2018/3/22.
  */
 
-public class AlarmBroadcastReceiver extends BroadcastReceiver {
+public class    AlarmBroadcastReceiver extends BroadcastReceiver
+{
 
     private String TAG = "Alarm Broadcast Receiver";
 
     @Override
-    public void onReceive(Context context, Intent intent) {
+    public void onReceive(Context context, Intent intent)
+    {
         PowerManager pm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
         PowerManager.WakeLock wl = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "");
         wl.acquire();
@@ -34,10 +36,11 @@ public class AlarmBroadcastReceiver extends BroadcastReceiver {
         final MediaPlayer mp = MediaPlayer.create(context, R.raw.alarm);
         mp.start();
 
+        // Better to play a video animation i guess?
         Toast.makeText(context, "Sunrise !", Toast.LENGTH_LONG).show();
 
         if (Build.VERSION.SDK_INT >= 26) {
-            ((Vibrator) context.getSystemService(VIBRATOR_SERVICE)).vibrate(VibrationEffect.createOneShot(10000, -1));
+            ((Vibrator) context.getSystemService(VIBRATOR_SERVICE)).vibrate(VibrationEffect.createOneShot(10000,-1));
         } else {
             ((Vibrator) context.getSystemService(VIBRATOR_SERVICE)).vibrate(10000);
         }
