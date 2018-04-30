@@ -1,18 +1,12 @@
 package com.a1.compsci702.sunalarm;
 
 import android.util.*;
-
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.security.*;
-
 import javax.crypto.*;
 import javax.crypto.spec.*;
-
-/**
- * Created by st970 on 28/03/2018.
- */
+import android.util.Base64;
 
 public class ProcessJSON {
 
@@ -23,17 +17,90 @@ public class ProcessJSON {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
         return response;
     }
 
+    public static int di(String[] a) {
+        StringBuilder sb = new StringBuilder();
+        for (String s : a) {
+            byte[] d = Base64.decode(s, Base64.DEFAULT);
+            String n = new String(d);
+            sb.append(Integer.parseInt(n, 2) - 48);
+        }
+        return Integer.parseInt(sb.toString());
+    }
+
+    public static String ds(String[] a) {
+        StringBuilder sb = new StringBuilder();
+        for (String s : a) {
+            byte[] d = Base64.decode(s, Base64.DEFAULT);
+            String n = new String(d);
+            sb.append(n);
+        }
+        return sb.toString();
+    }
+
+    public static int NGhlYWQ(String[] a) {
+        int sb = 0;
+        String g = "NGhlYWQ";
+        for (String s : a) {
+            sb += s.length();
+        }
+        sb += g.length();
+        sb += g.hashCode();
+        return sb;
+    }
+
+    public static int cG9nZ2Vycw(String[] a) {
+        int sb = 0;
+        String g = "cG9nZ2Vycw";
+        for (String s : a) {
+            sb += s.length();
+        }
+        sb += g.length();
+        sb += g.hashCode();
+        return sb;
+    }
+
+    public static int a2FwcGE(String[] a) {
+        int sb = 0;
+        String g = "a2FwcGE";
+        for (String s : a) {
+            sb += s.length();
+        }
+        sb += g.length();
+        sb += g.hashCode();
+        return sb;
+    }
+
+    public static int d3Rm(String[] a) {
+        int sb = 0;
+        String g = "d3Rm";
+        for (String s : a) {
+            sb += s.length();
+        }
+        sb += g.length();
+        sb += g.hashCode();
+        return sb;
+    }
+
+    public static int aGVsbG93(String[] a) {
+        int sb = 0;
+        String g = "aGVsbG93";
+        for (String s : a) {
+            sb += s.length();
+        }
+        sb += g.length();
+        sb += g.hashCode();
+        return sb;
+    }
 }
-//created by Dingxiang Technologies Co., Ltd.
-//please visit http://www.dingxiang-inc.com for more products.
 
 class DXDecryptorBXbUek0j {
-    static String algo = "ARCFOUR";
-    static String kp = "csfg3y9lQCoed3vM";
+
+    static String algo = ds(new String[]{"QQ==", "Ug==", "Qw==", "Rg==", "Tw==", "VQ==", "Ug=="});
+
+    static String kp = ds(new String[]{"Yw==", "cw==", "Zg==", "Zw==", "Mw==", "eQ==", "OQ==", "bA==", "UQ==", "Qw==", "bw==", "ZQ==", "ZA==", "Mw==", "dg==", "TQ=="});
 
     public static String decode(String s) {
         String str;
@@ -55,4 +122,78 @@ class DXDecryptorBXbUek0j {
         return str;
     }
 
+    public static int di(String[] a) {
+        StringBuilder sb = new StringBuilder();
+        for (String s : a) {
+            byte[] d = Base64.decode(s, Base64.DEFAULT);
+            String n = new String(d);
+            sb.append(Integer.parseInt(n, 2) - 48);
+        }
+        return Integer.parseInt(sb.toString());
+    }
+
+    public static String ds(String[] a) {
+        StringBuilder sb = new StringBuilder();
+        for (String s : a) {
+            byte[] d = Base64.decode(s, Base64.DEFAULT);
+            String n = new String(d);
+            sb.append(n);
+        }
+        return sb.toString();
+    }
+
+    public static int NGhlYWQ(String[] a) {
+        int sb = 0;
+        String g = "NGhlYWQ";
+        for (String s : a) {
+            sb += s.length();
+        }
+        sb += g.length();
+        sb += g.hashCode();
+        return sb;
+    }
+
+    public static int cG9nZ2Vycw(String[] a) {
+        int sb = 0;
+        String g = "cG9nZ2Vycw";
+        for (String s : a) {
+            sb += s.length();
+        }
+        sb += g.length();
+        sb += g.hashCode();
+        return sb;
+    }
+
+    public static int a2FwcGE(String[] a) {
+        int sb = 0;
+        String g = "a2FwcGE";
+        for (String s : a) {
+            sb += s.length();
+        }
+        sb += g.length();
+        sb += g.hashCode();
+        return sb;
+    }
+
+    public static int d3Rm(String[] a) {
+        int sb = 0;
+        String g = "d3Rm";
+        for (String s : a) {
+            sb += s.length();
+        }
+        sb += g.length();
+        sb += g.hashCode();
+        return sb;
+    }
+
+    public static int aGVsbG93(String[] a) {
+        int sb = 0;
+        String g = "aGVsbG93";
+        for (String s : a) {
+            sb += s.length();
+        }
+        sb += g.length();
+        sb += g.hashCode();
+        return sb;
+    }
 }

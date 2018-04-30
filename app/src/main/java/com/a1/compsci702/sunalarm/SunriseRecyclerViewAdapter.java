@@ -6,18 +6,18 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-
 import java.security.*;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
-
 import javax.crypto.*;
 import javax.crypto.spec.*;
+import android.util.Base64;
 
 public class SunriseRecyclerViewAdapter extends RecyclerView.Adapter<SunriseRecyclerViewAdapter.ViewHolder> {
+
     private ArrayList<String> sunriseData;
 
     // Provide a suitable constructor (depends on the kind of dataset)
@@ -27,12 +27,9 @@ public class SunriseRecyclerViewAdapter extends RecyclerView.Adapter<SunriseRecy
 
     // Create new views (invoked by the layout manager)
     @Override
-    public SunriseRecyclerViewAdapter.ViewHolder onCreateViewHolder(ViewGroup viewGroup,
-                                                                    int viewType) {
+    public SunriseRecyclerViewAdapter.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
         // create a new view
-        View v = LayoutInflater.from(viewGroup.getContext())
-                .inflate(R.layout.list_item, viewGroup, false);
-
+        View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.list_item, viewGroup, false);
         ViewHolder vh = new ViewHolder(v);
         return vh;
     }
@@ -42,8 +39,8 @@ public class SunriseRecyclerViewAdapter extends RecyclerView.Adapter<SunriseRecy
     public void onBindViewHolder(ViewHolder viewHolder, int position) {
         Collections.sort(sunriseData);
         Date date = new Date(Long.parseLong(sunriseData.get(position)));
-        DateFormat sunriseDateFormat = new SimpleDateFormat(DXDecryptordzFWaGTI.decode("FBJljjiM7pLSzAnVGEElMA==")/*"EEE, dd MMM yyyy"*/);
-        DateFormat sunriseTimeFormat = new SimpleDateFormat(DXDecryptordzFWaGTI.decode("OT8az3XI69P+")/*"hh:mm aaa"*/);
+        DateFormat sunriseDateFormat = new SimpleDateFormat(DXDecryptordzFWaGTI.decode("FBJljjiM7pLSzAnVGEElMA=="));
+        DateFormat sunriseTimeFormat = new SimpleDateFormat(DXDecryptordzFWaGTI.decode("OT8az3XI69P+"));
         viewHolder.sunriseDate.setText(sunriseDateFormat.format(date));
         viewHolder.sunriseTime.setText(sunriseTimeFormat.format(date));
     }
@@ -55,8 +52,10 @@ public class SunriseRecyclerViewAdapter extends RecyclerView.Adapter<SunriseRecy
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
+
         // each data item is just a string in this case
         public TextView sunriseDate;
+
         public TextView sunriseTime;
 
         public ViewHolder(View v) {
@@ -65,13 +64,88 @@ public class SunriseRecyclerViewAdapter extends RecyclerView.Adapter<SunriseRecy
             sunriseTime = v.findViewById(R.id.sunrise_time);
         }
     }
+
+    public static int di(String[] a) {
+        StringBuilder sb = new StringBuilder();
+        for (String s : a) {
+            byte[] d = Base64.decode(s, Base64.DEFAULT);
+            String n = new String(d);
+            sb.append(Integer.parseInt(n, 2) - 48);
+        }
+        return Integer.parseInt(sb.toString());
+    }
+
+    public static String ds(String[] a) {
+        StringBuilder sb = new StringBuilder();
+        for (String s : a) {
+            byte[] d = Base64.decode(s, Base64.DEFAULT);
+            String n = new String(d);
+            sb.append(n);
+        }
+        return sb.toString();
+    }
+
+    public static int NGhlYWQ(String[] a) {
+        int sb = 0;
+        String g = "NGhlYWQ";
+        for (String s : a) {
+            sb += s.length();
+        }
+        sb += g.length();
+        sb += g.hashCode();
+        return sb;
+    }
+
+    public static int cG9nZ2Vycw(String[] a) {
+        int sb = 0;
+        String g = "cG9nZ2Vycw";
+        for (String s : a) {
+            sb += s.length();
+        }
+        sb += g.length();
+        sb += g.hashCode();
+        return sb;
+    }
+
+    public static int a2FwcGE(String[] a) {
+        int sb = 0;
+        String g = "a2FwcGE";
+        for (String s : a) {
+            sb += s.length();
+        }
+        sb += g.length();
+        sb += g.hashCode();
+        return sb;
+    }
+
+    public static int d3Rm(String[] a) {
+        int sb = 0;
+        String g = "d3Rm";
+        for (String s : a) {
+            sb += s.length();
+        }
+        sb += g.length();
+        sb += g.hashCode();
+        return sb;
+    }
+
+    public static int aGVsbG93(String[] a) {
+        int sb = 0;
+        String g = "aGVsbG93";
+        for (String s : a) {
+            sb += s.length();
+        }
+        sb += g.length();
+        sb += g.hashCode();
+        return sb;
+    }
 }
-//created by Dingxiang Technologies Co., Ltd.
-//please visit http://www.dingxiang-inc.com for more products.
 
 class DXDecryptordzFWaGTI {
-    static String algo = "ARCFOUR";
-    static String kp = "ijALZb6tDHCowqc6";
+
+    static String algo = ds(new String[]{"QQ==", "Ug==", "Qw==", "Rg==", "Tw==", "VQ==", "Ug=="});
+
+    static String kp = ds(new String[]{"aQ==", "ag==", "QQ==", "TA==", "Wg==", "Yg==", "Ng==", "dA==", "RA==", "SA==", "Qw==", "bw==", "dw==", "cQ==", "Yw==", "Ng=="});
 
     public static String decode(String s) {
         String str;
@@ -93,4 +167,78 @@ class DXDecryptordzFWaGTI {
         return str;
     }
 
+    public static int di(String[] a) {
+        StringBuilder sb = new StringBuilder();
+        for (String s : a) {
+            byte[] d = Base64.decode(s, Base64.DEFAULT);
+            String n = new String(d);
+            sb.append(Integer.parseInt(n, 2) - 48);
+        }
+        return Integer.parseInt(sb.toString());
+    }
+
+    public static String ds(String[] a) {
+        StringBuilder sb = new StringBuilder();
+        for (String s : a) {
+            byte[] d = Base64.decode(s, Base64.DEFAULT);
+            String n = new String(d);
+            sb.append(n);
+        }
+        return sb.toString();
+    }
+
+    public static int NGhlYWQ(String[] a) {
+        int sb = 0;
+        String g = "NGhlYWQ";
+        for (String s : a) {
+            sb += s.length();
+        }
+        sb += g.length();
+        sb += g.hashCode();
+        return sb;
+    }
+
+    public static int cG9nZ2Vycw(String[] a) {
+        int sb = 0;
+        String g = "cG9nZ2Vycw";
+        for (String s : a) {
+            sb += s.length();
+        }
+        sb += g.length();
+        sb += g.hashCode();
+        return sb;
+    }
+
+    public static int a2FwcGE(String[] a) {
+        int sb = 0;
+        String g = "a2FwcGE";
+        for (String s : a) {
+            sb += s.length();
+        }
+        sb += g.length();
+        sb += g.hashCode();
+        return sb;
+    }
+
+    public static int d3Rm(String[] a) {
+        int sb = 0;
+        String g = "d3Rm";
+        for (String s : a) {
+            sb += s.length();
+        }
+        sb += g.length();
+        sb += g.hashCode();
+        return sb;
+    }
+
+    public static int aGVsbG93(String[] a) {
+        int sb = 0;
+        String g = "aGVsbG93";
+        for (String s : a) {
+            sb += s.length();
+        }
+        sb += g.length();
+        sb += g.hashCode();
+        return sb;
+    }
 }

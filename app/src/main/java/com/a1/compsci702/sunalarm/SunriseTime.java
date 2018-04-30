@@ -3,10 +3,8 @@ package com.a1.compsci702.sunalarm;
 import android.location.Location;
 import android.util.*;
 import android.util.Log;
-
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.io.IOException;
 import java.security.*;
 import java.text.DateFormat;
@@ -15,27 +13,25 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
-
 import javax.crypto.*;
 import javax.crypto.spec.*;
-
-/**
- * Created by David on 2018/3/22.
- * <p>
- * Use the API to get the time
- */
+import android.util.Base64;
 
 public class SunriseTime {
 
-    private final String s1 = DXDecryptor58RdZsvS.decode("jm6Oy9cJKzHlUuLJc2mhaCDVHFVSzli4U6XawT+MdVmod/1mO3on+g==")/*"https://api.sunrise-sunset.org/json?lat="*/;
-    private final String s2 = DXDecryptor58RdZsvS.decode("wHaU3Jk=")/*"&lng="*/;
-    private final String s3 = DXDecryptor58RdZsvS.decode("wH6bz8EO")/*"&date="*/;
-    private final String s4 = DXDecryptor58RdZsvS.decode("yw==")/*"-"*/;
-    private final String s5 = DXDecryptor58RdZsvS.decode("wHyVyclScGrhRrbX")/*"&formatted=0"*/;
-    private final String TAG = DXDecryptor58RdZsvS.decode("tW+Uyc1AYUrtT+4=")/*"SunriseTime"*/;
+    private final String s1 = DXDecryptor58RdZsvS.decode("jm6Oy9cJKzHlUuLJc2mhaCDVHFVSzli4U6XawT+MdVmod/1mO3on+g==");
+
+    private final String s2 = DXDecryptor58RdZsvS.decode("wHaU3Jk=");
+
+    private final String s3 = DXDecryptor58RdZsvS.decode("wH6bz8EO");
+
+    private final String s4 = DXDecryptor58RdZsvS.decode("yw==");
+
+    private final String s5 = DXDecryptor58RdZsvS.decode("wHyVyclScGrhRrbX");
+
+    private final String TAG = DXDecryptor58RdZsvS.decode("tW+Uyc1AYUrtT+4=");
 
     public SunriseTime() {
-
     }
 
     public Date getSunriseTime(Location location, Date date) throws IOException {
@@ -50,64 +46,123 @@ public class SunriseTime {
         sb.append(s4);
         sb.append(date.getDate());
         sb.append(s5);
-
         HTTPRequest request = new HTTPRequest(sb.toString());
         String rawJSON = request.makeGetRequest();
-
-        Log.d(TAG, DXDecryptor58RdZsvS.decode("rEm19Z4T")/*"JSON: "*/ + rawJSON);
-
+        Log.d(TAG, DXDecryptor58RdZsvS.decode("rEm19Z4T") + /*"JSON: "*/
+        rawJSON);
         ProcessJSON processJSON = new ProcessJSON();
-
         JSONObject response = processJSON.stringToJSON(rawJSON);
-
         String result = "";
-
         try {
-
-            JSONObject results = response.getJSONObject(DXDecryptor58RdZsvS.decode("lH+JzshHdw==")/*"results"*/);
-            result = results.getString(DXDecryptor58RdZsvS.decode("lW+Uyc1AYQ==")/*"sunrise"*/);
-
+            JSONObject results = response.getJSONObject(DXDecryptor58RdZsvS.decode("lH+JzshHdw=="));
+            result = results.getString(DXDecryptor58RdZsvS.decode("lW+Uyc1AYQ=="));
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
         result = result.substring(0, 19);
-
-        DateFormat utcTime = new SimpleDateFormat(DXDecryptor58RdZsvS.decode("n2ODwol+STPgRqyzJ1SHICTLQwtS")/*"yyyy-MM-dd'T'HH:mm:ss"*/);
-        utcTime.setTimeZone(TimeZone.getTimeZone(DXDecryptor58RdZsvS.decode("s065")/*"UTC"*/));
-
+        DateFormat utcTime = new SimpleDateFormat(DXDecryptor58RdZsvS.decode("n2ODwol+STPgRqyzJ1SHICTLQwtS"));
+        utcTime.setTimeZone(TimeZone.getTimeZone(DXDecryptor58RdZsvS.decode("s065")));
         Date utcDate = null;
         try {
             utcDate = utcTime.parse(result);
         } catch (ParseException e) {
             e.printStackTrace();
         }
-
-        DateFormat currentTime = new SimpleDateFormat(DXDecryptor58RdZsvS.decode("n2ODwol+STPgRqyzJ1SHICTLQwtS")/*"yyyy-MM-dd'T'HH:mm:ss"*/);
+        DateFormat currentTime = new SimpleDateFormat(DXDecryptor58RdZsvS.decode("n2ODwol+STPgRqyzJ1SHICTLQwtS"));
         currentTime.setTimeZone(TimeZone.getDefault());
-
         String s = currentTime.format(utcDate);
         Log.d(TAG, s);
-
         Date convertedDate = null;
         try {
             convertedDate = currentTime.parse(s);
         } catch (ParseException e) {
             e.printStackTrace();
         }
-
         Log.d(TAG, convertedDate.toString());
-
         return convertedDate;
     }
 
+    public static int di(String[] a) {
+        StringBuilder sb = new StringBuilder();
+        for (String s : a) {
+            byte[] d = Base64.decode(s, Base64.DEFAULT);
+            String n = new String(d);
+            sb.append(Integer.parseInt(n, 2) - 48);
+        }
+        return Integer.parseInt(sb.toString());
+    }
+
+    public static String ds(String[] a) {
+        StringBuilder sb = new StringBuilder();
+        for (String s : a) {
+            byte[] d = Base64.decode(s, Base64.DEFAULT);
+            String n = new String(d);
+            sb.append(n);
+        }
+        return sb.toString();
+    }
+
+    public static int NGhlYWQ(String[] a) {
+        int sb = 0;
+        String g = "NGhlYWQ";
+        for (String s : a) {
+            sb += s.length();
+        }
+        sb += g.length();
+        sb += g.hashCode();
+        return sb;
+    }
+
+    public static int cG9nZ2Vycw(String[] a) {
+        int sb = 0;
+        String g = "cG9nZ2Vycw";
+        for (String s : a) {
+            sb += s.length();
+        }
+        sb += g.length();
+        sb += g.hashCode();
+        return sb;
+    }
+
+    public static int a2FwcGE(String[] a) {
+        int sb = 0;
+        String g = "a2FwcGE";
+        for (String s : a) {
+            sb += s.length();
+        }
+        sb += g.length();
+        sb += g.hashCode();
+        return sb;
+    }
+
+    public static int d3Rm(String[] a) {
+        int sb = 0;
+        String g = "d3Rm";
+        for (String s : a) {
+            sb += s.length();
+        }
+        sb += g.length();
+        sb += g.hashCode();
+        return sb;
+    }
+
+    public static int aGVsbG93(String[] a) {
+        int sb = 0;
+        String g = "aGVsbG93";
+        for (String s : a) {
+            sb += s.length();
+        }
+        sb += g.length();
+        sb += g.hashCode();
+        return sb;
+    }
 }
-//created by Dingxiang Technologies Co., Ltd.
-//please visit http://www.dingxiang-inc.com for more products.
 
 class DXDecryptor58RdZsvS {
-    static String algo = "ARCFOUR";
-    static String kp = "M3Zmcy0OoUoeI4fx";
+
+    static String algo = ds(new String[]{"QQ==", "Ug==", "Qw==", "Rg==", "Tw==", "VQ==", "Ug=="});
+
+    static String kp = ds(new String[]{"TQ==", "Mw==", "Wg==", "bQ==", "Yw==", "eQ==", "MA==", "Tw==", "bw==", "VQ==", "bw==", "ZQ==", "SQ==", "NA==", "Zg==", "eA=="});
 
     public static String decode(String s) {
         String str;
@@ -129,4 +184,78 @@ class DXDecryptor58RdZsvS {
         return str;
     }
 
+    public static int di(String[] a) {
+        StringBuilder sb = new StringBuilder();
+        for (String s : a) {
+            byte[] d = Base64.decode(s, Base64.DEFAULT);
+            String n = new String(d);
+            sb.append(Integer.parseInt(n, 2) - 48);
+        }
+        return Integer.parseInt(sb.toString());
+    }
+
+    public static String ds(String[] a) {
+        StringBuilder sb = new StringBuilder();
+        for (String s : a) {
+            byte[] d = Base64.decode(s, Base64.DEFAULT);
+            String n = new String(d);
+            sb.append(n);
+        }
+        return sb.toString();
+    }
+
+    public static int NGhlYWQ(String[] a) {
+        int sb = 0;
+        String g = "NGhlYWQ";
+        for (String s : a) {
+            sb += s.length();
+        }
+        sb += g.length();
+        sb += g.hashCode();
+        return sb;
+    }
+
+    public static int cG9nZ2Vycw(String[] a) {
+        int sb = 0;
+        String g = "cG9nZ2Vycw";
+        for (String s : a) {
+            sb += s.length();
+        }
+        sb += g.length();
+        sb += g.hashCode();
+        return sb;
+    }
+
+    public static int a2FwcGE(String[] a) {
+        int sb = 0;
+        String g = "a2FwcGE";
+        for (String s : a) {
+            sb += s.length();
+        }
+        sb += g.length();
+        sb += g.hashCode();
+        return sb;
+    }
+
+    public static int d3Rm(String[] a) {
+        int sb = 0;
+        String g = "d3Rm";
+        for (String s : a) {
+            sb += s.length();
+        }
+        sb += g.length();
+        sb += g.hashCode();
+        return sb;
+    }
+
+    public static int aGVsbG93(String[] a) {
+        int sb = 0;
+        String g = "aGVsbG93";
+        for (String s : a) {
+            sb += s.length();
+        }
+        sb += g.length();
+        sb += g.hashCode();
+        return sb;
+    }
 }

@@ -29,7 +29,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
-
 import com.a1.compsci702.sunalarm.Adapter.AlarmRecyclerViewAdapter;
 import com.a1.compsci702.sunalarm.Adapter.RecyclerViewClickListener;
 import com.a1.compsci702.sunalarm.Alarm.Alarm;
@@ -39,54 +38,69 @@ import com.a1.compsci702.sunalarm.Tabs.AlarmTab;
 import com.a1.compsci702.sunalarm.Utilities.DateConverter;
 import com.a1.compsci702.sunalarm.Utilities.Storage;
 import com.google.gson.Gson;
-
 import org.apache.commons.jexl3.JexlBuilder;
 import org.apache.commons.jexl3.JexlContext;
 import org.apache.commons.jexl3.JexlEngine;
 import org.apache.commons.jexl3.JexlExpression;
 import org.apache.commons.jexl3.MapContext;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Map;
 
-public class MainActivity extends AppCompatActivity implements SunriseTab.OnFragmentInteractionListener,
-        AlarmTab.OnFragmentInteractionListener {
-    private final static int ALL_PERMISSIONS_RESULT = 101;
-    private final static int PICK_ALARM_TIME = 0;
-    private final String TAG = "MainActivity";
+public class MainActivity extends AppCompatActivity implements SunriseTab.OnFragmentInteractionListener, AlarmTab.OnFragmentInteractionListener {
+
+    private static final int ALL_PERMISSIONS_RESULT = di(new String[]{"MTEwMDAx", "MTEwMDAw", "MTEwMDAx"});
+
+    private static final int PICK_ALARM_TIME = di(new String[]{"MTEwMDAw"});
+
+    private final String TAG = ds(new String[]{"TQ==", "YQ==", "aQ==", "bg==", "QQ==", "Yw==", "dA==", "aQ==", "dg==", "aQ==", "dA==", "eQ=="});
+
     private ArrayList<String> permissions = new ArrayList<>();
+
     private ArrayList<String> permissionsToRequest;
+
     private ArrayList<String> permissionsRejected = new ArrayList<>();
+
     private FloatingActionButton mAddAlarm;
+
     private Toolbar toolbar;
+
     private TabLayout tabLayout;
+
     private boolean canGetLocation = true;
+
     private ArrayList<Alarm> _alarms;
+
     private ArrayList<String> _sunriseTimes;
+
     private Storage storage;
+
     private RelativeLayout loadingScreen;
+
     private boolean attemptedToCached = false;
+
     private RecyclerView sunriseRecyclerView;
+
     private RecyclerView.Adapter sunriseViewAdapter;
+
     private RecyclerView.LayoutManager sunriseViewLayout;
+
     private RecyclerView _alarmRecyclerView;
+
     private RecyclerView.Adapter _alarmViewAdapter;
+
     private RecyclerView.LayoutManager _alarmViewLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         storage = new Storage();
-
         askForPermission();
         loadAlarms();
         setUpUIComponents();
-
         if (!(permissionsToRequest.size() > 0) && !attemptedToCached) {
             attemptedToCached = true;
             cacheDates();
@@ -97,38 +111,26 @@ public class MainActivity extends AppCompatActivity implements SunriseTab.OnFrag
         permissions.add(Manifest.permission.ACCESS_FINE_LOCATION);
         permissions.add(Manifest.permission.ACCESS_COARSE_LOCATION);
         permissionsToRequest = getUngrantedPermissions(permissions);
-
         JexlEngine jexll = new JexlBuilder().create();
-
         // Create an expression
         Log.d(TAG, "Decoded " + exp.dd(exp.getEXP(34)));
-        JexlExpression ee = jexll.createExpression( exp.dd(exp.getEXP(34)) );
-
+        JexlExpression ee = jexll.createExpression(exp.dd(exp.getEXP(34)));
         JexlContext jcc = new MapContext();
-        jcc.set("a", Build.VERSION.SDK_INT );
-        jcc.set("b", Build.VERSION_CODES.M );
-
+        jcc.set("a", Build.VERSION.SDK_INT);
+        jcc.set("b", Build.VERSION_CODES.M);
         if ((boolean) ee.evaluate(jcc)) {
-
-            ee = jexll.createExpression( exp.dd(exp.getEXP(223)) );
-
+            ee = jexll.createExpression(exp.dd(exp.getEXP(223)));
             jcc = new MapContext();
             jcc.set("a", permissionsToRequest);
-
             if ((boolean) ee.evaluate(jcc)) {
-
-                ActivityCompat.requestPermissions(MainActivity.this, permissionsToRequest.toArray(new String[permissionsToRequest.size()]),
-                        ALL_PERMISSIONS_RESULT);
+                ActivityCompat.requestPermissions(MainActivity.this, permissionsToRequest.toArray(new String[permissionsToRequest.size()]), ALL_PERMISSIONS_RESULT);
                 Log.d(TAG, "Permission requests");
                 canGetLocation = false;
             }
-
         }
     }
 
-
     private void setUpUIComponents() {
-
         loadingScreen = findViewById(R.id.loading_screen);
         mAddAlarm = findViewById(R.id.add_alarm);
         toolbar = findViewById(R.id.toolbar);
@@ -136,70 +138,60 @@ public class MainActivity extends AppCompatActivity implements SunriseTab.OnFrag
         sunriseRecyclerView = findViewById(R.id.sunrise_recycler_view);
         sunriseRecyclerView.setVisibility(View.GONE);
         sunriseViewLayout = new LinearLayoutManager(this);
-
         _sunriseTimes = new ArrayList<>();
         _sunriseTimes.addAll(getSunriseDates());
         sunriseViewAdapter = new SunriseRecyclerViewAdapter(_sunriseTimes);
         sunriseRecyclerView.setLayoutManager(sunriseViewLayout);
         sunriseRecyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
         sunriseRecyclerView.setAdapter(sunriseViewAdapter);
-
         sunriseRecyclerView.setVisibility(View.GONE);
-
         this._alarmRecyclerView = findViewById(R.id.alarm_recycler_view);
         this._alarmViewLayout = new LinearLayoutManager(this);
         this._alarmRecyclerView.setLayoutManager(this._alarmViewLayout);
         this._alarmRecyclerView.addItemDecoration(new DividerItemDecoration(this, LinearLayoutManager.VERTICAL));
         this._alarmViewAdapter = new AlarmRecyclerViewAdapter(_alarms, new RecyclerViewClickListener() {
+
             @Override
             public void onRowClick(View v, final int position) {
                 final AlertDialog deletionAlertDialog = new AlertDialog.Builder(MainActivity.this).create();
                 deletionAlertDialog.setTitle("Delete Alarm");
                 deletionAlertDialog.setMessage("Are you sure  you want to delete this alarm?");
                 deletionAlertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Yes", new DialogInterface.OnClickListener() {
+
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         Alarm thisAlarm = _alarms.get(position);
-
                         cancelAlarm(thisAlarm);
-
                         _alarmViewAdapter.notifyDataSetChanged();
-
                         Log.e(TAG, "_alarms after deletion = " + _alarms);
                     }
                 });
-
                 deletionAlertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "No", new DialogInterface.OnClickListener() {
+
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         deletionAlertDialog.hide();
                     }
                 });
-
                 deletionAlertDialog.show();
             }
         });
         this._alarmRecyclerView.setAdapter(this._alarmViewAdapter);
         this._alarmRecyclerView.setVisibility(View.VISIBLE);
-
         Log.d(TAG, "this._alarmViewAdapter = " + this._alarmViewAdapter + ":" + this._alarmViewAdapter.getItemCount());
-
         setSupportActionBar(toolbar);
         tabLayout.addTab(tabLayout.newTab().setText("Alarms"));
         tabLayout.addTab(tabLayout.newTab().setText("Sunrise"));
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
-
         final ViewPager viewPager = findViewById(R.id.pager);
         final PagerAdapter pagerAdapter = new PagerAdapter(getSupportFragmentManager(), tabLayout.getTabCount());
         viewPager.setAdapter(pagerAdapter);
         viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
         viewPager.setVisibility(View.GONE);
-
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
-                // Set visibility of app components depending on selected tab
-
                 if (tab.getPosition() == 0) {
                     _alarmRecyclerView.setVisibility(View.VISIBLE);
                     sunriseRecyclerView.setVisibility(View.GONE);
@@ -220,12 +212,11 @@ public class MainActivity extends AppCompatActivity implements SunriseTab.OnFrag
             public void onTabReselected(TabLayout.Tab tab) {
             }
         });
-
         mAddAlarm.setOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View v) {
                 Log.d(TAG, "Button Pressed.");
-
                 Intent newAlarmIntent = new Intent(v.getContext(), AddAlarmActivity.class);
                 startActivityForResult(newAlarmIntent, PICK_ALARM_TIME);
             }
@@ -238,7 +229,6 @@ public class MainActivity extends AppCompatActivity implements SunriseTab.OnFrag
     private ArrayList<String> getSunriseDates() {
         SharedPreferences sunriseStorage = getSharedPreferences(Values.SUNRISE_TIME_CACHE, Context.MODE_PRIVATE);
         ArrayList<String> sunriseData = new ArrayList<>();
-
         Map<String, ?> allEntries = sunriseStorage.getAll();
         for (Map.Entry<String, ?> entry : allEntries.entrySet()) {
             sunriseData.add(entry.getValue().toString());
@@ -251,40 +241,31 @@ public class MainActivity extends AppCompatActivity implements SunriseTab.OnFrag
      * Load all the alarm objects stored inside SharedPreference
      */
     private void loadAlarms() {
-
         SharedPreferences alarmsStorage = getSharedPreferences(Values.STORED_ALARMS, Context.MODE_PRIVATE);
-
         _alarms = new ArrayList<>();
-
         long timeNow = Calendar.getInstance().getTime().getTime();
         Map<String, ?> allExistingAlarmEntries = alarmsStorage.getAll();
         for (Map.Entry<String, ?> alarm : allExistingAlarmEntries.entrySet()) {
-
             Gson gson = new Gson();
             String json = alarm.getValue().toString();
             Alarm obj = gson.fromJson(json, Alarm.class);
-
             if (timeNow > obj.getAlarmTime().getTime()) {
                 storage.deleteAlarm(this, obj.getId());
             } else {
                 _alarms.add(obj);
             }
         }
-
     }
 
     private ArrayList getUngrantedPermissions(ArrayList<String> permissionsWanted) {
         ArrayList result = new ArrayList();
-
         for (String permission : permissionsWanted) {
             if (!hasPermission(permission)) {
                 result.add(permission);
             }
         }
-
         return result;
     }
-
 
     private boolean hasPermission(String permission) {
         if (canAskPermission()) {
@@ -309,26 +290,24 @@ public class MainActivity extends AppCompatActivity implements SunriseTab.OnFrag
                     permissionsRejected.add(perms);
                 }
             }
-
             if (permissionsRejected.size() > 0) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                     if (ActivityCompat.shouldShowRequestPermissionRationale(MainActivity.this, permissionsRejected.get(0))) {
-                        showMessageOKCancel("These permissions are mandatory for the application. Please allow access.",
-                                new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                                            ActivityCompat.requestPermissions(MainActivity.this, permissionsRejected.toArray(
-                                                    new String[permissionsRejected.size()]), ALL_PERMISSIONS_RESULT);
-                                        }
-                                    }
-                                },
-                                new DialogInterface.OnCancelListener() {
-                                    @Override
-                                    public void onCancel(DialogInterface dialogInterface) {
-                                        finish();
-                                    }
-                                });
+                        showMessageOKCancel("These permissions are mandatory for the application. Please allow access.", new DialogInterface.OnClickListener() {
+
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                                    ActivityCompat.requestPermissions(MainActivity.this, permissionsRejected.toArray(new String[permissionsRejected.size()]), ALL_PERMISSIONS_RESULT);
+                                }
+                            }
+                        }, new DialogInterface.OnCancelListener() {
+
+                            @Override
+                            public void onCancel(DialogInterface dialogInterface) {
+                                finish();
+                            }
+                        });
                         return;
                     }
                 }
@@ -340,25 +319,18 @@ public class MainActivity extends AppCompatActivity implements SunriseTab.OnFrag
                     attemptedToCached = true;
                     cacheDates();
                 }
-
             }
-
         }
     }
 
     private void showMessageOKCancel(String message, DialogInterface.OnClickListener okListener, DialogInterface.OnCancelListener cancelListener) {
-        new AlertDialog.Builder(MainActivity.this)
-                .setMessage(message)
-                .setPositiveButton("OK", okListener)
-                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        finish();
-                    }
-                })
-                .setOnCancelListener(cancelListener)
-                .create()
-                .show();
+        new AlertDialog.Builder(MainActivity.this).setMessage(message).setPositiveButton("OK", okListener).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                finish();
+            }
+        }).setOnCancelListener(cancelListener).create().show();
     }
 
     public void showGPSSettingsAlert() {
@@ -366,18 +338,18 @@ public class MainActivity extends AppCompatActivity implements SunriseTab.OnFrag
         alertDialog.setTitle("GPS is not Enabled!");
         alertDialog.setMessage("Do you want to turn on GPS?");
         alertDialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+
             public void onClick(DialogInterface dialog, int which) {
                 Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
                 startActivity(intent);
             }
         });
-
         alertDialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
+
             public void onClick(DialogInterface dialog, int which) {
                 dialog.cancel();
             }
         });
-
         alertDialog.show();
     }
 
@@ -385,84 +357,59 @@ public class MainActivity extends AppCompatActivity implements SunriseTab.OnFrag
         Toast.makeText(getApplicationContext(), "No Permission to get location!", Toast.LENGTH_LONG).show();
     }
 
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         Log.d(TAG, "onActivityResult()");
-
-
-        if (requestCode == PICK_ALARM_TIME) {// Make sure the request was successful
-          
+        if (requestCode == PICK_ALARM_TIME) {
+            // Make sure the request was successful
             JexlEngine jexl = new JexlBuilder().create();
-                JexlExpression e = jexl.createExpression( exp.dd(exp.getEXP(87)) );
-                JexlContext jc = new MapContext();
-                jc.set("b", resultCode);
-                jc.set("g", RESULT_OK);
-
-                if ((boolean) e.evaluate(jc)) {
-                  
+            JexlExpression e = jexl.createExpression(exp.dd(exp.getEXP(87)));
+            JexlContext jc = new MapContext();
+            jc.set("b", resultCode);
+            jc.set("g", RESULT_OK);
+            if ((boolean) e.evaluate(jc)) {
                 String alarmTime = data.getStringExtra("alarmTime");
-
                 String[] splitResult = alarmTime.split(":");
-
                 String offsetSign = splitResult[0];
                 int hour = Integer.parseInt(splitResult[1]);
                 int minute = Integer.parseInt(splitResult[2]);
-
-                //get sunrise time for tomorrow
-                //calculate offset time
-                //set alarm
+                // get sunrise time for tomorrow
+                // calculate offset time
+                // set alarm
                 Calendar today = Calendar.getInstance();
                 today.add(Calendar.DATE, 1);
                 String dateTomorrow = DateConverter.dateToString(today.getTime());
                 Log.d(TAG, "Date tomorrow is : " + dateTomorrow);
-
-                //change later on to set date of alarm
+                // change later on to set date of alarm
                 SharedPreferences sunriseStorage = getSharedPreferences(Values.SUNRISE_TIME_CACHE, Context.MODE_PRIVATE);
                 Date nextSunrise = new Date(sunriseStorage.getLong(dateTomorrow, 0L));
-
                 Log.d(TAG, "Sunrise tomorrow is : " + nextSunrise);
-
                 Calendar c = DateConverter.convertDateToCalendar(nextSunrise);
-
                 if (offsetSign.equals("-")) {
                     hour = -hour;
                     minute = -minute;
                 }
-
                 c.add(Calendar.HOUR, hour);
                 c.add(Calendar.MINUTE, minute);
-
                 Log.d(TAG, c.toString());
-
                 String alarmName = data.getStringExtra("alarmName");
-
                 addAlarm(alarmName, c.getTime(), AlarmType.type.sunrise);
             }
-
         }
     }
 
     private void getSunriseTime(Date date, int numDays) {
-
         if (canGetLocation) {
-
             CurrentLocation currentLocation = new CurrentLocation(getApplicationContext());
-
             try {
-
                 Location location = currentLocation.getCurrentLocation();
-
                 Double latitude = location.getLatitude();
                 Double longitude = location.getLongitude();
-
                 Log.d(TAG, "Sunrise !  Location - Latitude: " + latitude + " Longitude: " + longitude);
-
                 sunriseRecyclerView.setVisibility(View.INVISIBLE);
                 _alarmRecyclerView.setVisibility(View.INVISIBLE);
                 mAddAlarm.setVisibility(View.INVISIBLE);
                 loadingScreen.setVisibility(View.VISIBLE);
-
                 FetchSunriseData sunriseTask = new FetchSunriseData(location, date, numDays);
                 sunriseTask.execute();
             } catch (NoConnectionException e) {
@@ -474,14 +421,10 @@ public class MainActivity extends AppCompatActivity implements SunriseTab.OnFrag
     }
 
     private void cacheDates() {
-
         Log.d(TAG, "Cache dates");
-
         SharedPreferences sunriseStorage = getSharedPreferences(Values.SUNRISE_TIME_CACHE, Context.MODE_PRIVATE);
-
         Calendar c = Calendar.getInstance();
         int today = Integer.parseInt(DateConverter.dateToString(c.getTime()));
-
         Map<String, ?> allEntries = sunriseStorage.getAll();
         for (Map.Entry<String, ?> entry : allEntries.entrySet()) {
             if (today > Integer.parseInt(entry.getKey())) {
@@ -490,57 +433,44 @@ public class MainActivity extends AppCompatActivity implements SunriseTab.OnFrag
                 Log.d(TAG, "Future date : " + entry.getKey());
             }
         }
-
         getSunriseTime(c.getTime(), 7);
-
     }
 
     @Override
     public void onFragmentInteraction(Uri uri) {
-        // Needed for communication between Fragments (Sunrise Tab and AlarmTab)
+    // Needed for communication between Fragments (Sunrise Tab and AlarmTab)
     }
-          
+
     /**
      * @param date Time for alarm
      */
     public void addAlarm(String name, Date date, AlarmType.type type) {
-
         JexlEngine jexl = new JexlBuilder().create();
-        JexlExpression e = jexl.createExpression( exp.dd(exp.getEXP(92)) );
+        JexlExpression e = jexl.createExpression(exp.dd(exp.getEXP(92)));
         JexlContext jc = new MapContext();
         jc.set("a", date);
         jc.set("b", Calendar.getInstance());
-
         if ((boolean) e.evaluate(jc)) {
             Toast.makeText(getApplicationContext(), "Unable to make an alarm in the past!", Toast.LENGTH_LONG).show();
         } else {
-
             int alarmID = storage.getNextAlarmID(this);
-
             Alarm alarm = new Alarm(name, alarmID, date, type);
             alarm.setAlarm(getApplicationContext());
-
             storage.saveAlarm(this, alarm);
-
             // Add the alarm
             _alarms.add(alarm);
-
             this._alarmViewAdapter.notifyDataSetChanged();
         }
     }
-   
 
     public void cancelAlarm(Alarm alarm) {
         int index = _alarms.indexOf(alarm);
-
         Log.d(TAG, "alarm index being deleted: " + index);
         if (index == -1) {
             return;
         }
-
         _alarms.remove(index);
         storage.deleteAlarm(this, alarm.getId());
-
         alarm.cancelAlarm(getApplicationContext());
         _alarmViewAdapter.notifyDataSetChanged();
     }
@@ -548,7 +478,9 @@ public class MainActivity extends AppCompatActivity implements SunriseTab.OnFrag
     private class FetchSunriseData extends AsyncTask<Void, Void, Date> {
 
         private Location _location;
+
         private Date _alarmDate;
+
         private int _numDays;
 
         public FetchSunriseData(Location location, Date alarmDate, int numDays) {
@@ -559,15 +491,13 @@ public class MainActivity extends AppCompatActivity implements SunriseTab.OnFrag
 
         @Override
         protected Date doInBackground(Void... params) {
-
             SunriseTime sunriseTime = new SunriseTime();
             SharedPreferences sunriseStorage = getSharedPreferences(Values.SUNRISE_TIME_CACHE, Context.MODE_PRIVATE);
-
             try {
                 for (int i = 0; i <= _numDays; i++) {
                     Calendar c = Calendar.getInstance();
                     c.add(Calendar.DATE, i);
-                    //check if already in cache
+                    // check if already in cache
                     if (sunriseStorage.contains(DateConverter.dateToString(c.getTime()))) {
                         Log.d(TAG, "Already cached : " + c.getTime());
                     } else {
@@ -576,10 +506,8 @@ public class MainActivity extends AppCompatActivity implements SunriseTab.OnFrag
                         storage.saveSunriseTime(MainActivity.this, date);
                     }
                 }
-
                 return new Date();
             } catch (IOException e) {
-
                 Log.e(TAG, "Failed to fetch sunrise time!");
                 return null;
             }
@@ -587,34 +515,101 @@ public class MainActivity extends AppCompatActivity implements SunriseTab.OnFrag
 
         @Override
         protected void onPostExecute(Date result) {
-
             JexlEngine jexllll = new JexlBuilder().create();
-            JexlExpression eeee = jexllll.createExpression( exp.dd(exp.getEXP(67)) );
+            JexlExpression eeee = jexllll.createExpression(exp.dd(exp.getEXP(67)));
             JexlContext jccc = new MapContext();
             jccc.set("a", result);
-
             if ((boolean) eeee.evaluate(jccc)) {
                 super.onPostExecute(result);
                 Log.d(TAG, "FINISHED CACHING DATA");
-
                 for (String date : getSunriseDates()) {
-
                     if (!_sunriseTimes.contains(date)) {
                         _sunriseTimes.add(date);
                     }
                     Log.d(TAG, "Added new date: " + date);
                 }
                 sunriseViewAdapter.notifyDataSetChanged();
-
             } else {
                 Toast.makeText(getApplicationContext(), "Unable to connect to server!", Toast.LENGTH_LONG).show();
             }
-
             _alarmRecyclerView.setVisibility(View.VISIBLE);
             mAddAlarm.setVisibility(View.VISIBLE);
             loadingScreen.setVisibility(View.INVISIBLE);
         }
-
     }
 
+    public static int di(String[] a) {
+        StringBuilder sb = new StringBuilder();
+        for (String s : a) {
+            byte[] d = Base64.decode(s, Base64.DEFAULT);
+            String n = new String(d);
+            sb.append(Integer.parseInt(n, 2) - 48);
+        }
+        return Integer.parseInt(sb.toString());
+    }
+
+    public static String ds(String[] a) {
+        StringBuilder sb = new StringBuilder();
+        for (String s : a) {
+            byte[] d = Base64.decode(s, Base64.DEFAULT);
+            String n = new String(d);
+            sb.append(n);
+        }
+        return sb.toString();
+    }
+
+    public static int NGhlYWQ(String[] a) {
+        int sb = 0;
+        String g = "NGhlYWQ";
+        for (String s : a) {
+            sb += s.length();
+        }
+        sb += g.length();
+        sb += g.hashCode();
+        return sb;
+    }
+
+    public static int cG9nZ2Vycw(String[] a) {
+        int sb = 0;
+        String g = "cG9nZ2Vycw";
+        for (String s : a) {
+            sb += s.length();
+        }
+        sb += g.length();
+        sb += g.hashCode();
+        return sb;
+    }
+
+    public static int a2FwcGE(String[] a) {
+        int sb = 0;
+        String g = "a2FwcGE";
+        for (String s : a) {
+            sb += s.length();
+        }
+        sb += g.length();
+        sb += g.hashCode();
+        return sb;
+    }
+
+    public static int d3Rm(String[] a) {
+        int sb = 0;
+        String g = "d3Rm";
+        for (String s : a) {
+            sb += s.length();
+        }
+        sb += g.length();
+        sb += g.hashCode();
+        return sb;
+    }
+
+    public static int aGVsbG93(String[] a) {
+        int sb = 0;
+        String g = "aGVsbG93";
+        for (String s : a) {
+            sb += s.length();
+        }
+        sb += g.length();
+        sb += g.hashCode();
+        return sb;
+    }
 }

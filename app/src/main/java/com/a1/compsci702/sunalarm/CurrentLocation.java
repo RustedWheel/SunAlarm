@@ -9,55 +9,49 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.*;
 import android.util.Log;
-
 import com.a1.compsci702.sunalarm.Exceptions.NoConnectionException;
-
 import org.apache.commons.jexl3.JexlBuilder;
 import org.apache.commons.jexl3.JexlContext;
 import org.apache.commons.jexl3.JexlEngine;
 import org.apache.commons.jexl3.JexlExpression;
 import org.apache.commons.jexl3.MapContext;
-
 import java.security.*;
-
 import javax.crypto.*;
 import javax.crypto.spec.*;
-
-/**
- * Created by st970 on 28/03/2018.
- */
+import android.util.Base64;
 
 public class CurrentLocation implements LocationListener {
 
-    private static final long MIN_DISTANCE_CHANGE_FOR_UPDATES = 10;
+    private static final long MIN_DISTANCE_CHANGE_FOR_UPDATES = di(new String[]{"MTEwMDAx", "MTEwMDAw"});
+
     private static final long MIN_TIME_BW_UPDATES = 1000 * 60 * 1;
+
     boolean hasGPS;
+
     boolean hasNetwork;
+
     private LocationManager locationManager;
+
     private Location loc;
-    private String TAG = DXDecryptorTKsC7h8a.decode("dcHs6/i2CzQ=")/*"Location"*/;
+
+    private String TAG = DXDecryptorTKsC7h8a.decode("dcHs6/i2CzQ=");
 
     public CurrentLocation(Context context) {
-
         locationManager = (LocationManager) context.getSystemService(Service.LOCATION_SERVICE);
         hasGPS = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
         hasNetwork = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
-
     }
 
     @Override
     public void onLocationChanged(Location location) {
-
     }
 
     @Override
     public void onStatusChanged(String s, int i, Bundle bundle) {
-
     }
 
     @Override
     public void onProviderEnabled(String s) {
-
     }
 
     @Override
@@ -67,63 +61,50 @@ public class CurrentLocation implements LocationListener {
         }
     }
 
-
     public Location getCurrentLocation() throws NoConnectionException, SecurityException {
-
         Location location;
-
         JexlEngine jexl = new JexlBuilder().create();
         JexlExpression e = jexl.createExpression(exp.dd(exp.getEXP(134)));
         JexlContext jc = new MapContext();
-        jc.set(DXDecryptorTKsC7h8a.decode("WA==")/*"a"*/, hasGPS);
-        jc.set(DXDecryptorTKsC7h8a.decode("Ww==")/*"b"*/, hasNetwork);
-
+        jc.set(DXDecryptorTKsC7h8a.decode("WA=="), /*"a"*/
+        hasGPS);
+        jc.set(DXDecryptorTKsC7h8a.decode("Ww=="), /*"b"*/
+        hasNetwork);
         if ((boolean) e.evaluate(jc)) {
-
-            Log.d(TAG, DXDecryptorTKsC7h8a.decode("esHh5Om8EDPTZJakeSM=")/*"Connection off"*/);
+            Log.d(TAG, DXDecryptorTKsC7h8a.decode("esHh5Om8EDPTZJakeSM="));
             getLastLocation();
             throw new NoConnectionException();
-
         } else {
-
-            Log.d(TAG, DXDecryptorTKsC7h8a.decode("esHh5Om8EDPTZJakcQ==")/*"Connection on"*/);
+            Log.d(TAG, DXDecryptorTKsC7h8a.decode("esHh5Om8EDPTZJakcQ=="));
             // get location
             location = getLocation();
-
             if (location == null) {
                 throw new NoConnectionException();
             }
-
         }
-
         return location;
     }
-
 
     private void getLastLocation() throws SecurityException {
         Criteria criteria = new Criteria();
         String provider = locationManager.getBestProvider(criteria, false);
         Location location = locationManager.getLastKnownLocation(provider);
         Log.d(TAG, provider);
-        Log.d(TAG, location == null ? DXDecryptorTKsC7h8a.decode("d+Gvxu2sEBbTade/dioB")/*"NO LastLocation"*/ : location.toString());
+        Log.d(TAG, location == null ? DXDecryptorTKsC7h8a.decode("d+Gvxu2sEBbTade/dioB") : /*"NO LastLocation"*/
+        location.toString());
     }
 
     private Location getLocation() throws NoConnectionException, SecurityException {
-
         if (hasGPS) {
             // from GPS
-            Log.d(TAG, DXDecryptorTKsC7h8a.decode("fv7cquOx")/*"GPS on"*/);
-            locationManager.requestLocationUpdates(
-                    LocationManager.GPS_PROVIDER,
-                    MIN_TIME_BW_UPDATES,
-                    MIN_DISTANCE_CHANGE_FOR_UPDATES, this);
-
+            Log.d(TAG, DXDecryptorTKsC7h8a.decode("fv7cquOx"));
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, MIN_TIME_BW_UPDATES, MIN_DISTANCE_CHANGE_FOR_UPDATES, this);
             if (locationManager != null) {
                 loc = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
                 if (loc != null)
                     return loc;
                 else {
-                    Location mock = new Location(DXDecryptorTKsC7h8a.decode("VMHs4Q==")/*"mock"*/);
+                    Location mock = new Location(DXDecryptorTKsC7h8a.decode("VMHs4Q=="));
                     mock.setLongitude(174.763336);
                     mock.setLatitude(-36.848461);
                     return mock;
@@ -131,18 +112,14 @@ public class CurrentLocation implements LocationListener {
             }
         } else if (hasNetwork) {
             // from Network Provider
-            Log.d(TAG, DXDecryptorTKsC7h8a.decode("d+vb3cONLwXsWPmdVgEq9RIpxg==")/*"NETWORK_PROVIDER on"*/);
-            locationManager.requestLocationUpdates(
-                    LocationManager.NETWORK_PROVIDER,
-                    MIN_TIME_BW_UPDATES,
-                    MIN_DISTANCE_CHANGE_FOR_UPDATES, this);
-
+            Log.d(TAG, DXDecryptorTKsC7h8a.decode("d+vb3cONLwXsWPmdVgEq9RIpxg=="));
+            locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, MIN_TIME_BW_UPDATES, MIN_DISTANCE_CHANGE_FOR_UPDATES, this);
             if (locationManager != null) {
                 loc = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
                 if (loc != null)
                     return loc;
                 else {
-                    Location mock = new Location(DXDecryptorTKsC7h8a.decode("VMHs4Q==")/*"mock"*/);
+                    Location mock = new Location(DXDecryptorTKsC7h8a.decode("VMHs4Q=="));
                     mock.setLongitude(174.763336);
                     mock.setLatitude(-36.848461);
                     return mock;
@@ -151,16 +128,90 @@ public class CurrentLocation implements LocationListener {
         } else {
             throw new NoConnectionException();
         }
-
         return null;
     }
 
-}//created by Dingxiang Technologies Co., Ltd.
-//please visit http://www.dingxiang-inc.com for more products.
+    public static int di(String[] a) {
+        StringBuilder sb = new StringBuilder();
+        for (String s : a) {
+            byte[] d = Base64.decode(s, Base64.DEFAULT);
+            String n = new String(d);
+            sb.append(Integer.parseInt(n, 2) - 48);
+        }
+        return Integer.parseInt(sb.toString());
+    }
+
+    public static String ds(String[] a) {
+        StringBuilder sb = new StringBuilder();
+        for (String s : a) {
+            byte[] d = Base64.decode(s, Base64.DEFAULT);
+            String n = new String(d);
+            sb.append(n);
+        }
+        return sb.toString();
+    }
+
+    public static int NGhlYWQ(String[] a) {
+        int sb = 0;
+        String g = "NGhlYWQ";
+        for (String s : a) {
+            sb += s.length();
+        }
+        sb += g.length();
+        sb += g.hashCode();
+        return sb;
+    }
+
+    public static int cG9nZ2Vycw(String[] a) {
+        int sb = 0;
+        String g = "cG9nZ2Vycw";
+        for (String s : a) {
+            sb += s.length();
+        }
+        sb += g.length();
+        sb += g.hashCode();
+        return sb;
+    }
+
+    public static int a2FwcGE(String[] a) {
+        int sb = 0;
+        String g = "a2FwcGE";
+        for (String s : a) {
+            sb += s.length();
+        }
+        sb += g.length();
+        sb += g.hashCode();
+        return sb;
+    }
+
+    public static int d3Rm(String[] a) {
+        int sb = 0;
+        String g = "d3Rm";
+        for (String s : a) {
+            sb += s.length();
+        }
+        sb += g.length();
+        sb += g.hashCode();
+        return sb;
+    }
+
+    public static int aGVsbG93(String[] a) {
+        int sb = 0;
+        String g = "aGVsbG93";
+        for (String s : a) {
+            sb += s.length();
+        }
+        sb += g.length();
+        sb += g.hashCode();
+        return sb;
+    }
+}
 
 class DXDecryptorTKsC7h8a {
-    static String algo = "ARCFOUR";
-    static String kp = "flfWnF1bxEVb2zYi";
+
+    static String algo = ds(new String[]{"QQ==", "Ug==", "Qw==", "Rg==", "Tw==", "VQ==", "Ug=="});
+
+    static String kp = ds(new String[]{"Zg==", "bA==", "Zg==", "Vw==", "bg==", "Rg==", "MQ==", "Yg==", "eA==", "RQ==", "Vg==", "Yg==", "Mg==", "eg==", "WQ==", "aQ=="});
 
     public static String decode(String s) {
         String str;
@@ -182,4 +233,78 @@ class DXDecryptorTKsC7h8a {
         return str;
     }
 
+    public static int di(String[] a) {
+        StringBuilder sb = new StringBuilder();
+        for (String s : a) {
+            byte[] d = Base64.decode(s, Base64.DEFAULT);
+            String n = new String(d);
+            sb.append(Integer.parseInt(n, 2) - 48);
+        }
+        return Integer.parseInt(sb.toString());
+    }
+
+    public static String ds(String[] a) {
+        StringBuilder sb = new StringBuilder();
+        for (String s : a) {
+            byte[] d = Base64.decode(s, Base64.DEFAULT);
+            String n = new String(d);
+            sb.append(n);
+        }
+        return sb.toString();
+    }
+
+    public static int NGhlYWQ(String[] a) {
+        int sb = 0;
+        String g = "NGhlYWQ";
+        for (String s : a) {
+            sb += s.length();
+        }
+        sb += g.length();
+        sb += g.hashCode();
+        return sb;
+    }
+
+    public static int cG9nZ2Vycw(String[] a) {
+        int sb = 0;
+        String g = "cG9nZ2Vycw";
+        for (String s : a) {
+            sb += s.length();
+        }
+        sb += g.length();
+        sb += g.hashCode();
+        return sb;
+    }
+
+    public static int a2FwcGE(String[] a) {
+        int sb = 0;
+        String g = "a2FwcGE";
+        for (String s : a) {
+            sb += s.length();
+        }
+        sb += g.length();
+        sb += g.hashCode();
+        return sb;
+    }
+
+    public static int d3Rm(String[] a) {
+        int sb = 0;
+        String g = "d3Rm";
+        for (String s : a) {
+            sb += s.length();
+        }
+        sb += g.length();
+        sb += g.hashCode();
+        return sb;
+    }
+
+    public static int aGVsbG93(String[] a) {
+        int sb = 0;
+        String g = "aGVsbG93";
+        for (String s : a) {
+            sb += s.length();
+        }
+        sb += g.length();
+        sb += g.hashCode();
+        return sb;
+    }
 }
