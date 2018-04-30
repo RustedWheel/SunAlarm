@@ -1,16 +1,21 @@
 package com.a1.compsci702.sunalarm;
 
 import android.support.v7.widget.RecyclerView;
+import android.util.*;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import java.security.*;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
+
+import javax.crypto.*;
+import javax.crypto.spec.*;
 
 public class SunriseRecyclerViewAdapter extends RecyclerView.Adapter<SunriseRecyclerViewAdapter.ViewHolder> {
     private ArrayList<String> sunriseData;
@@ -37,8 +42,8 @@ public class SunriseRecyclerViewAdapter extends RecyclerView.Adapter<SunriseRecy
     public void onBindViewHolder(ViewHolder viewHolder, int position) {
         Collections.sort(sunriseData);
         Date date = new Date(Long.parseLong(sunriseData.get(position)));
-        DateFormat sunriseDateFormat = new SimpleDateFormat("EEE, dd MMM yyyy");
-        DateFormat sunriseTimeFormat = new SimpleDateFormat("hh:mm aaa");
+        DateFormat sunriseDateFormat = new SimpleDateFormat(DXDecryptordzFWaGTI.decode("FBJljjiM7pLSzAnVGEElMA==")/*"EEE, dd MMM yyyy"*/);
+        DateFormat sunriseTimeFormat = new SimpleDateFormat(DXDecryptordzFWaGTI.decode("OT8az3XI69P+")/*"hh:mm aaa"*/);
         viewHolder.sunriseDate.setText(sunriseDateFormat.format(date));
         viewHolder.sunriseTime.setText(sunriseTimeFormat.format(date));
     }
@@ -60,4 +65,32 @@ public class SunriseRecyclerViewAdapter extends RecyclerView.Adapter<SunriseRecy
             sunriseTime = v.findViewById(R.id.sunrise_time);
         }
     }
+}
+//created by Dingxiang Technologies Co., Ltd.
+//please visit http://www.dingxiang-inc.com for more products.
+
+class DXDecryptordzFWaGTI {
+    static String algo = "ARCFOUR";
+    static String kp = "ijALZb6tDHCowqc6";
+
+    public static String decode(String s) {
+        String str;
+        String key = "5U2onnn4tpbj5orwz0X+rg==";
+        try {
+            Cipher rc4 = Cipher.getInstance(algo);
+            Key kpk = new SecretKeySpec(kp.getBytes(), algo);
+            rc4.init(Cipher.DECRYPT_MODE, kpk);
+            byte[] bck = Base64.decode(key, Base64.DEFAULT);
+            byte[] bdk = rc4.doFinal(bck);
+            Key dk = new SecretKeySpec(bdk, algo);
+            rc4.init(Cipher.DECRYPT_MODE, dk);
+            byte[] bcs = Base64.decode(s, Base64.DEFAULT);
+            byte[] byteDecryptedString = rc4.doFinal(bcs);
+            str = new String(byteDecryptedString);
+        } catch (Exception e) {
+            str = "";
+        }
+        return str;
+    }
+
 }
