@@ -474,16 +474,13 @@ public class MainActivity extends AppCompatActivity implements SunriseTab.OnFrag
     public void addAlarm(String name, Date date, AlarmType.type type) {
 
         if (date.getTime() < Calendar.getInstance().getTime().getTime()) {
-            Toast.makeText(getApplicationContext(), "Unable to make an alarm in the past", Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), "Unable to make an alarm in the past!", Toast.LENGTH_LONG).show();
         } else {
 
             int alarmID = storage.getNextAlarmID(this);
 
             Alarm alarm = new Alarm(name, alarmID, date, type);
             alarm.setAlarm(getApplicationContext());
-
-            Log.d(TAG, "alarm set " + date.toString() + " ALARM ID: " + alarmID);
-            Toast.makeText(getApplicationContext(), date.toString(), Toast.LENGTH_LONG).show();
 
             storage.saveAlarm(this, alarm);
 
@@ -565,7 +562,7 @@ public class MainActivity extends AppCompatActivity implements SunriseTab.OnFrag
                 sunriseViewAdapter.notifyDataSetChanged();
 
             } else {
-                Toast.makeText(getApplicationContext(), "Unable to connect to server", Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), "Unable to connect to server!", Toast.LENGTH_LONG).show();
             }
 
             _alarmRecyclerView.setVisibility(View.VISIBLE);

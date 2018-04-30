@@ -15,7 +15,6 @@ import android.widget.Button;
 import android.widget.NumberPicker;
 import android.widget.TextView;
 import android.widget.TimePicker;
-import android.widget.Toast;
 
 import com.a1.compsci702.sunalarm.Utilities.DateConverter;
 
@@ -39,6 +38,7 @@ public class AddAlarmActivity extends AppCompatActivity {
     private Date _nextSunrise;
 
     @Override
+    @SuppressWarnings( "deprecation" )
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
@@ -73,8 +73,6 @@ public class AddAlarmActivity extends AppCompatActivity {
             @TargetApi(Build.VERSION_CODES.M)
             public void onClick(View v) {
 
-                Toast.makeText(getApplicationContext(), offsetStrings[(offsetPicker.getValue())] + "Time:" + _alarmTimePicker.getHour() + _alarmTimePicker.getMinute(), Toast.LENGTH_LONG).show();
-
                 String offsetSign = offsetStrings[(offsetPicker.getValue())];
 
                 Intent returnAddAlarmIntent = new Intent();
@@ -85,7 +83,7 @@ public class AddAlarmActivity extends AppCompatActivity {
                 if (Build.VERSION.SDK_INT < 23) {
                     alarmTime = offsetSign + ":" + _alarmTimePicker.getCurrentHour() + ":" + _alarmTimePicker.getCurrentMinute();
                 } else {
-                    alarmTime = offsetSign + ":" + _alarmTimePicker.getHour() + ":" + _alarmTimePicker.getMinute();
+                    alarmTime = offsetSign + ":" + _alarmTimePicker.getCurrentHour() + ":" + _alarmTimePicker.getCurrentMinute();
                 }
 
                 returnAddAlarmIntent.putExtra("alarmTime", alarmTime);
