@@ -14,3 +14,4 @@
 -verbose
 -dontshrink
 -dontoptimize
+-flattenpackagehierarchy app
