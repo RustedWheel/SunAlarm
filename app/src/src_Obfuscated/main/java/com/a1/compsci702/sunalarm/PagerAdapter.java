@@ -1,19 +1,40 @@
 package com.a1.compsci702.sunalarm;
 
-import org.junit.Test;
-import static org.junit.Assert.*;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentStatePagerAdapter;
+import com.a1.compsci702.sunalarm.Tabs.AlarmTab;
 import android.util.Base64;
 
-/**
- * Example local unit test, which will execute on the development machine (host).
- *
- * @see <a href="http://d.android.com/tools/testing">Testing documentation</a>
- */
-public class ExampleUnitTest {
+public class PagerAdapter extends FragmentStatePagerAdapter {
 
-    @Test
-    public void addition_isCorrect() throws Exception {
-        assertEquals(4, 2 + 2);
+    private final int ALARM_TAB = di(new String[]{"MTEwMDAw"});
+
+    private final int SUNRISE_TAB = di(new String[]{"MTEwMDAx"});
+
+    int mNumOfTabs;
+
+    public PagerAdapter(FragmentManager fm, int NumOfTabs) {
+        super(fm);
+        this.mNumOfTabs = NumOfTabs;
+    }
+
+    @Override
+    public Fragment getItem(int position) {
+        if (position == ALARM_TAB) {
+            AlarmTab alarmTab = new AlarmTab();
+            return alarmTab;
+        } else if (position == SUNRISE_TAB) {
+            SunriseTab sunriseTab = new SunriseTab();
+            return sunriseTab;
+        } else {
+            return null;
+        }
+    }
+
+    @Override
+    public int getCount() {
+        return mNumOfTabs;
     }
 
     public static int di(String[] a) {

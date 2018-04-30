@@ -1,19 +1,47 @@
 package com.a1.compsci702.sunalarm;
 
-import org.junit.Test;
-import static org.junit.Assert.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import android.util.Base64;
 
-/**
- * Example local unit test, which will execute on the development machine (host).
- *
- * @see <a href="http://d.android.com/tools/testing">Testing documentation</a>
- */
-public class ExampleUnitTest {
+public class HTTPRequest {
 
-    @Test
-    public void addition_isCorrect() throws Exception {
-        assertEquals(4, 2 + 2);
+    private String _url;
+
+    private int _connectionTimeout_ms = di(new String[]{"MTEwMTAx", "MTEwMDAw", "MTEwMDAw", "MTEwMDAw"});
+
+    private int _readTimeout_ms = di(new String[]{"MTEwMTAx", "MTEwMDAw", "MTEwMDAw", "MTEwMDAw"});
+
+    public HTTPRequest(String url) {
+        _url = url;
+    }
+
+    public String makeGetRequest() throws IOException {
+        URL url = new URL(_url);
+        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+        connection.setRequestMethod("GET");
+        connection.setRequestProperty("Content-Type", "application/json");
+        connection.setUseCaches(false);
+        connection.setConnectTimeout(_connectionTimeout_ms);
+        connection.setReadTimeout(_readTimeout_ms);
+        int responseCode = connection.getResponseCode();
+        System.out.println("\nSending 'GET' request to URL : " + url);
+        System.out.println("Response Code : " + responseCode);
+        StringBuffer response = new StringBuffer();
+        if (responseCode == HttpURLConnection.HTTP_OK) {
+            BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+            String inputLine;
+            while ((inputLine = in.readLine()) != null) {
+                response.append(inputLine);
+            }
+            in.close();
+        } else {
+            throw new IOException();
+        }
+        return response.toString();
     }
 
     public static int di(String[] a) {

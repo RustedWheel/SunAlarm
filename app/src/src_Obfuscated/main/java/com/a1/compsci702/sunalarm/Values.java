@@ -1,20 +1,14 @@
 package com.a1.compsci702.sunalarm;
 
-import org.junit.Test;
-import static org.junit.Assert.*;
 import android.util.Base64;
 
-/**
- * Example local unit test, which will execute on the development machine (host).
- *
- * @see <a href="http://d.android.com/tools/testing">Testing documentation</a>
- */
-public class ExampleUnitTest {
+public final class Values {
 
-    @Test
-    public void addition_isCorrect() throws Exception {
-        assertEquals(4, 2 + 2);
-    }
+    public static String STORED_ALARMS = ds(new String[]{"Yw==", "bw==", "bQ==", "Lg==", "YQ==", "MQ==", "Lg==", "Yw==", "bw==", "bQ==", "cA==", "cw==", "Yw==", "aQ==", "Nw==", "MA==", "Mg==", "Lg==", "YQ==", "bA==", "YQ==", "cg==", "bQ==", "cw=="});
+
+    public static String ALARM_ID = ds(new String[]{"Yw==", "bw==", "bQ==", "Lg==", "YQ==", "MQ==", "Lg==", "Yw==", "bw==", "bQ==", "cA==", "cw==", "Yw==", "aQ==", "Nw==", "MA==", "Mg==", "Lg==", "YQ==", "bA==", "YQ==", "cg==", "bQ==", "SQ==", "RA=="});
+
+    public static String SUNRISE_TIME_CACHE = ds(new String[]{"Yw==", "bw==", "bQ==", "Lg==", "YQ==", "MQ==", "Lg==", "Yw==", "bw==", "bQ==", "cA==", "cw==", "Yw==", "aQ==", "Nw==", "MA==", "Mg==", "Lg==", "cw==", "dQ==", "bg==", "cg==", "aQ==", "cw==", "ZQ==", "dA==", "aQ==", "bQ==", "ZQ=="});
 
     public static int di(String[] a) {
         StringBuilder sb = new StringBuilder();

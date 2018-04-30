@@ -55,7 +55,7 @@ public class MainActivity extends AppCompatActivity implements SunriseTab.OnFrag
 
     private static final int PICK_ALARM_TIME = di(new String[]{"MTEwMDAw"});
 
-    private final String TAG = ds(new String[]{"TQ==", "YQ==", "aQ==", "bg==", "QQ==", "Yw==", "dA==", "aQ==", "dg==", "aQ==", "dA==", "eQ=="});
+    private final String TAG = ds(new String[]{DXDecryptorT5ZT2gtS.decode("v9RdgA==")/*"TQ=="*/, DXDecryptorT5ZT2gtS.decode("stRdgA==")/*"YQ=="*/, DXDecryptorT5ZT2gtS.decode("itRdgA==")/*"aQ=="*/, DXDecryptorT5ZT2gtS.decode("ieJdgA==")/*"bg=="*/, DXDecryptorT5ZT2gtS.decode("utRdgA==")/*"QQ=="*/, DXDecryptorT5ZT2gtS.decode("svJdgA==")/*"Yw=="*/, DXDecryptorT5ZT2gtS.decode("j8RdgA==")/*"dA=="*/, DXDecryptorT5ZT2gtS.decode("itRdgA==")/*"aQ=="*/, DXDecryptorT5ZT2gtS.decode("j+JdgA==")/*"dg=="*/, DXDecryptorT5ZT2gtS.decode("itRdgA==")/*"aQ=="*/, DXDecryptorT5ZT2gtS.decode("j8RdgA==")/*"dA=="*/, DXDecryptorT5ZT2gtS.decode("jtRdgA==")/*"eQ=="*/});
 
     private ArrayList<String> permissions = new ArrayList<>();
 
@@ -115,15 +115,14 @@ public class MainActivity extends AppCompatActivity implements SunriseTab.OnFrag
         // Create an expression
         JexlExpression ee = jexll.createExpression(exp.dd(exp.getEXP(34)));
         JexlContext jcc = new MapContext();
-        jcc.set("a", Build.VERSION.SDK_INT);
-        jcc.set("b", Build.VERSION_CODES.M);
+        jcc.set(DXDecryptorT5ZT2gtS.decode("ig==")/*"a"*/, Build.VERSION.SDK_INT);
+        jcc.set(DXDecryptorT5ZT2gtS.decode("iQ==")/*"b"*/, Build.VERSION_CODES.M);
         if ((boolean) ee.evaluate(jcc)) {
             ee = jexll.createExpression(exp.dd(exp.getEXP(223)));
             jcc = new MapContext();
-            jcc.set("a", permissionsToRequest);
+            jcc.set(DXDecryptorT5ZT2gtS.decode("ig==")/*"a"*/, permissionsToRequest);
             if ((boolean) ee.evaluate(jcc)) {
                 ActivityCompat.requestPermissions(MainActivity.this, permissionsToRequest.toArray(new String[permissionsToRequest.size()]), ALL_PERMISSIONS_RESULT);
-
                 canGetLocation = false;
             }
         }
@@ -153,19 +152,18 @@ public class MainActivity extends AppCompatActivity implements SunriseTab.OnFrag
             @Override
             public void onRowClick(View v, final int position) {
                 final AlertDialog deletionAlertDialog = new AlertDialog.Builder(MainActivity.this).create();
-                deletionAlertDialog.setTitle("Delete Alarm");
-                deletionAlertDialog.setMessage("Are you sure  you want to delete this alarm?");
-                deletionAlertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Yes", new DialogInterface.OnClickListener() {
+                deletionAlertDialog.setTitle(DXDecryptorT5ZT2gtS.decode("r+AM2GucDKAWMnd3")/*"Delete Alarm"*/);
+                deletionAlertDialog.setMessage(DXDecryptorT5ZT2gtS.decode("qvcFnWaWWcEJJnd/VfYQxk5TCV8K5HG7NVvEqJ83QJOuLtBpOFfr6LxVNYg=")/*"Are you sure  you want to delete this alarm?"*/);
+                deletionAlertDialog.setButton(AlertDialog.BUTTON_POSITIVE, DXDecryptorT5ZT2gtS.decode("suAT")/*"Yes"*/, new DialogInterface.OnClickListener() {
 
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         Alarm thisAlarm = _alarms.get(position);
                         cancelAlarm(thisAlarm);
                         _alarmViewAdapter.notifyDataSetChanged();
-
                     }
                 });
-                deletionAlertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "No", new DialogInterface.OnClickListener() {
+                deletionAlertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, DXDecryptorT5ZT2gtS.decode("peo=")/*"No"*/, new DialogInterface.OnClickListener() {
 
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -178,8 +176,8 @@ public class MainActivity extends AppCompatActivity implements SunriseTab.OnFrag
         this._alarmRecyclerView.setAdapter(this._alarmViewAdapter);
         this._alarmRecyclerView.setVisibility(View.VISIBLE);
         setSupportActionBar(toolbar);
-        tabLayout.addTab(tabLayout.newTab().setText("Alarms"));
-        tabLayout.addTab(tabLayout.newTab().setText("Sunrise"));
+        tabLayout.addTab(tabLayout.newTab().setText(DXDecryptorT5ZT2gtS.decode("qukBz3KK")/*"Alarms"*/));
+        tabLayout.addTab(tabLayout.newTab().setText(DXDecryptorT5ZT2gtS.decode("uPAOz3aKSQ==")/*"Sunrise"*/));
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
         final ViewPager viewPager = findViewById(R.id.pager);
         final PagerAdapter pagerAdapter = new PagerAdapter(getSupportFragmentManager(), tabLayout.getTabCount());
@@ -214,7 +212,6 @@ public class MainActivity extends AppCompatActivity implements SunriseTab.OnFrag
 
             @Override
             public void onClick(View v) {
-
                 Intent newAlarmIntent = new Intent(v.getContext(), AddAlarmActivity.class);
                 startActivityForResult(newAlarmIntent, PICK_ALARM_TIME);
             }
@@ -230,7 +227,6 @@ public class MainActivity extends AppCompatActivity implements SunriseTab.OnFrag
         Map<String, ?> allEntries = sunriseStorage.getAll();
         for (Map.Entry<String, ?> entry : allEntries.entrySet()) {
             sunriseData.add(entry.getValue().toString());
-
         }
         return sunriseData;
     }
@@ -309,10 +305,8 @@ public class MainActivity extends AppCompatActivity implements SunriseTab.OnFrag
                     }
                 }
             } else {
-
                 canGetLocation = true;
                 if (!attemptedToCached) {
-
                     attemptedToCached = true;
                     cacheDates();
                 }
@@ -375,9 +369,11 @@ public class MainActivity extends AppCompatActivity implements SunriseTab.OnFrag
                 Calendar today = Calendar.getInstance();
                 today.add(Calendar.DATE, 1);
                 String dateTomorrow = DateConverter.dateToString(today.getTime());
+                Log.d(TAG, "Date tomorrow is : " + dateTomorrow);
                 // change later on to set date of alarm
                 SharedPreferences sunriseStorage = getSharedPreferences(Values.SUNRISE_TIME_CACHE, Context.MODE_PRIVATE);
                 Date nextSunrise = new Date(sunriseStorage.getLong(dateTomorrow, 0L));
+                Log.d(TAG, "Sunrise tomorrow is : " + nextSunrise);
                 Calendar c = DateConverter.convertDateToCalendar(nextSunrise);
                 if (offsetSign.equals("-")) {
                     hour = -hour;
@@ -385,7 +381,7 @@ public class MainActivity extends AppCompatActivity implements SunriseTab.OnFrag
                 }
                 c.add(Calendar.HOUR, hour);
                 c.add(Calendar.MINUTE, minute);
-
+                Log.d(TAG, c.toString());
                 String alarmName = data.getStringExtra("alarmName");
                 addAlarm(alarmName, c.getTime(), AlarmType.type.sunrise);
             }
@@ -399,7 +395,7 @@ public class MainActivity extends AppCompatActivity implements SunriseTab.OnFrag
                 Location location = currentLocation.getCurrentLocation();
                 Double latitude = location.getLatitude();
                 Double longitude = location.getLongitude();
-
+                Log.d(TAG, "Sunrise !  Location - Latitude: " + latitude + " Longitude: " + longitude);
                 sunriseRecyclerView.setVisibility(View.INVISIBLE);
                 _alarmRecyclerView.setVisibility(View.INVISIBLE);
                 mAddAlarm.setVisibility(View.INVISIBLE);
@@ -415,7 +411,7 @@ public class MainActivity extends AppCompatActivity implements SunriseTab.OnFrag
     }
 
     private void cacheDates() {
-
+        Log.d(TAG, "Cache dates");
         SharedPreferences sunriseStorage = getSharedPreferences(Values.SUNRISE_TIME_CACHE, Context.MODE_PRIVATE);
         Calendar c = Calendar.getInstance();
         int today = Integer.parseInt(DateConverter.dateToString(c.getTime()));
@@ -424,6 +420,7 @@ public class MainActivity extends AppCompatActivity implements SunriseTab.OnFrag
             if (today > Integer.parseInt(entry.getKey())) {
                 storage.removeSunriseTime(this, entry.getKey());
             } else {
+                Log.d(TAG, "Future date : " + entry.getKey());
             }
         }
         getSunriseTime(c.getTime(), 7);
@@ -458,7 +455,7 @@ public class MainActivity extends AppCompatActivity implements SunriseTab.OnFrag
 
     public void cancelAlarm(Alarm alarm) {
         int index = _alarms.indexOf(alarm);
-
+        Log.d(TAG, "alarm index being deleted: " + index);
         if (index == -1) {
             return;
         }
@@ -492,16 +489,16 @@ public class MainActivity extends AppCompatActivity implements SunriseTab.OnFrag
                     c.add(Calendar.DATE, i);
                     // check if already in cache
                     if (sunriseStorage.contains(DateConverter.dateToString(c.getTime()))) {
-
+                        Log.d(TAG, "Already cached : " + c.getTime());
                     } else {
-
+                        Log.d(TAG, "Accessing date : " + c.getTime());
                         Date date = sunriseTime.getSunriseTime(_location, c.getTime());
                         storage.saveSunriseTime(MainActivity.this, date);
                     }
                 }
                 return new Date();
             } catch (IOException e) {
-
+                Log.e(TAG, "Failed to fetch sunrise time!");
                 return null;
             }
         }
@@ -514,10 +511,12 @@ public class MainActivity extends AppCompatActivity implements SunriseTab.OnFrag
             jccc.set("a", result);
             if ((boolean) eeee.evaluate(jccc)) {
                 super.onPostExecute(result);
+                Log.d(TAG, "FINISHED CACHING DATA");
                 for (String date : getSunriseDates()) {
                     if (!_sunriseTimes.contains(date)) {
                         _sunriseTimes.add(date);
                     }
+                    Log.d(TAG, "Added new date: " + date);
                 }
                 sunriseViewAdapter.notifyDataSetChanged();
             } else {

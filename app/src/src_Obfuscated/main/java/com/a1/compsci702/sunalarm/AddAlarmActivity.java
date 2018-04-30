@@ -105,6 +105,7 @@ public class AddAlarmActivity extends AppCompatActivity {
         Calendar today = Calendar.getInstance();
         today.add(Calendar.DATE, 1);
         String dateTomorrow = DateConverter.dateToString(today.getTime());
+        Log.d(TAG, "Date tomorrow is : " + dateTomorrow);
         // change later on to set date of alarm
         SharedPreferences sunriseStorage = getSharedPreferences(Values.SUNRISE_TIME_CACHE, Context.MODE_PRIVATE);
         _nextSunrise = new Date(sunriseStorage.getLong(dateTomorrow, 0L));

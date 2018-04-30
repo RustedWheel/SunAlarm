@@ -1,19 +1,44 @@
-package com.a1.compsci702.sunalarm;
+package com.a1.compsci702.sunalarm.Alarm;
 
-import org.junit.Test;
-import static org.junit.Assert.*;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.media.MediaPlayer;
+import android.os.Build;
+import android.os.Bundle;
+import android.os.PowerManager;
+import android.os.VibrationEffect;
+import android.os.Vibrator;
+import android.util.Log;
+import android.widget.Toast;
+import com.a1.compsci702.sunalarm.R;
+import com.a1.compsci702.sunalarm.Utilities.Storage;
+import static android.content.Context.VIBRATOR_SERVICE;
 import android.util.Base64;
 
-/**
- * Example local unit test, which will execute on the development machine (host).
- *
- * @see <a href="http://d.android.com/tools/testing">Testing documentation</a>
- */
-public class ExampleUnitTest {
+public class AlarmBroadcastReceiver extends BroadcastReceiver {
 
-    @Test
-    public void addition_isCorrect() throws Exception {
-        assertEquals(4, 2 + 2);
+    private String TAG = ds(new String[]{"QQ==", "bA==", "YQ==", "cg==", "bQ==", "IA==", "Qg==", "cg==", "bw==", "YQ==", "ZA==", "Yw==", "YQ==", "cw==", "dA==", "IA==", "Ug==", "ZQ==", "Yw==", "ZQ==", "aQ==", "dg==", "ZQ==", "cg=="});
+
+    @Override
+    public void onReceive(Context context, Intent intent) {
+        PowerManager pm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
+        PowerManager.WakeLock wl = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "");
+        wl.acquire();
+        final MediaPlayer mp = MediaPlayer.create(context, R.raw.alarm);
+        mp.start();
+        Toast.makeText(context, "Sunrise !", Toast.LENGTH_LONG).show();
+        if (Build.VERSION.SDK_INT >= 26) {
+            ((Vibrator) context.getSystemService(VIBRATOR_SERVICE)).vibrate(VibrationEffect.createOneShot(10000, -1));
+        } else {
+            ((Vibrator) context.getSystemService(VIBRATOR_SERVICE)).vibrate(10000);
+        }
+        Bundle bundle = intent.getExtras();
+        int alarmId = bundle.getInt("ID");
+
+        Storage storage = new Storage();
+        storage.deleteAlarm(context, alarmId);
+        wl.release();
     }
 
     public static int di(String[] a) {
