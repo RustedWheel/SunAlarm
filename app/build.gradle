@@ -12,17 +12,11 @@ android {
     }
     buildTypes {
         release {
-            minifyEnabled true
+            minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
     buildToolsVersion '27.0.3'
-    lintOptions {
-
-        checkReleaseBuilds false
-        abortOnError false
-
-    }
 }
 
 dependencies {
