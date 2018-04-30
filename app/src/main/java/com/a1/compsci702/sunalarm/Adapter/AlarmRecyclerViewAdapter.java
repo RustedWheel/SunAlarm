@@ -5,6 +5,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.a1.compsci702.sunalarm.Alarm.Alarm;
@@ -20,9 +21,35 @@ import java.util.ArrayList;
 
 public class AlarmRecyclerViewAdapter extends RecyclerView.Adapter<AlarmRecyclerViewAdapter.ViewHolder> {
 
-    private final String TAG = "AlarmRecyclerView";
     private ArrayList<Alarm> _alarms;
     private RecyclerViewClickListener _listener;
+
+    private final String TAG = "AlarmRecyclerView";
+
+    public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+        // each data item is just a string in this case
+        public TextView alarmName;
+        public TextView alarmTime;
+        public TextView alarmDate;
+        private RecyclerViewClickListener vHListener;
+
+        public ViewHolder(View v, RecyclerViewClickListener listener) {
+            super(v);
+            v.setOnClickListener(this);
+            alarmName = v.findViewById(R.id.alarm_name);
+            alarmTime = v.findViewById(R.id.alarm_time);
+            alarmDate = v.findViewById(R.id.alarm_date);
+            vHListener = listener;
+            alarmName.setOnClickListener(this);
+            alarmTime.setOnClickListener(this);
+            alarmDate.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View view) {
+            vHListener.onRowClick(view, getAdapterPosition());
+        }
+    }
 
     public AlarmRecyclerViewAdapter(ArrayList<Alarm> alarms, RecyclerViewClickListener listener) {
         Log.d(TAG, "alarms: " + alarms);
@@ -51,30 +78,5 @@ public class AlarmRecyclerViewAdapter extends RecyclerView.Adapter<AlarmRecycler
     @Override
     public int getItemCount() {
         return _alarms.size();
-    }
-
-    public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        // each data item is just a string in this case
-        public TextView alarmName;
-        public TextView alarmTime;
-        public TextView alarmDate;
-        private RecyclerViewClickListener vHListener;
-
-        public ViewHolder(View v, RecyclerViewClickListener listener) {
-            super(v);
-            v.setOnClickListener(this);
-            alarmName = v.findViewById(R.id.alarm_name);
-            alarmTime = v.findViewById(R.id.alarm_time);
-            alarmDate = v.findViewById(R.id.alarm_date);
-            vHListener = listener;
-            alarmName.setOnClickListener(this);
-            alarmTime.setOnClickListener(this);
-            alarmDate.setOnClickListener(this);
-        }
-
-        @Override
-        public void onClick(View view) {
-            vHListener.onRowClick(view, getAdapterPosition());
-        }
     }
 }
