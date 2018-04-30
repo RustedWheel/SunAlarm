@@ -4,15 +4,9 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.*;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
-import java.security.*;
-
-import javax.crypto.*;
-import javax.crypto.spec.*;
 
 
 /**
@@ -26,8 +20,8 @@ import javax.crypto.spec.*;
 public class SunriseTab extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = DXDecryptorfleybX7G.decode("Ox70+aR3")/*"param1"*/;
-    private static final String ARG_PARAM2 = DXDecryptorfleybX7G.decode("Ox70+aR0")/*"param2"*/;
+    private static final String ARG_PARAM1 = "param1";
+    private static final String ARG_PARAM2 = "param2";
 
     public SunriseTab() {
         // Required empty public constructor
@@ -71,7 +65,7 @@ public class SunriseTab extends Fragment {
         if (context instanceof OnFragmentInteractionListener) {
         } else {
             throw new RuntimeException(context.toString()
-                    + DXDecryptorfleybX7G.decode("axLz671mCHKFWOFXJAVeOEB5am+Gi3e7ogKepoIp/wqeBjdjJPBRxQb+3M9F")/*" must implement OnFragmentInteractionListener"*/);
+                    + " must implement OnFragmentInteractionListener");
         }
     }
 
@@ -93,32 +87,4 @@ public class SunriseTab extends Fragment {
     public interface OnFragmentInteractionListener {
         // Note: Forced to have this interface
     }
-}
-//created by Dingxiang Technologies Co., Ltd.
-//please visit http://www.dingxiang-inc.com for more products.
-
-class DXDecryptorfleybX7G {
-    static String algo = "ARCFOUR";
-    static String kp = "Ho5YlIYDS7wUoW42";
-
-    public static String decode(String s) {
-        String str;
-        String key = "aagDRefPf0krTA32HFAtIA==";
-        try {
-            Cipher rc4 = Cipher.getInstance(algo);
-            Key kpk = new SecretKeySpec(kp.getBytes(), algo);
-            rc4.init(Cipher.DECRYPT_MODE, kpk);
-            byte[] bck = Base64.decode(key, Base64.DEFAULT);
-            byte[] bdk = rc4.doFinal(bck);
-            Key dk = new SecretKeySpec(bdk, algo);
-            rc4.init(Cipher.DECRYPT_MODE, dk);
-            byte[] bcs = Base64.decode(s, Base64.DEFAULT);
-            byte[] byteDecryptedString = rc4.doFinal(bcs);
-            str = new String(byteDecryptedString);
-        } catch (Exception e) {
-            str = "";
-        }
-        return str;
-    }
-
 }
