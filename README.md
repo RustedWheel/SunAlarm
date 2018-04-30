@@ -16,21 +16,10 @@ Give examples
 
 ### Installing
 
-A step by step series of examples that tell you have to get a development env running
-
-Say what the step will be
-
-```
-Give the example
-```
-
-And repeat
-
-```
-until finished
-```
-
-End with an example of getting some data out of the system or using it for a little demo
+* Download all files and open them on Android Studio(Android API version 26).
+* Create a keychain and build a signed APK with that key.
+* And you'll get the APK file.
+* Install the APK file on you device and enjoy our APP.
 
 ## Running the tests
 
