@@ -48,9 +48,9 @@ public class SunriseTime {
         sb.append(s2);
         sb.append(location.getLongitude());
         sb.append(s3);
-        sb.append(date.getYear()+1900);
+        sb.append(date.getYear() + 1900);
         sb.append(s4);
-        sb.append(date.getMonth()+1);
+        sb.append(date.getMonth() + 1);
         sb.append(s4);
         sb.append(date.getDate());
         sb.append(s5);
@@ -75,7 +75,7 @@ public class SunriseTime {
             e.printStackTrace();
         }
 
-        result = result.substring(0,19);
+        result = result.substring(0, 19);
 
         DateFormat utcTime = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
         utcTime.setTimeZone(TimeZone.getTimeZone("UTC"));

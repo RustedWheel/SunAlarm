@@ -28,24 +28,17 @@ public class Alarm {
 
     }
 
+    public void setAlarm(Context context) {
 
-    public void setAlarmTime(Date date){
-        _alarmTime = date;
-    }
-
-
-    public void setAlarm(Context context){
-
-            Calendar c = DateConverter.convertDateToCalendar(_alarmTime);
-            Intent intent = new Intent(context, AlarmBroadcastReceiver.class);
-            intent.addFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
-            intent.putExtra("ID", _alarmId);
-            PendingIntent pendingIntent = PendingIntent.getBroadcast(context, _alarmId, intent, 0);
-            AlarmManager am = (AlarmManager) context.getSystemService(context.ALARM_SERVICE);
-            am.set(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(), pendingIntent);
+        Calendar c = DateConverter.convertDateToCalendar(_alarmTime);
+        Intent intent = new Intent(context, AlarmBroadcastReceiver.class);
+        intent.addFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
+        intent.putExtra("ID", _alarmId);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, _alarmId, intent, 0);
+        AlarmManager am = (AlarmManager) context.getSystemService(context.ALARM_SERVICE);
+        am.set(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(), pendingIntent);
 
     }
-
 
     public void cancelAlarm(Context context) {
 
@@ -56,27 +49,29 @@ public class Alarm {
 
     }
 
-    public int getId(){
+    public int getId() {
         return _alarmId;
     }
 
-
-    public Date getAlarmTime(){
+    public Date getAlarmTime() {
         return _alarmTime;
     }
 
+    public void setAlarmTime(Date date) {
+        _alarmTime = date;
+    }
 
-    public String getName(){
+    public String getName() {
         return _name;
     }
 
 
-    public RepeatInfo getRepeatInfo(){
+    public RepeatInfo getRepeatInfo() {
         return _repeatInfo;
     }
 
 
-    public AlarmType.type getType(){
+    public AlarmType.type getType() {
         return _type;
     }
 

@@ -9,20 +9,20 @@ public class RepeatInfo {
     private boolean _isRepeatOn;
     private ArrayList<DayOfWeek.Day> _repeatWeekDays;
 
-    public RepeatInfo(Boolean isRepeatOn, ArrayList<DayOfWeek.Day> repeatWeekDays){
+    public RepeatInfo(Boolean isRepeatOn, ArrayList<DayOfWeek.Day> repeatWeekDays) {
         _isRepeatOn = isRepeatOn;
         _repeatWeekDays = repeatWeekDays;
     }
 
-    public void setRepeatWeekDays(ArrayList<DayOfWeek.Day> repeatWeekDays){
-        _repeatWeekDays = repeatWeekDays;
-    }
-
-    public ArrayList<DayOfWeek.Day> getRepeatWeekDays(){
+    public ArrayList<DayOfWeek.Day> getRepeatWeekDays() {
         return _repeatWeekDays;
     }
 
-    public Boolean isRepeatOn(){
+    public void setRepeatWeekDays(ArrayList<DayOfWeek.Day> repeatWeekDays) {
+        _repeatWeekDays = repeatWeekDays;
+    }
+
+    public Boolean isRepeatOn() {
         return _isRepeatOn;
     }
 }

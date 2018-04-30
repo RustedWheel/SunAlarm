@@ -19,10 +19,10 @@ public class CurrentLocation implements LocationListener {
 
     private static final long MIN_DISTANCE_CHANGE_FOR_UPDATES = 10;
     private static final long MIN_TIME_BW_UPDATES = 1000 * 60 * 1;
-    private LocationManager locationManager;
-    private Location loc;
     boolean hasGPS = false;
     boolean hasNetwork = false;
+    private LocationManager locationManager;
+    private Location loc;
     private String TAG = "Location";
 
     public CurrentLocation(Context context) {
@@ -71,7 +71,7 @@ public class CurrentLocation implements LocationListener {
             // get location
             location = getLocation();
 
-            if(location == null){
+            if (location == null) {
                 throw new NoConnectionException();
             }
 
@@ -81,57 +81,57 @@ public class CurrentLocation implements LocationListener {
     }
 
 
-    private void getLastLocation() throws SecurityException{
-            Criteria criteria = new Criteria();
-            String provider = locationManager.getBestProvider(criteria, false);
-            Location location = locationManager.getLastKnownLocation(provider);
-            Log.d(TAG, provider);
-            Log.d(TAG, location == null ? "NO LastLocation" : location.toString());
+    private void getLastLocation() throws SecurityException {
+        Criteria criteria = new Criteria();
+        String provider = locationManager.getBestProvider(criteria, false);
+        Location location = locationManager.getLastKnownLocation(provider);
+        Log.d(TAG, provider);
+        Log.d(TAG, location == null ? "NO LastLocation" : location.toString());
     }
 
     private Location getLocation() throws NoConnectionException, SecurityException {
 
-            if (hasGPS) {
-                // from GPS
-                Log.d(TAG, "GPS on");
-                locationManager.requestLocationUpdates(
-                        LocationManager.GPS_PROVIDER,
-                        MIN_TIME_BW_UPDATES,
-                        MIN_DISTANCE_CHANGE_FOR_UPDATES, this);
+        if (hasGPS) {
+            // from GPS
+            Log.d(TAG, "GPS on");
+            locationManager.requestLocationUpdates(
+                    LocationManager.GPS_PROVIDER,
+                    MIN_TIME_BW_UPDATES,
+                    MIN_DISTANCE_CHANGE_FOR_UPDATES, this);
 
-                if (locationManager != null) {
-                    loc = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-                    if (loc != null)
-                        return loc;
-                    else {
-                        Location mock = new Location("mock");
-                        mock.setLongitude(174.763336);
-                        mock.setLatitude(-36.848461);
-                        return mock;
-                    }
+            if (locationManager != null) {
+                loc = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+                if (loc != null)
+                    return loc;
+                else {
+                    Location mock = new Location("mock");
+                    mock.setLongitude(174.763336);
+                    mock.setLatitude(-36.848461);
+                    return mock;
                 }
-            } else if (hasNetwork) {
-                // from Network Provider
-                Log.d(TAG, "NETWORK_PROVIDER on");
-                locationManager.requestLocationUpdates(
-                        LocationManager.NETWORK_PROVIDER,
-                        MIN_TIME_BW_UPDATES,
-                        MIN_DISTANCE_CHANGE_FOR_UPDATES, this);
-
-                if (locationManager != null) {
-                    loc = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-                    if (loc != null)
-                        return loc;
-                    else {
-                        Location mock = new Location("mock");
-                        mock.setLongitude(174.763336);
-                        mock.setLatitude(-36.848461);
-                        return mock;
-                    }
-                }
-            } else {
-                throw new NoConnectionException();
             }
+        } else if (hasNetwork) {
+            // from Network Provider
+            Log.d(TAG, "NETWORK_PROVIDER on");
+            locationManager.requestLocationUpdates(
+                    LocationManager.NETWORK_PROVIDER,
+                    MIN_TIME_BW_UPDATES,
+                    MIN_DISTANCE_CHANGE_FOR_UPDATES, this);
+
+            if (locationManager != null) {
+                loc = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+                if (loc != null)
+                    return loc;
+                else {
+                    Location mock = new Location("mock");
+                    mock.setLongitude(174.763336);
+                    mock.setLatitude(-36.848461);
+                    return mock;
+                }
+            }
+        } else {
+            throw new NoConnectionException();
+        }
 
         return null;
     }
