@@ -503,7 +503,7 @@ public class MainActivity extends AppCompatActivity implements SunriseTab.OnFrag
     /**
      * @param date Time for alarm
      */
-    public void addAlarm(String name, Date date, RepeatInfo repeatInfo, AlarmType.type type) {
+    public void addAlarm(String name, Date date, AlarmType.type type) {
 
         JexlEngine jexl = new JexlBuilder().create();
         JexlExpression e = jexl.createExpression( exp.dd(exp.getEXP(92)) );
@@ -517,7 +517,7 @@ public class MainActivity extends AppCompatActivity implements SunriseTab.OnFrag
 
             int alarmID = storage.getNextAlarmID(this);
 
-            Alarm alarm = new Alarm(name, alarmID, date, repeatInfo, type);
+            Alarm alarm = new Alarm(name, alarmID, date, type);
             alarm.setAlarm(getApplicationContext());
 
             storage.saveAlarm(this, alarm);
