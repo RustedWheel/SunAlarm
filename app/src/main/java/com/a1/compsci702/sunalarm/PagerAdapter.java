@@ -19,15 +19,14 @@ public class PagerAdapter extends FragmentStatePagerAdapter {
     @Override
     public Fragment getItem(int position) {
 
-        switch (position) {
-            case ALARM_TAB:
-                AlarmTab alarmTab = new AlarmTab();
-                return alarmTab;
-            case SUNRISE_TAB:
-                SunriseTab sunriseTab = new SunriseTab();
-                return sunriseTab;
-            default:
-                return null;
+        if (position == ALARM_TAB) {
+            AlarmTab alarmTab = new AlarmTab();
+            return alarmTab;
+        } else if (position == SUNRISE_TAB) {
+            SunriseTab sunriseTab = new SunriseTab();
+            return sunriseTab;
+        } else {
+            return null;
         }
     }
 

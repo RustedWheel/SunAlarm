@@ -279,48 +279,47 @@ public class MainActivity extends AppCompatActivity implements SunriseTab.OnFrag
     @TargetApi(Build.VERSION_CODES.M)
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        switch (requestCode) {
-            case ALL_PERMISSIONS_RESULT:
-                Log.d(TAG, "onRequestPermissionsResult");
-                for (String perms : permissionsToRequest) {
-                    if (!hasPermission(perms)) {
-                        permissionsRejected.add(perms);
+        if (requestCode == ALL_PERMISSIONS_RESULT) {
+            Log.d(TAG, "onRequestPermissionsResult");
+            for (String perms : permissionsToRequest) {
+                if (!hasPermission(perms)) {
+                    permissionsRejected.add(perms);
+                }
+            }
+
+            if (permissionsRejected.size() > 0) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    if (ActivityCompat.shouldShowRequestPermissionRationale(MainActivity.this, permissionsRejected.get(0))) {
+                        showMessageOKCancel("These permissions are mandatory for the application. Please allow access.",
+                                new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                                            ActivityCompat.requestPermissions(MainActivity.this, permissionsRejected.toArray(
+                                                    new String[permissionsRejected.size()]), ALL_PERMISSIONS_RESULT);
+                                        }
+                                    }
+                                },
+                                new DialogInterface.OnCancelListener() {
+                                    @Override
+                                    public void onCancel(DialogInterface dialogInterface) {
+                                        finish();
+                                    }
+                                });
+                        return;
                     }
                 }
-
-                if (permissionsRejected.size() > 0) {
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                        if (ActivityCompat.shouldShowRequestPermissionRationale(MainActivity.this, permissionsRejected.get(0))) {
-                            showMessageOKCancel("These permissions are mandatory for the application. Please allow access.",
-                                    new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialog, int which) {
-                                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                                                ActivityCompat.requestPermissions(MainActivity.this, permissionsRejected.toArray(
-                                                        new String[permissionsRejected.size()]), ALL_PERMISSIONS_RESULT);
-                                            }
-                                        }
-                                    },
-                                    new DialogInterface.OnCancelListener() {
-                                        @Override
-                                        public void onCancel(DialogInterface dialogInterface) {
-                                            finish();
-                                        }
-                                    });
-                            return;
-                        }
-                    }
-                } else {
-                    Log.d(TAG, "can now get location");
-                    canGetLocation = true;
-                    if (!attemptedToCached) {
-                        Log.d(TAG, "now caching dates");
-                        attemptedToCached = true;
-                        cacheDates();
-                    }
-
+            } else {
+                Log.d(TAG, "can now get location");
+                canGetLocation = true;
+                if (!attemptedToCached) {
+                    Log.d(TAG, "now caching dates");
+                    attemptedToCached = true;
+                    cacheDates();
                 }
-                break;
+
+            }
+
         }
     }
 
@@ -368,49 +367,47 @@ public class MainActivity extends AppCompatActivity implements SunriseTab.OnFrag
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         Log.d(TAG, "onActivityResult()");
 
-        switch (requestCode) {
-            case PICK_ALARM_TIME:
-                // Make sure the request was successful
-                if (resultCode == RESULT_OK) {
-                    String alarmTime = data.getStringExtra("alarmTime");
+        if (requestCode == PICK_ALARM_TIME) {// Make sure the request was successful
+            if (resultCode == RESULT_OK) {
+                String alarmTime = data.getStringExtra("alarmTime");
 
-                    String[] splitResult = alarmTime.split(":");
+                String[] splitResult = alarmTime.split(":");
 
-                    String offsetSign = splitResult[0];
-                    int hour = Integer.parseInt(splitResult[1]);
-                    int minute = Integer.parseInt(splitResult[2]);
+                String offsetSign = splitResult[0];
+                int hour = Integer.parseInt(splitResult[1]);
+                int minute = Integer.parseInt(splitResult[2]);
 
-                    //get sunrise time for tomorrow
-                    //calculate offset time
-                    //set alarm
-                    Calendar today = Calendar.getInstance();
-                    today.add(Calendar.DATE, 1);
-                    String dateTomorrow = DateConverter.dateToString(today.getTime());
-                    Log.d(TAG, "Date tomorrow is : " + dateTomorrow);
+                //get sunrise time for tomorrow
+                //calculate offset time
+                //set alarm
+                Calendar today = Calendar.getInstance();
+                today.add(Calendar.DATE, 1);
+                String dateTomorrow = DateConverter.dateToString(today.getTime());
+                Log.d(TAG, "Date tomorrow is : " + dateTomorrow);
 
-                    //change later on to set date of alarm
-                    SharedPreferences sunriseStorage = getSharedPreferences(Values.SUNRISE_TIME_CACHE, Context.MODE_PRIVATE);
-                    Date nextSunrise = new Date(sunriseStorage.getLong(dateTomorrow, 0L));
+                //change later on to set date of alarm
+                SharedPreferences sunriseStorage = getSharedPreferences(Values.SUNRISE_TIME_CACHE, Context.MODE_PRIVATE);
+                Date nextSunrise = new Date(sunriseStorage.getLong(dateTomorrow, 0L));
 
-                    Log.d(TAG, "Sunrise tomorrow is : " + nextSunrise);
+                Log.d(TAG, "Sunrise tomorrow is : " + nextSunrise);
 
-                    Calendar c = DateConverter.convertDateToCalendar(nextSunrise);
+                Calendar c = DateConverter.convertDateToCalendar(nextSunrise);
 
-                    if (offsetSign.equals("-")) {
-                        hour = -hour;
-                        minute = -minute;
-                    }
-
-                    c.add(Calendar.HOUR, hour);
-                    c.add(Calendar.MINUTE, minute);
-
-                    Log.d(TAG, c.toString());
-
-                    String alarmName = data.getStringExtra("alarmName");
-
-                    addAlarm(alarmName, c.getTime(), AlarmType.type.sunrise);
+                if (offsetSign.equals("-")) {
+                    hour = -hour;
+                    minute = -minute;
                 }
-                break;
+
+                c.add(Calendar.HOUR, hour);
+                c.add(Calendar.MINUTE, minute);
+
+                Log.d(TAG, c.toString());
+
+                String alarmName = data.getStringExtra("alarmName");
+
+                addAlarm(alarmName, c.getTime(), AlarmType.type.sunrise);
+            }
+
         }
     }
 
