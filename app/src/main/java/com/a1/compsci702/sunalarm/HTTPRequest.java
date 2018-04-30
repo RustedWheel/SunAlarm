@@ -22,7 +22,6 @@ public class HTTPRequest {
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
         connection.setRequestMethod("GET");
 
-        // connection.setRequestProperty("User-Agent", USER_AGENT);
         connection.setRequestProperty("Content-Type", "application/json");
         connection.setUseCaches(false);
         connection.setConnectTimeout(_connectionTimeout_ms);

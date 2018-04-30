@@ -33,15 +33,6 @@ public class SunriseTime {
 
     }
 
-    public Date getMockSunriseTime() {
-        // DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-        Calendar cal = Calendar.getInstance();
-        cal.set(2018, Calendar.APRIL, 9, 10, 11, 12); //Year, month, day of month, hours, minutes and seconds
-        Date date = cal.getTime();
-
-        return date;
-    }
-
     public Date getSunriseTime(Location location, Date date) throws IOException {
         StringBuilder sb = new StringBuilder(s1);
         sb.append(location.getLatitude());

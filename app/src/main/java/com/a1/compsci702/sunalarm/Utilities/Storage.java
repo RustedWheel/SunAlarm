@@ -49,15 +49,6 @@ public final class Storage {
     }
 
 
-    public void removeAllSunriseTime(Context context) {
-        SharedPreferences sunriseStorage = context.getSharedPreferences(Values.SUNRISE_TIME_CACHE, Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sunriseStorage.edit();
-        editor.clear();
-        Log.d("REMOVE_ALL_DATE", "Removing all cached dates");
-        editor.apply();
-    }
-
-
     public int getNextAlarmID(Context context) {
         SharedPreferences alarmStorage = context.getSharedPreferences(Values.ALARM_ID, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = alarmStorage.edit();

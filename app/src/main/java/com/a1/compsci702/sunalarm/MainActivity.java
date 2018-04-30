@@ -33,7 +33,6 @@ import com.a1.compsci702.sunalarm.Adapter.AlarmRecyclerViewAdapter;
 import com.a1.compsci702.sunalarm.Adapter.RecyclerViewClickListener;
 import com.a1.compsci702.sunalarm.Alarm.Alarm;
 import com.a1.compsci702.sunalarm.Alarm.AlarmType;
-import com.a1.compsci702.sunalarm.Alarm.RepeatInfo;
 import com.a1.compsci702.sunalarm.Exceptions.NoConnectionException;
 import com.a1.compsci702.sunalarm.Tabs.AlarmTab;
 import com.a1.compsci702.sunalarm.Utilities.DateConverter;
@@ -409,7 +408,7 @@ public class MainActivity extends AppCompatActivity implements SunriseTab.OnFrag
 
                     String alarmName = data.getStringExtra("alarmName");
 
-                    addAlarm(alarmName, c.getTime(), null, AlarmType.type.sunrise);
+                    addAlarm(alarmName, c.getTime(), AlarmType.type.sunrise);
                 }
                 break;
         }
@@ -475,7 +474,7 @@ public class MainActivity extends AppCompatActivity implements SunriseTab.OnFrag
     /**
      * @param date Time for alarm
      */
-    public void addAlarm(String name, Date date, RepeatInfo repeatInfo, AlarmType.type type) {
+    public void addAlarm(String name, Date date, AlarmType.type type) {
 
         if (date.getTime() < Calendar.getInstance().getTime().getTime()) {
             Toast.makeText(getApplicationContext(), "Unable to make an alarm in the past", Toast.LENGTH_LONG).show();
@@ -483,7 +482,7 @@ public class MainActivity extends AppCompatActivity implements SunriseTab.OnFrag
 
             int alarmID = storage.getNextAlarmID(this);
 
-            Alarm alarm = new Alarm(name, alarmID, date, repeatInfo, type);
+            Alarm alarm = new Alarm(name, alarmID, date, type);
             alarm.setAlarm(getApplicationContext());
 
             Log.d(TAG, "alarm set " + date.toString() + " ALARM ID: " + alarmID);

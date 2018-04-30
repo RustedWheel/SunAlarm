@@ -34,7 +34,6 @@ public class AlarmBroadcastReceiver extends BroadcastReceiver {
         final MediaPlayer mp = MediaPlayer.create(context, R.raw.alarm);
         mp.start();
 
-        // Better to play a video animation i guess?
         Toast.makeText(context, "Sunrise !", Toast.LENGTH_LONG).show();
 
         if (Build.VERSION.SDK_INT >= 26) {

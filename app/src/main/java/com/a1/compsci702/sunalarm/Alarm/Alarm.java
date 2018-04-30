@@ -15,15 +15,13 @@ public class Alarm {
     private String _name;
     private int _alarmId;
     private Date _alarmTime;
-    private RepeatInfo _repeatInfo;
     private AlarmType.type _type;
 
-    public Alarm(String name, int alarmId, Date alarmTime, RepeatInfo repeatInfo, AlarmType.type type) {
+    public Alarm(String name, int alarmId, Date alarmTime, AlarmType.type type) {
 
         _name = name;
         _alarmId = alarmId;
         _alarmTime = alarmTime;
-        _repeatInfo = repeatInfo;
         _type = type;
 
     }
@@ -57,17 +55,8 @@ public class Alarm {
         return _alarmTime;
     }
 
-    public void setAlarmTime(Date date) {
-        _alarmTime = date;
-    }
-
     public String getName() {
         return _name;
-    }
-
-
-    public RepeatInfo getRepeatInfo() {
-        return _repeatInfo;
     }
 
 
