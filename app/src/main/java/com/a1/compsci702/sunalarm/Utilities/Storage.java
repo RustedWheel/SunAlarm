@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
 
-import com.a1.compsci702.sunalarm.Alarm.AlarmBroadcastReceiver;
 import com.a1.compsci702.sunalarm.Alarm.Alarm;
 import com.a1.compsci702.sunalarm.Values;
 import com.google.gson.Gson;
@@ -46,15 +45,6 @@ public final class Storage {
         SharedPreferences.Editor editor = sunriseStorage.edit();
         editor.remove(date);
         Log.d("REMOVE_OLD_DATES", "Removing expired date: : " + date);
-        editor.apply();
-    }
-
-
-    public void removeAllSunriseTime(Context context) {
-        SharedPreferences sunriseStorage = context.getSharedPreferences(Values.SUNRISE_TIME_CACHE, Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sunriseStorage.edit();
-        editor.clear();
-        Log.d("REMOVE_ALL_DATE", "Removing all cached dates");
         editor.apply();
     }
 

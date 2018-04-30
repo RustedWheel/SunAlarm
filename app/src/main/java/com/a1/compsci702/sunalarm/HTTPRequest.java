@@ -1,12 +1,9 @@
 package com.a1.compsci702.sunalarm;
 
-import org.json.JSONObject;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
 
 public class HTTPRequest {
@@ -25,7 +22,6 @@ public class HTTPRequest {
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
         connection.setRequestMethod("GET");
 
-        // connection.setRequestProperty("User-Agent", USER_AGENT);
         connection.setRequestProperty("Content-Type", "application/json");
         connection.setUseCaches(false);
         connection.setConnectTimeout(_connectionTimeout_ms);

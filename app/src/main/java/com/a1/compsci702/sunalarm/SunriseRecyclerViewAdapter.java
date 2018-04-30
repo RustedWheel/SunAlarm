@@ -15,17 +15,6 @@ import java.util.Date;
 public class SunriseRecyclerViewAdapter extends RecyclerView.Adapter<SunriseRecyclerViewAdapter.ViewHolder> {
     private ArrayList<String> sunriseData;
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
-        // each data item is just a string in this case
-        public TextView sunriseDate;
-        public TextView sunriseTime;
-        public ViewHolder(View v) {
-            super(v);
-            sunriseDate = v.findViewById(R.id.sunrise_date);
-            sunriseTime = v.findViewById(R.id.sunrise_time);
-        }
-    }
-
     // Provide a suitable constructor (depends on the kind of dataset)
     public SunriseRecyclerViewAdapter(ArrayList<String> dataSet) {
         sunriseData = dataSet;
@@ -34,7 +23,7 @@ public class SunriseRecyclerViewAdapter extends RecyclerView.Adapter<SunriseRecy
     // Create new views (invoked by the layout manager)
     @Override
     public SunriseRecyclerViewAdapter.ViewHolder onCreateViewHolder(ViewGroup viewGroup,
-                                                   int viewType) {
+                                                                    int viewType) {
         // create a new view
         View v = LayoutInflater.from(viewGroup.getContext())
                 .inflate(R.layout.list_item, viewGroup, false);
@@ -58,5 +47,17 @@ public class SunriseRecyclerViewAdapter extends RecyclerView.Adapter<SunriseRecy
     @Override
     public int getItemCount() {
         return sunriseData.size();
+    }
+
+    public static class ViewHolder extends RecyclerView.ViewHolder {
+        // each data item is just a string in this case
+        public TextView sunriseDate;
+        public TextView sunriseTime;
+
+        public ViewHolder(View v) {
+            super(v);
+            sunriseDate = v.findViewById(R.id.sunrise_date);
+            sunriseTime = v.findViewById(R.id.sunrise_time);
+        }
     }
 }
