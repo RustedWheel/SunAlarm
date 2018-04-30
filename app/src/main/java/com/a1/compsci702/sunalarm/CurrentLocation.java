@@ -11,12 +11,6 @@ import android.util.Log;
 
 import com.a1.compsci702.sunalarm.Exceptions.NoConnectionException;
 
-import org.apache.commons.jexl3.JexlBuilder;
-import org.apache.commons.jexl3.JexlContext;
-import org.apache.commons.jexl3.JexlEngine;
-import org.apache.commons.jexl3.JexlExpression;
-import org.apache.commons.jexl3.MapContext;
-
 /**
  * Created by st970 on 28/03/2018.
  */
@@ -66,14 +60,7 @@ public class CurrentLocation implements LocationListener {
 
         Location location;
 
-        JexlEngine jexl = new JexlBuilder().create();
-        JexlExpression e = jexl.createExpression( exp.dd(exp.getEXP(134)) );
-        JexlContext jc = new MapContext();
-        jc.set("a", hasGPS);
-        jc.set("b", hasNetwork);
-
-        if ((boolean) e.evaluate(jc)) {
-
+        if (!hasGPS && !hasNetwork) {
             Log.d(TAG, "Connection off");
             getLastLocation();
             throw new NoConnectionException();
