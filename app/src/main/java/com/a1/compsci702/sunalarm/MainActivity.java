@@ -69,20 +69,29 @@ public class MainActivity extends AppCompatActivity implements SunriseTab.OnFrag
     private RecyclerView.Adapter _alarmViewAdapter;
     private RecyclerView.LayoutManager _alarmViewLayout;
 
+    private long initialTime;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         storage = new Storage();
-
         askForPermission();
+
+        initialTime = System.nanoTime();
         loadAlarms();
+        Log.w(TAG, "execution time for Loading Alarms: " + (System.nanoTime() - initialTime));
+
+        initialTime = System.nanoTime();
         setUpUIComponents();
+        Log.w(TAG, "execution time for Setting up UI components: " + (System.nanoTime() - initialTime));
 
         if (!(permissionsToRequest.size() > 0) && !attemptedToCached) {
             attemptedToCached = true;
+
+            initialTime = System.nanoTime();
             cacheDates();
+            Log.w(TAG, "execution time for caching dates: " + (System.nanoTime() - initialTime));
         }
     }
 
@@ -430,9 +439,10 @@ public class MainActivity extends AppCompatActivity implements SunriseTab.OnFrag
                 _alarmRecyclerView.setVisibility(View.INVISIBLE);
                 mAddAlarm.setVisibility(View.INVISIBLE);
                 loadingScreen.setVisibility(View.VISIBLE);
-
+                initialTime = System.nanoTime();
                 FetchSunriseData sunriseTask = new FetchSunriseData(location, date, numDays);
                 sunriseTask.execute();
+                Log.w(TAG, "execution time for sunriseTask: " + (System.nanoTime() - initialTime));
             } catch (NoConnectionException e) {
                 showGPSSettingsAlert();
             } catch (SecurityException e) {
